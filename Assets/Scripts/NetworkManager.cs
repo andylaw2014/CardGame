@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 public class NetworkManager : Photon.MonoBehaviour
 {
@@ -38,9 +37,10 @@ public class NetworkManager : Photon.MonoBehaviour
             foreach (RoomInfo game in PhotonNetwork.GetRoomList())
             {
                 GameObject room = Instantiate(RoomListItem) as GameObject;
-                room.GetComponentInChildren<Text>().text = game.name+" "+game.playerCount+"/2";
+                room.GetComponentInChildren<Text>().text = game.name + " " + game.playerCount + "/2";
                 room.transform.SetParent(ScrollViewContent.transform);
                 room.GetComponent<Button>().onClick.AddListener(() => { PhotonNetwork.JoinRoom(game.name); });
+                room.transform.localScale = Vector3.one;
             }
         }
     }
@@ -52,7 +52,7 @@ public class NetworkManager : Photon.MonoBehaviour
 
     public void CreateRoom()
     {
-        if (!string.IsNullOrEmpty(RoomNameInputField.text)&& RoomNameInputField.text.Length<=20)
+        if (!string.IsNullOrEmpty(RoomNameInputField.text) && RoomNameInputField.text.Length <= 20)
             if (PhotonNetwork.CreateRoom(RoomNameInputField.text, new RoomOptions() { maxPlayers = 2, isVisible = true }, null))
             {
                 CreateButton.interactable = false;
@@ -81,7 +81,7 @@ public class NetworkManager : Photon.MonoBehaviour
 
     void OnJoinedRoom()
     {
-        if(!PhotonNetwork.isMasterClient)
+        if (!PhotonNetwork.isMasterClient)
             Application.LoadLevel("Main");
     }
 
@@ -91,6 +91,11 @@ public class NetworkManager : Photon.MonoBehaviour
     }
 
     void OnPhotonPlayerDisconnected()
+    {
+        PhotonNetwork.LeaveRoom();
+    }
+
+    public void LeaveRoom()
     {
         PhotonNetwork.LeaveRoom();
     }
