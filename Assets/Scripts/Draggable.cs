@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -8,12 +9,12 @@ using UnityEngine.EventSystems;
 public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [HideInInspector]
-    public Transform returnParent = null;
-    private GameObject placeholder = null;
+    public bool OnPlayZone;
 
+    private GameObject placeholder;
     // Hold the offset between mosue and object center.
     private Vector3 mouseOffSet;
-    private Transform oringialParent = null;
+    private Transform oringialParent;
     public void OnBeginDrag(PointerEventData eventData)
     {
 
@@ -33,8 +34,6 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         // Calculate the mouse offset.
         mouseOffSet = transform.position.Minus(eventData.position);
 
-        returnParent = transform.parent;
-
         // Dragging necessary code
         transform.SetParent(transform.parent.parent);
         GetComponent<CanvasGroup>().blocksRaycasts = false;
@@ -48,14 +47,23 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        transform.SetParent(returnParent);
-        if (oringialParent == transform.parent)
-            transform.SetSiblingIndex(placeholder.transform.GetSiblingIndex());
+        transform.SetParent(oringialParent);
+        transform.SetSiblingIndex(placeholder.transform.GetSiblingIndex());
         GetComponent<CanvasGroup>().blocksRaycasts = true;
         transform.rotation = Quaternion.identity;
 
         Destroy(placeholder);
+
+        if (OnPlayZone)
+        {
+            Game game = GameObject.FindGameObjectWithTag("GameController").GetComponent<Game>();
+            CardController cardController = GetComponent<CardController>();
+            if (cardController == null) return;
+            if(game.IsCardPlayable(cardController.ID))
+                game.PlayCard(cardController.ID);
+        }
+
     }
 
-    
+
 }

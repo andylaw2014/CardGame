@@ -33,4 +33,5 @@ MonoBehaviour:
   - OppYouDraw
   - RPCSetState
   - OppAddMana
+  - OppPlayCard
   DisableAutoOpenWizard: 1

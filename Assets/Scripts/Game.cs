@@ -26,7 +26,7 @@ public class Game : MonoBehaviour
 
     void Start()
     {
-        GameState = State.GameStart;
+        SetState(State.GameStart);
         AllowPlayCard = false;
         // UNDONE: Random instead
         IsMaster = PhotonNetwork.isMasterClient;
@@ -37,14 +37,12 @@ public class Game : MonoBehaviour
 
         // UNDONE: Draw from deck
         DrawCard("TestCard");
+        DrawCard("TestCard");
+        DrawCard("TestCard");
 
         // Start Game
         if (IsMaster) // Remove condition will make SetState called twice (Player 1 and 2 and their RPC)
             SetState(State.Player1_1Reset);
-    }
-
-    public void Update()
-    {
     }
 
     void OnGUI()
@@ -52,16 +50,12 @@ public class Game : MonoBehaviour
         UpdateStateText();
     }
 
+    #region Draw Card
     // Player draw a card
     public void DrawCard(string cardName)
     {
         int id = Player.DrawCard(cardName);
         GetComponent<PhotonView>().RPC("OppYouDraw", PhotonTargets.Others, cardName, id);
-    }
-
-    public bool IsCardPlayable(int id)
-    {
-        return AllowPlayCard&&Player.IsPlayable(id);
     }
 
     // Opponent see you draw a card
@@ -70,6 +64,27 @@ public class Game : MonoBehaviour
     {
         Opponent.DrawCard(cardName, ID, false);
     }
+    #endregion
+
+    #region Play Card
+    public void PlayCard(int id)
+    {
+        Player.Play(id);
+        GetComponent<PhotonView>().RPC("OppPlayCard", PhotonTargets.Others, id);
+    }
+
+    public bool IsCardPlayable(int id)
+    {
+        return AllowPlayCard && Player.IsPlayable(id);
+    }
+
+    // Opponent see play card
+    [PunRPC]
+    private void OppPlayCard(int id)
+    {
+        Opponent.Play(id);
+    }
+    #endregion
 
     #region Mana Methods
     public void ResetMana(bool isPlayer = true)
@@ -106,7 +121,6 @@ public class Game : MonoBehaviour
 
     public void AddMana2()
     {
-
         Player.AddMana2();
         GetComponent<PhotonView>().RPC("OppAddMana", PhotonTargets.Others, 2);
         ResetMana();
@@ -246,8 +260,8 @@ public class Game : MonoBehaviour
             }
         #endregion
 
-        // Enable action that can do on player turn
-        #region PlayerTurn
+        // Enable NextPhaseButton
+        #region Next Phase Button
         switch (GameState)
         {
             case State.Player1_1Reset:
@@ -259,7 +273,6 @@ public class Game : MonoBehaviour
             case State.Player2_7DefCot:
             case State.Player1_8Main:
                 NextPhaseButton.interactable = IsMaster;
-                AllowPlayCard = IsMaster;
                 break;
             case State.Player2_1Reset:
             case State.Player2_2Draw:
@@ -270,12 +283,30 @@ public class Game : MonoBehaviour
             case State.Player1_7DefCot:
             case State.Player2_8Main:
                 NextPhaseButton.interactable = !IsMaster;
-                AllowPlayCard = !IsMaster;
                 break;
             default:
                 NextPhaseButton.interactable = false;
                 break;
         }
+        #endregion
+        // Enable NextPhaseButton
+
+        #region Allow Play Card
+        switch (GameState)
+        {
+            case State.Player1_3Main:
+            case State.Player1_8Main:
+                AllowPlayCard = IsMaster;
+                break;
+            case State.Player2_3Main:
+            case State.Player2_8Main:
+                AllowPlayCard = !IsMaster;
+                break;
+            default:
+                AllowPlayCard = false;
+                break;
+        }
+
         #endregion
     }
 

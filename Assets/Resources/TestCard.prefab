@@ -14,6 +14,7 @@ GameObject:
   - 225: {fileID: 22553296}
   - 114: {fileID: 11467658}
   - 114: {fileID: 11463172}
+  - 114: {fileID: 11411084}
   m_Layer: 5
   m_Name: TestCard
   m_TagString: Untagged
@@ -21,6 +22,23 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &11411084
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 119130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13b46c0dc01178944a072e872fe00935, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HP: 0
+  MaxHP: 1
+  Attack: 1
+  CostMana1: 1
+  CostMana2: 0
+  CostMana3: 0
 --- !u!114 &11453442
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -166,6 +184,18 @@ Prefab:
       propertyPath: ImageController
       value: 
       objectReference: {fileID: 11467658}
+    - target: {fileID: 0}
+      propertyPath: MaxHP
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: Attack
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: CostMana1
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 119130}

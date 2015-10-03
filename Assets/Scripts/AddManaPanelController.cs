@@ -40,7 +40,7 @@ public class AddManaPanelController : MonoBehaviour
         game.AddMana3();
         Deactivate();
     }
-    
+
     private void Deactivate()
     {
         gameObject.SetActive(false);

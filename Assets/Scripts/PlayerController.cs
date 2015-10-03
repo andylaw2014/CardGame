@@ -5,7 +5,7 @@ public class PlayerController : MonoBehaviour
 {
     private GameObject HandZone;
     private GameObject MinionZone;
-    private List<ValuePair<int, CardController>> Hand;
+    private Dictionary<int, CardController> Hand;
     private PlayerStatisticController Stats;
     private const int MAX_MANA = 10;
 
@@ -15,37 +15,48 @@ public class PlayerController : MonoBehaviour
         HandZone = gameObject.FindChildWithTag("HandZone");
         MinionZone = gameObject.FindChildWithTag("MinionZone");
         Stats = gameObject.FindComponentInChildWithTag<PlayerStatisticController>("Stat");
-        Hand = new List<ValuePair<int, CardController>>();
-        maxID = 0;
+        Hand = new Dictionary<int, CardController>();
+        maxID = -1;
     }
 
-    public int DrawCard(string cardName, int ID = -1, bool isPlayer = true)
+    public int DrawCard(string cardName, int id = -1, bool isPlayer = true)
     {
         GameObject card = Instantiate(Resources.Load(cardName)) as GameObject;
         CardController cardController = card.GetComponent<CardController>();
 
-        cardController.SetImageSide(isPlayer);
-        cardController.SetDraggable(isPlayer);
+        cardController.IsFront = isPlayer;
+        cardController.Draggable = isPlayer;
 
-        int id = ID == -1 ? GetID() : ID;
-        cardController.SetID(id);
-        Hand.Add(new ValuePair<int, CardController>(id, cardController));
-
+        int mid = id == -1 ? GetID() : id;
+        cardController.ID = mid;
+        Hand.Add(mid, cardController);
         cardController.SetParent(HandZone.transform);
         return id;
     }
+
     #region PlayCard
     // Is a card playable
     public bool IsPlayable(int id)
     {
-        return FindCardControllerByID(id).IsPlayable();
+        CardController cardToPlayController = FindCardControllerByID(id);
+        bool enoughMana = (Mana1 >= cardToPlayController.Mana1Cost) && (Mana2 >= cardToPlayController.Mana2Cost) &&
+                          (Mana3 >= cardToPlayController.Mana3Cost);
+        return cardToPlayController.IsPlayable() && enoughMana;
     }
 
     public void Play(int id)
     {
+        CardController cardToPlayController = FindCardControllerByID(id);
+        Debug.Log((cardToPlayController == null) + ":" + id + ":" + Hand.ContainsKey(id));
+        Mana1 -= cardToPlayController.Mana1Cost;
+        Mana2 -= cardToPlayController.Mana2Cost;
+        Mana3 -= cardToPlayController.Mana3Cost;
+
         // UNDONE: Event Card
         CardController cardController = FindCardControllerByID(id);
+        cardController.Draggable = false;
         cardController.SetParent(MinionZone.transform);
+        cardController.IsFront = true;
         cardController.Play();
     }
     #endregion
@@ -60,19 +71,19 @@ public class PlayerController : MonoBehaviour
 
     public bool IsMana1Full
     {
-        get { return Stats.MaxMana1 >= MAX_MANA; }
+        get { return Mana1 >= MAX_MANA; }
     }
 
 
     public bool IsMana2Full
     {
-        get { return Stats.MaxMana2 >= MAX_MANA; }
+        get { return Mana2 >= MAX_MANA; }
     }
 
 
     public bool IsMana3Full
     {
-        get { return Stats.MaxMana3 >= MAX_MANA; }
+        get { return Mana3 >= MAX_MANA; }
     }
 
     public bool IsManaFull
@@ -82,35 +93,69 @@ public class PlayerController : MonoBehaviour
 
     public void AddMana1()
     {
-        Stats.MaxMana1++;
+        MaxMana1++;
     }
 
     public void AddMana2()
     {
-        Stats.MaxMana2++;
+        MaxMana2++;
     }
 
     public void AddMana3()
     {
-        Stats.MaxMana3++;
+        MaxMana3++;
+    }
+
+    public int Mana1
+    {
+        get { return Stats.Mana1; }
+        set { Stats.Mana1 = value; }
+    }
+
+    public int Mana2
+    {
+        get { return Stats.Mana2; }
+        set { Stats.Mana2 = value; }
+    }
+
+    public int Mana3
+    {
+        get { return Stats.Mana3; }
+        set { Stats.Mana3 = value; }
+    }
+
+    public int MaxMana1
+    {
+        get { return Stats.MaxMana1; }
+        set { Stats.MaxMana1 = value; }
+    }
+
+    public int MaxMana2
+    {
+        get { return Stats.MaxMana2; }
+        set { Stats.MaxMana2 = value; }
+    }
+
+    public int MaxMana3
+    {
+        get { return Stats.MaxMana3; }
+        set { Stats.MaxMana3 = value; }
     }
     #endregion
 
+    #region Utility
     // Get ID
     private int GetID()
     {
-        maxID++;
-        return maxID - 1;
+        return ++maxID;
     }
 
     private CardController FindCardControllerByID(int id)
     {
-        foreach (ValuePair<int, CardController> pair in Hand)
-        {
-            if (pair.Value1 == id)
-                return pair.Value2;
-        }
-
+        CardController cardController;
+        if (Hand.TryGetValue(id, out cardController))
+            return cardController;
         return null;
     }
+    #endregion
 }

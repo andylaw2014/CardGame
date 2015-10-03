@@ -18,7 +18,8 @@ public class CardImageController : MonoBehaviour
         set
         {
             _isFront = value;
-            GetComponent<Image>().sprite = _isFront ? Front : Back.sprite; // Set card image to front or back image.
+            // Set card image to front or back image.
+            GetComponent<Image>().sprite = _isFront ? Front : Back.sprite;
         }
     }
 
