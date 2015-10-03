@@ -20,13 +20,14 @@ public class Game : MonoBehaviour
     [HideInInspector]
     public State GameState; // Current phase of the game
 
+    private bool AllowPlayCard; // Is Player allow to play any card
     private PlayerController Player;
     private PlayerController Opponent;
 
     void Start()
     {
         GameState = State.GameStart;
-
+        AllowPlayCard = false;
         // UNDONE: Random instead
         IsMaster = PhotonNetwork.isMasterClient;
 
@@ -38,7 +39,7 @@ public class Game : MonoBehaviour
         DrawCard("TestCard");
 
         // Start Game
-        if (IsMaster)
+        if (IsMaster) // Remove condition will make SetState called twice (Player 1 and 2 and their RPC)
             SetState(State.Player1_1Reset);
     }
 
@@ -58,12 +59,18 @@ public class Game : MonoBehaviour
         GetComponent<PhotonView>().RPC("OppYouDraw", PhotonTargets.Others, cardName, id);
     }
 
+    public bool IsCardPlayable(int id)
+    {
+        return AllowPlayCard&&Player.IsPlayable(id);
+    }
+
     // Opponent see you draw a card
     [PunRPC]
     private void OppYouDraw(string cardName, int ID)
     {
         Opponent.DrawCard(cardName, ID, false);
     }
+
     #region Mana Methods
     public void ResetMana(bool isPlayer = true)
     {
@@ -200,41 +207,9 @@ public class Game : MonoBehaviour
     {
         GameState = (State)state;
 
-        // Next Phase Button
-        switch (GameState)
-        {
-            case State.Player1_1Reset:
-            case State.Player1_2Draw:
-            case State.Player1_3Main:
-            case State.Player1_4Atk:
-            case State.Player2_5Def:
-            case State.Player1_6AtkCot:
-            case State.Player2_7DefCot:
-            case State.Player1_8Main:
-                if (IsMaster)
-                    NextPhaseButton.interactable = true;
-                else
-                    NextPhaseButton.interactable = false;
-                break;
-            case State.Player2_1Reset:
-            case State.Player2_2Draw:
-            case State.Player2_3Main:
-            case State.Player2_4Atk:
-            case State.Player1_5Def:
-            case State.Player2_6AtkCot:
-            case State.Player1_7DefCot:
-            case State.Player2_8Main:
-                if (!IsMaster)
-                    NextPhaseButton.interactable = true;
-                else
-                    NextPhaseButton.interactable = false;
-                break;
-            default:
-                NextPhaseButton.interactable = false;
-                break;
-        }
-
-        // Call Phase
+        // Call Phase method
+        // It should excute all events when a phase start
+        #region CallPhase
         if (IsMaster)
             switch (GameState)
             {
@@ -269,12 +244,46 @@ public class Game : MonoBehaviour
                 default:
                     break;
             }
+        #endregion
+
+        // Enable action that can do on player turn
+        #region PlayerTurn
+        switch (GameState)
+        {
+            case State.Player1_1Reset:
+            case State.Player1_2Draw:
+            case State.Player1_3Main:
+            case State.Player1_4Atk:
+            case State.Player2_5Def:
+            case State.Player1_6AtkCot:
+            case State.Player2_7DefCot:
+            case State.Player1_8Main:
+                NextPhaseButton.interactable = IsMaster;
+                AllowPlayCard = IsMaster;
+                break;
+            case State.Player2_1Reset:
+            case State.Player2_2Draw:
+            case State.Player2_3Main:
+            case State.Player2_4Atk:
+            case State.Player1_5Def:
+            case State.Player2_6AtkCot:
+            case State.Player1_7DefCot:
+            case State.Player2_8Main:
+                NextPhaseButton.interactable = !IsMaster;
+                AllowPlayCard = !IsMaster;
+                break;
+            default:
+                NextPhaseButton.interactable = false;
+                break;
+        }
+        #endregion
     }
 
     private void UpdateStateText()
     {
 
         string text = "";
+
         switch (GameState)
         {
             case State.Player1_1Reset:
@@ -285,10 +294,7 @@ public class Game : MonoBehaviour
             case State.Player1_6AtkCot:
             case State.Player1_7DefCot:
             case State.Player1_8Main:
-                if (IsMaster)
-                    text = "Your ";
-                else
-                    text = "Opponent ";
+                text = IsMaster ? "Your " : "Opponent ";
                 break;
             case State.Player2_1Reset:
             case State.Player2_2Draw:
@@ -298,16 +304,14 @@ public class Game : MonoBehaviour
             case State.Player2_6AtkCot:
             case State.Player2_7DefCot:
             case State.Player2_8Main:
-                if (IsMaster)
-                    text = "Opponent ";
-                else
-                    text = "Your ";
+                text = IsMaster ? "Opponent " : "Your ";
                 break;
             case State.GameStart:
                 break;
             default:
                 break;
         }
+
         switch (GameState)
         {
             case State.Player1_1Reset:

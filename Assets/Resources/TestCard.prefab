@@ -12,7 +12,6 @@ GameObject:
   - 114: {fileID: 11498336}
   - 114: {fileID: 11453442}
   - 225: {fileID: 22553296}
-  - 114: {fileID: 11497830}
   - 114: {fileID: 11467658}
   - 114: {fileID: 11463172}
   m_Layer: 5
@@ -51,6 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf9a03e7e83ab6c40bd8a1c00706d089, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ImageController: {fileID: 11467658}
 --- !u!114 &11467658
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -63,19 +63,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Front: {fileID: 21300000, guid: bf3c22ca7e43a7f49a436cc5c1a5eb94, type: 3}
-  Back: {fileID: 21300000, guid: 41fb64318f9d75443a90d1b2e780972f, type: 3}
---- !u!114 &11497830
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 119130}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b91b8bf6065d7644abd904c91302ca33, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ID: 0
+  Back: {fileID: 11444212, guid: 69a90882ecff1f44182550310066415e, type: 2}
 --- !u!114 &11498336
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -95,7 +83,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: bf3c22ca7e43a7f49a436cc5c1a5eb94, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -168,13 +156,16 @@ Prefab:
     - target: {fileID: 0}
       propertyPath: Back
       value: 
-      objectReference: {fileID: 21300000, guid: 41fb64318f9d75443a90d1b2e780972f,
-        type: 3}
+      objectReference: {fileID: 11444212, guid: 69a90882ecff1f44182550310066415e,
+        type: 2}
     - target: {fileID: 0}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: bf3c22ca7e43a7f49a436cc5c1a5eb94,
-        type: 3}
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: ImageController
+      value: 
+      objectReference: {fileID: 11467658}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 119130}

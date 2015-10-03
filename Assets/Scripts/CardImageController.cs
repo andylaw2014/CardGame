@@ -4,28 +4,23 @@ using UnityEngine.UI;
 // Control card image between front image and card back. 
 public class CardImageController : MonoBehaviour
 {
-    
-    [HideInInspector]
     public Sprite Front; // Front image of card.
+    public CardBack Back;  // Card back of card.
+
     [HideInInspector]
-    public Sprite Back;  // Card back of card.
-    
-    // Initial front image and card back.
-    void Start()
+    public bool IsFront
     {
-        Front = GetComponent<Image>().sprite;
-        Back = GameObject.FindGameObjectWithTag("CardBack").GetComponent<CardBack>().sprite;
+        get
+        {
+            return _isFront;
+        }
+
+        set
+        {
+            _isFront = value;
+            GetComponent<Image>().sprite = _isFront ? Front : Back.sprite; // Set card image to front or back image.
+        }
     }
 
-    // Set card image to front image.
-    public void SetFront()
-    {
-        GetComponent<Image>().sprite = Front;
-    }
-
-    // Set card image to card back.
-    public void SetBack()
-    {
-        GetComponent<Image>().sprite = Back;
-    }
+    private bool _isFront;
 }

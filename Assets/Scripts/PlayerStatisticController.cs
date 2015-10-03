@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class StatisticController : MonoBehaviour
+public class PlayerStatisticController : MonoBehaviour
 {
     [HideInInspector]
     public int HP;
