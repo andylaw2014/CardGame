@@ -6,7 +6,7 @@ public class CardController : MonoBehaviour, IPointerEnterHandler
     public CardImageController ImageController;
 
     [HideInInspector]
-    public int ID
+    public int Id
     {
         get { return _id; }
         set
@@ -31,22 +31,21 @@ public class CardController : MonoBehaviour, IPointerEnterHandler
         get { return _draggable; }
         set
         {
-            if (value && GetComponent<Draggable>() == null)
+            _draggable = value;
+            if (_draggable && GetComponent<Draggable>() == null)
                 gameObject.AddComponent<Draggable>();
-            else if (!value && GetComponent<Draggable>() != null)
+            else if (!_draggable && GetComponent<Draggable>() != null)
                 Destroy(GetComponent<Draggable>());
         }
     }
-
-
-
-    private CardStatisticController StatisticController;
+    
+    private CardStatisticController _statisticController;
     private int _id=-1;
-    private bool _draggable=false;
+    private bool _draggable;
 
     void Start()
     {
-        StatisticController = GetComponent<CardStatisticController>();
+        _statisticController = GetComponent<CardStatisticController>();
     }
 
     public void SetParent(Transform parent)
@@ -68,29 +67,27 @@ public class CardController : MonoBehaviour, IPointerEnterHandler
     public void OnPointerEnter(PointerEventData eventData)
     {
         // Ensure only card face front can be viewed
-        if (IsFront)
-        {
-            CardViewController cardViewController =
-                GameObject.FindGameObjectWithTag("CardView").GetComponent<CardViewController>();
-            if (cardViewController != null)
-                cardViewController.SetImage(ImageController.Front);
-        }
+        if (!IsFront) return;
+        var cardViewController =
+            GameObject.FindGameObjectWithTag("CardView").GetComponent<CardViewController>();
+        if (cardViewController != null)
+            cardViewController.SetImage(ImageController.Front);
     }
 
     #region ManaCost
     public int Mana1Cost
     {
-        get { return StatisticController.CostMana1; }
+        get { return _statisticController.CostMana1; }
     }
 
     public int Mana2Cost
     {
-        get { return StatisticController.CostMana2; }
+        get { return _statisticController.CostMana2; }
     }
 
     public int Mana3Cost
     {
-        get { return StatisticController.CostMana3; }
+        get { return _statisticController.CostMana3; }
     }
     #endregion
 }

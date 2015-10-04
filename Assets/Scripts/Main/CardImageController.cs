@@ -5,7 +5,6 @@ using UnityEngine.UI;
 public class CardImageController : MonoBehaviour
 {
     public Sprite Front; // Front image of card.
-    public CardBack Back;  // Card back of card.
 
     [HideInInspector]
     public bool IsFront
@@ -18,8 +17,9 @@ public class CardImageController : MonoBehaviour
         set
         {
             _isFront = value;
+            var back = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().CardBack;
             // Set card image to front or back image.
-            GetComponent<Image>().sprite = _isFront ? Front : Back.sprite;
+            GetComponent<Image>().sprite = _isFront ? Front : back;
         }
     }
 

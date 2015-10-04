@@ -1,10 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-// Game Controller
-public class Game : MonoBehaviour
+// GameController Controller
+public class GameController : MonoBehaviour
 {
-    // Different Game phase
+    // Different GameController phase
     public enum State
     {
         GameStart = 0,
@@ -15,32 +15,33 @@ public class Game : MonoBehaviour
     public Text StateText; // GUI text to show current phase.
     public Button NextPhaseButton;  // Button to end current phase
     public AddManaPanelController AddManaPanel;
+    public Sprite CardBack;  // Card back
     [HideInInspector]
     public bool IsMaster; // True: Player 1; False: Player 2
     [HideInInspector]
-    public State GameState; // Current phase of the game
+    public State GameState; // Current phase of the GameController
 
-    private bool AllowPlayCard; // Is Player allow to play any card
-    private PlayerController Player;
-    private PlayerController Opponent;
+    private bool _allowPlayCard; // Is Player allow to play any card
+    private PlayerController _player;
+    private PlayerController _opponent;
 
     void Start()
     {
         SetState(State.GameStart);
-        AllowPlayCard = false;
+        _allowPlayCard = false;
         // UNDONE: Random instead
         IsMaster = PhotonNetwork.isMasterClient;
 
         // Set up player controller
-        Player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
-        Opponent = GameObject.FindGameObjectWithTag("Opponent").GetComponent<PlayerController>();
+        _player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        _opponent = GameObject.FindGameObjectWithTag("Opponent").GetComponent<PlayerController>();
 
         // UNDONE: Draw from deck
         DrawCard("TestCard");
         DrawCard("TestCard");
         DrawCard("TestCard");
 
-        // Start Game
+        // Start GameController
         if (IsMaster) // Remove condition will make SetState called twice (Player 1 and 2 and their RPC)
             SetState(State.Player1_1Reset);
     }
@@ -54,7 +55,7 @@ public class Game : MonoBehaviour
     // Player draw a card
     public void DrawCard(string cardName)
     {
-        int id = Player.DrawCard(cardName);
+        int id = _player.DrawCard(cardName);
         GetComponent<PhotonView>().RPC("OppYouDraw", PhotonTargets.Others, cardName, id);
     }
 
@@ -62,27 +63,27 @@ public class Game : MonoBehaviour
     [PunRPC]
     private void OppYouDraw(string cardName, int ID)
     {
-        Opponent.DrawCard(cardName, ID, false);
+        _opponent.DrawCard(cardName, ID, false);
     }
     #endregion
 
     #region Play Card
     public void PlayCard(int id)
     {
-        Player.Play(id);
+        _player.Play(id);
         GetComponent<PhotonView>().RPC("OppPlayCard", PhotonTargets.Others, id);
     }
 
     public bool IsCardPlayable(int id)
     {
-        return AllowPlayCard && Player.IsPlayable(id);
+        return _allowPlayCard && _player.IsPlayable(id);
     }
 
     // Opponent see play card
     [PunRPC]
     private void OppPlayCard(int id)
     {
-        Opponent.Play(id);
+        _opponent.Play(id);
     }
     #endregion
 
@@ -90,45 +91,45 @@ public class Game : MonoBehaviour
     public void ResetMana(bool isPlayer = true)
     {
         if (isPlayer)
-            Player.ResetMana();
+            _player.ResetMana();
         else
-            Opponent.ResetMana();
+            _opponent.ResetMana();
     }
 
     public bool IsMana1Full
     {
-        get { return Player.IsMana1Full; }
+        get { return _player.IsMana1Full; }
     }
 
 
     public bool IsMana2Full
     {
-        get { return Player.IsMana2Full; }
+        get { return _player.IsMana2Full; }
     }
 
 
     public bool IsMana3Full
     {
-        get { return Player.IsMana3Full; }
+        get { return _player.IsMana3Full; }
     }
 
     public void AddMana1()
     {
-        Player.AddMana1();
+        _player.AddMana1();
         GetComponent<PhotonView>().RPC("OppAddMana", PhotonTargets.Others, 1);
         ResetMana();
     }
 
     public void AddMana2()
     {
-        Player.AddMana2();
+        _player.AddMana2();
         GetComponent<PhotonView>().RPC("OppAddMana", PhotonTargets.Others, 2);
         ResetMana();
     }
 
     public void AddMana3()
     {
-        Player.AddMana3();
+        _player.AddMana3();
         GetComponent<PhotonView>().RPC("OppAddMana", PhotonTargets.Others, 3);
         ResetMana();
     }
@@ -137,14 +138,21 @@ public class Game : MonoBehaviour
     [PunRPC]
     private void OppAddMana(int type)
     {
-        if (type == 1)
-            Opponent.AddMana1();
-        else if (type == 2)
-            Opponent.AddMana2();
-        else
-            Opponent.AddMana3();
+        switch (type)
+        {
+            case 1:
+                _opponent.AddMana1();
+                break;
+            case 2:
+                _opponent.AddMana2();
+                break;
+            default:
+                _opponent.AddMana3();
+                break;
+        }
         ResetMana(false);
     }
+
     #endregion
 
     #region Phase Methods
@@ -296,14 +304,14 @@ public class Game : MonoBehaviour
         {
             case State.Player1_3Main:
             case State.Player1_8Main:
-                AllowPlayCard = IsMaster;
+                _allowPlayCard = IsMaster;
                 break;
             case State.Player2_3Main:
             case State.Player2_8Main:
-                AllowPlayCard = !IsMaster;
+                _allowPlayCard = !IsMaster;
                 break;
             default:
-                AllowPlayCard = false;
+                _allowPlayCard = false;
                 break;
         }
 
@@ -313,7 +321,7 @@ public class Game : MonoBehaviour
     private void UpdateStateText()
     {
 
-        string text = "";
+        var text = "";
 
         switch (GameState)
         {
@@ -387,7 +395,7 @@ public class Game : MonoBehaviour
 
     private void ResetPhase()
     {
-        if (!Player.IsManaFull)
+        if (!_player.IsManaFull)
             AddManaPanel.Activate();
     }
     #endregion

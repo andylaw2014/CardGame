@@ -3,9 +3,9 @@ using UnityEngine;
 public class CardStatisticController : MonoBehaviour
 {
     [HideInInspector]
-    public int HP;
+    public int Hp;
 
-    public int MaxHP;
+    public int MaxHp;
     public int Attack;
     public int CostMana1;
     public int CostMana2;
@@ -13,6 +13,6 @@ public class CardStatisticController : MonoBehaviour
 
     void Start()
     {
-        HP = MaxHP;
+        Hp = MaxHp;
     }
 }

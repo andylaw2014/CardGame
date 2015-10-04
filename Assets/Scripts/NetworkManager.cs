@@ -34,13 +34,13 @@ public class NetworkManager : Photon.MonoBehaviour
             {
                 Destroy(child.gameObject);
             }
-            foreach (RoomInfo game in PhotonNetwork.GetRoomList())
+            foreach (var room in PhotonNetwork.GetRoomList())
             {
-                GameObject room = Instantiate(RoomListItem) as GameObject;
-                room.GetComponentInChildren<Text>().text = game.name + " " + game.playerCount + "/2";
-                room.transform.SetParent(ScrollViewContent.transform);
-                room.GetComponent<Button>().onClick.AddListener(() => { PhotonNetwork.JoinRoom(game.name); });
-                room.transform.localScale = Vector3.one;
+                var roomListItem = Instantiate(RoomListItem);
+                roomListItem.GetComponentInChildren<Text>().text = room.name + " " + room.playerCount + "/2";
+                roomListItem.transform.SetParent(ScrollViewContent.transform);
+                roomListItem.GetComponent<Button>().onClick.AddListener(() => { PhotonNetwork.JoinRoom(room.name); });
+                roomListItem.transform.localScale = Vector3.one;
             }
         }
     }
@@ -52,17 +52,19 @@ public class NetworkManager : Photon.MonoBehaviour
 
     public void CreateRoom()
     {
-        if (!string.IsNullOrEmpty(RoomNameInputField.text) && RoomNameInputField.text.Length <= 20)
-            if (PhotonNetwork.CreateRoom(RoomNameInputField.text, new RoomOptions() { maxPlayers = 2, isVisible = true }, null))
-            {
-                CreateButton.interactable = false;
-                CancelButton.interactable = true;
-                CreateButton.GetComponent<ChangeMenu>().Change();
-            }
-            else
-            {
-                CreateButton.interactable = true;
-            }
+        var roomName = RoomNameInputField.text;
+        if (string.IsNullOrEmpty(roomName) || IsRoomExists(roomName) || roomName.Length > 20) return;
+
+        if (PhotonNetwork.CreateRoom(RoomNameInputField.text, new RoomOptions() { maxPlayers = 2, isVisible = true }, null))
+        {
+            CreateButton.interactable = false;
+            CancelButton.interactable = true;
+            CreateButton.GetComponent<ChangeMenu>().Change();
+        }
+        else
+        {
+            CreateButton.interactable = true;
+        }
     }
 
     void OnLeftRoom()
@@ -98,5 +100,15 @@ public class NetworkManager : Photon.MonoBehaviour
     public void LeaveRoom()
     {
         PhotonNetwork.LeaveRoom();
+    }
+
+    private bool IsRoomExists(string name)
+    { 
+        foreach (var room in PhotonNetwork.GetRoomList())
+        {
+            if (room.name.Equals(name))
+                return true;
+        }
+        return false;
     }
 }

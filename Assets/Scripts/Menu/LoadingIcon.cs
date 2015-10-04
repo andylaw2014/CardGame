@@ -4,17 +4,15 @@ using UnityEngine.UI;
 // Use for loading icon animation only.
 public class LoadingIcon : MonoBehaviour
 {
-    // Image to hold the sprites.
-    public Image image;
     // Sprites array of different frames.
-    public Sprite[] frames;
+    public Sprite[] Frames;
     // FPS of sprites.
-    public int framesPerSecond;
+    public int FramesPerSecond;
 
     void OnGUI()
     {
         // Change sprite depend on time.
-        int index = (int)((Time.time * framesPerSecond) % frames.Length);
-        image.sprite = frames[index];
+        int index = (int)((Time.time * FramesPerSecond) % Frames.Length);
+        GetComponent<Image>().sprite = Frames[index];
     }
 }
