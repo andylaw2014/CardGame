@@ -51,7 +51,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         Destroy(_placeHolder);
 
         if (!OnPlayZone) return;
-        var game = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+        var game = GameController.Instance;
         var cardController = GetComponent<CardController>();
         if (cardController == null) return;
         if(game.IsCardPlayable(cardController.Id))

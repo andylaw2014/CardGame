@@ -13,8 +13,7 @@ GameObject:
   - 114: {fileID: 11453442}
   - 225: {fileID: 22553296}
   - 114: {fileID: 11467658}
-  - 114: {fileID: 11463172}
-  - 114: {fileID: 11411084}
+  - 114: {fileID: 11469528}
   m_Layer: 5
   m_Name: TestCard
   m_TagString: Untagged
@@ -22,23 +21,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &11411084
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 119130}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13b46c0dc01178944a072e872fe00935, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HP: 0
-  MaxHP: 1
-  Attack: 1
-  CostMana1: 1
-  CostMana2: 0
-  CostMana3: 0
 --- !u!114 &11453442
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -57,18 +39,6 @@ MonoBehaviour:
   m_PreferredHeight: 135
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
---- !u!114 &11463172
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 119130}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf9a03e7e83ab6c40bd8a1c00706d089, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ImageController: {fileID: 11467658}
 --- !u!114 &11467658
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -81,7 +51,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Front: {fileID: 21300000, guid: bf3c22ca7e43a7f49a436cc5c1a5eb94, type: 3}
-  Back: {fileID: 11444212, guid: 69a90882ecff1f44182550310066415e, type: 2}
+--- !u!114 &11469528
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 119130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09bddb514d3adf34a82c7746748a15cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ImageController: {fileID: 11467658}
+  MaxHp: 1
+  Attack: 1
+  Metal: 1
+  Crystal: 0
+  Deuterium: 0
 --- !u!114 &11498336
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -194,6 +180,14 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 0}
       propertyPath: CostMana1
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: MaxHp
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: Metal
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

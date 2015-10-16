@@ -17,7 +17,7 @@ public class CardImageController : MonoBehaviour
         set
         {
             _isFront = value;
-            var back = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().CardBack;
+            var back = GameController.Instance.GuiController.CardBack;
             // Set card image to front or back image.
             GetComponent<Image>().sprite = _isFront ? Front : back;
         }

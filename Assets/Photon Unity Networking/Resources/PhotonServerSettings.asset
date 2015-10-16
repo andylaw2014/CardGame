@@ -34,4 +34,8 @@ MonoBehaviour:
   - RPCSetState
   - OppAddMana
   - OppPlayCard
+  - RpcSetPhase
+  - RpcDrawCard
+  - RpcAddResource
+  - RpcPlayCard
   DisableAutoOpenWizard: 1

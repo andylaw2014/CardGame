@@ -6,11 +6,7 @@ TagManager:
   tags:
   - CardView
   - Opponent
-  - HandZone
-  - MinionZone
   - DeckList
-  - CardBack
-  - Stat
   - NetworkManager
   layers:
   - Default
