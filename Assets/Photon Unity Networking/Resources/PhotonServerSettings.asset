@@ -38,4 +38,6 @@ MonoBehaviour:
   - RpcDrawCard
   - RpcAddResource
   - RpcPlayCard
+  - AddSelector
+  - AddAttackor
   DisableAutoOpenWizard: 1

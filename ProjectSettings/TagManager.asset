@@ -8,6 +8,7 @@ TagManager:
   - Opponent
   - DeckList
   - NetworkManager
+  - Stat
   layers:
   - Default
   - TransparentFX

@@ -5,19 +5,9 @@ public class DrawState : GameState
         StateText += " Draw Phase";
     }
 
-    public override void StateCall()
-    {
-
-    }
-
     public override bool NextPhaseClickable()
     {
         return IsYourTurn();
-    }
-
-    public override bool AllowPlayCard()
-    {
-        return false;
     }
     
     public override Type NextState()

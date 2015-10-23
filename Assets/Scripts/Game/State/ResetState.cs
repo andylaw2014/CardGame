@@ -16,11 +16,6 @@ public class ResetState : GameState
         return IsYourTurn();
     }
 
-    public override bool AllowPlayCard()
-    {
-        return false;
-    }
-
     public override Type NextState()
     {
         return IsFirstPlayer ? Type.Player1Draw : Type.Player2Draw;

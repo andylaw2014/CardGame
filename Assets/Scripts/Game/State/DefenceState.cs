@@ -7,7 +7,9 @@ public class DefenceState : GameState
 
     public override void StateCall()
     {
-
+        if (IsYourTurn()) return;
+        GameController.Instance.Player.ToggleDefencableEffect(true);
+        GameController.Instance.Opponent.ToggleAttackingEffect(true);
     }
 
     public override bool NextPhaseClickable()
@@ -15,13 +17,16 @@ public class DefenceState : GameState
         return !IsYourTurn();
     }
 
-    public override bool AllowPlayCard()
-    {
-        return false;
-    }
-
     public override Type NextState()
     {
         return IsFirstPlayer ? Type.Player1AtkCot : Type.Player2AtkCot;
+    }
+
+    public override void EndStateCall()
+    {
+        if (IsYourTurn()) return;
+        GameController.Instance.Player.ToggleDefencableEffect(false);
+        GameController.Instance.Opponent.ToggleAttackingEffect(false);
+        GameController.Instance.Opponent.ToggleAttackableEffect(false);
     }
 }

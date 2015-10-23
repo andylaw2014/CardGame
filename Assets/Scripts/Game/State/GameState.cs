@@ -20,8 +20,25 @@ public abstract class GameState
         return IsFirstPlayer == GameController.Instance.IsFirstPlayer;
     }
 
-    public abstract void StateCall();
-    public abstract bool NextPhaseClickable();
-    public abstract bool AllowPlayCard();
+    public virtual void StateCall()
+    {
+        
+    }
+
+    public virtual bool NextPhaseClickable()
+    {
+        return false;
+    }
+
+    public virtual bool AllowPlayCard()
+    {
+        return false;
+    }
+
+    public virtual void EndStateCall()
+    {
+        
+    }
+
     public abstract Type NextState();
 }

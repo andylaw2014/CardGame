@@ -5,11 +5,6 @@ public class AttackCounterState : GameState
         StateText += " Attack Counter Phase";
     }
 
-    public override void StateCall()
-    {
-
-    }
-
     public override bool NextPhaseClickable()
     {
         return IsYourTurn();

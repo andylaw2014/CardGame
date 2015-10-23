@@ -7,7 +7,9 @@ public class AttackState : GameState
 
     public override void StateCall()
     {
-
+        GameController.Instance.InitialCombatHandler();
+        if (IsYourTurn())
+            GameController.Instance.Player.ToggleAttackableEffect(true);
     }
 
     public override bool NextPhaseClickable()
@@ -15,13 +17,16 @@ public class AttackState : GameState
         return IsYourTurn();
     }
 
-    public override bool AllowPlayCard()
-    {
-        return false;
-    }
-
     public override Type NextState()
     {
         return IsFirstPlayer ? Type.Player1Def : Type.Player2Def;
+    }
+
+    public override void EndStateCall()
+    {
+        if (!IsYourTurn()) return;
+        GameController.Instance.Player.AddAttackors();
+        GameController.Instance.Player.ToggleAttackableEffect(false);
+        GameController.Instance.Combat.SumbitAttackor();
     }
 }

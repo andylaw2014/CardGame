@@ -7,7 +7,8 @@ public class MainState : GameState
 
     public override void StateCall()
     {
-
+        if (IsYourTurn())
+            GameController.Instance.Player.TogglePlayableEffect(true);
     }
 
     public override bool NextPhaseClickable()
@@ -23,5 +24,11 @@ public class MainState : GameState
     public override Type NextState()
     {
         return IsFirstPlayer ? Type.Player1Atk : Type.Player2Atk;
+    }
+
+    public override void EndStateCall()
+    {
+        if (IsYourTurn())
+            GameController.Instance.Player.TogglePlayableEffect(false);
     }
 }
