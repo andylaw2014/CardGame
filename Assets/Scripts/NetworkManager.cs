@@ -16,14 +16,16 @@ public class NetworkManager : Photon.MonoBehaviour
     }
 
     void Awake()
-    {
+    {	
         DontDestroyOnLoad(gameObject);
     }
 
     void OnJoinedLobby()
     {
-        NewButton.interactable = true;
-        CreateButton.interactable = true;
+		if(NewButton!=null)
+        	NewButton.interactable = true;
+		if(CreateButton!=null)
+        	CreateButton.interactable = true;
     }
 
     void OnReceivedRoomListUpdate()
@@ -66,6 +68,12 @@ public class NetworkManager : Photon.MonoBehaviour
             CreateButton.interactable = true;
         }
     }
+
+	void OnEnterEdit()
+	{
+		DestroyImmediate(gameObject);
+		Application.LoadLevel("Edit");
+	}
 
     void OnLeftRoom()
     {
