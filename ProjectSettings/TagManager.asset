@@ -9,6 +9,13 @@ TagManager:
   - DeckList
   - NetworkManager
   - Stat
+  - CardBack
+  - MinionZone
+  - HandZone
+  - CardPanel
+  - DetailCard
+  - ChosenDeck
+  - ChoiceDeck
   layers:
   - Default
   - TransparentFX

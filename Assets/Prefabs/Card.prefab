@@ -13,7 +13,6 @@ GameObject:
   - 114: {fileID: 11425070}
   - 114: {fileID: 11409586}
   - 225: {fileID: 22501946}
-  - 114: {fileID: 11410004}
   m_Layer: 5
   m_Name: Card
   m_TagString: Untagged
@@ -56,17 +55,6 @@ MonoBehaviour:
   m_PreferredHeight: 160
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
---- !u!114 &11410004
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 153986}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 918b568f90e0df14a9fba15444fbd03a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &11425070
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -78,7 +66,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ef49af347531354c9e026f50837dba6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  returnParent: {fileID: 0}
 --- !u!114 &11437830
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -92,12 +79,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 21300000, guid: cf4fb823aba2cbe4d8ae3d555026d36a, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
@@ -119,12 +100,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
     m_FontSize: 15
