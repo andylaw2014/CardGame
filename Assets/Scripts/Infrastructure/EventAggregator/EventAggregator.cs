@@ -67,7 +67,7 @@ namespace Infrastructure.EventAggregator
 
         private readonly List<WeakEventHandler> _handlers;
 
-        public static Action<object, object> HandlerResultProcessing = (target, result) => { };
+        private static readonly Action<object, object> HandlerResultProcessing = (target, result) => { };
 
         public EventAggregator()
         {
@@ -76,15 +76,16 @@ namespace Infrastructure.EventAggregator
 
         public bool HandlerExistsFor(Type messageType)
         {
-            return _handlers.Any(handler => handler.Handles(messageType) & !handler.IsDead);
+            lock (_handlers)
+            {
+                return _handlers.Any(handler => handler.Handles(messageType) & !handler.IsDead);
+            }
         }
 
         public void Subscribe(object subscriber)
         {
             if (subscriber == null)
-            {
                 throw new ArgumentNullException("subscriber");
-            }
 
             lock (_handlers)
             {
@@ -94,11 +95,7 @@ namespace Infrastructure.EventAggregator
                 }
             }
         }
-
-        /// <summary>
-        /// Publish a message on the current thread
-        /// </summary>
-        /// <param name="message"></param>
+        
         public void Publish(object message)
         {
             Publish(message, action => action());
@@ -107,14 +104,10 @@ namespace Infrastructure.EventAggregator
         private void Publish(object message, Action<Action> marshal)
         {
             if (message == null)
-            {
                 throw new ArgumentNullException("message");
-            }
 
             if (marshal == null)
-            {
                 throw new ArgumentNullException("marshal");
-            }
 
             WeakEventHandler[] toNotify;
             lock (_handlers)
@@ -130,14 +123,12 @@ namespace Infrastructure.EventAggregator
                     .Where(handler => !handler.Handle(messageType, message))
                     .ToList();
 
-                if (dead.Any())
+                if (!dead.Any()) return;
+                lock (_handlers)
                 {
-                    lock (_handlers)
+                    foreach (var handler in dead)
                     {
-                        foreach (var handler in dead)
-                        {
-                            _handlers.Remove(handler);
-                        }
+                        _handlers.Remove(handler);
                     }
                 }
             });

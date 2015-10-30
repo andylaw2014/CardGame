@@ -11,6 +11,7 @@ namespace Infrastructure.Trackable
             get { return _value; }
             set
             {
+                if (value.Equals(_value)) return;
                 _value = value;
                 ValueChanged(this, new ValueChangedEventArgs<T>(_value));
             }
@@ -42,7 +43,7 @@ namespace Infrastructure.Trackable
 
         public static implicit operator T(Trackable<T> trackable)
         {
-            return trackable.Value;
+            return trackable.Value; 
         }
     }
 }
