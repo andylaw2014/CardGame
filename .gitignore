@@ -16,6 +16,9 @@
 #Unity3D Generated File On Crash Reports
 sysinfo.txt
 
+# Visual Studio 2015 cache/options directory
+.vs/
+
 # =========================
 # Operating System Files
 # =========================
