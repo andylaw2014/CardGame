@@ -6,10 +6,11 @@ namespace Infrastructure.Trackable
 {
     public abstract class TrackableCollection<T> : IEnumerable<T>
     {
-        public EventHandler<TrackableCollectionChangeEventArgs<T>> AddedEventHandler;
-        public EventHandler<TrackableCollectionChangeEventArgs<T>> RemovedEventHandler;
-        public EventHandler<TrackableCollectionChangeEventArgs<T>> InsertedEventHandler;
-        public EventHandler<TrackableCollectionChangeEventArgs<T>> ClearEventHandler;
+        // Avoid null EventHandler
+        public EventHandler<TrackableCollectionChangeEventArgs<T>> AddedEventHandler = delegate { };
+        public EventHandler<TrackableCollectionChangeEventArgs<T>> RemovedEventHandler = delegate { };
+        public EventHandler<TrackableCollectionChangeEventArgs<T>> InsertedEventHandler = delegate { };
+        public EventHandler<TrackableCollectionChangeEventArgs<T>> ClearEventHandler = delegate { };
 
         public void Add(T item)
         {

@@ -4,7 +4,8 @@ namespace Infrastructure.Trackable
 {
     public class Trackable<T>
     {
-        public EventHandler<ValueChangedEventArgs<T>> ValueChanged;
+        // Avoid null EventHandler
+        public EventHandler<ValueChangedEventArgs<T>> ValueChanged = delegate { };
         public T Value
         {
             get { return _value; }
