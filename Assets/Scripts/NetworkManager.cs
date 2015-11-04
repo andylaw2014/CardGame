@@ -1,3 +1,4 @@
+using Infrastructure.EventAggregator;
 using UnityEngine;
 using UnityEngine.UI;
 

@@ -1,15 +1,16 @@
-﻿using UnityEngine;
-using System.Collections;
+using UnityEngine;
+using Core.Zone;
 
-public class Card : MonoBehaviour {
+namespace Core
+{
+    public class Card : MonoBehaviour
+    {
+        public Player Owner { get; set; }
+        public OrderedZone Zone { get; private set; }
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+        public void ChangeZone(OrderedZone zone)
+        {
+            Zone = zone;
+        }
+    }
 }

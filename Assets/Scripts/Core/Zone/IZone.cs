@@ -1,8 +1,9 @@
-public interface IZone
+namespace Core.Zone
 {
-    Zone Name { get; }
-
-    void Remove(Card card);
-    void AfterRemove(Card card);
-    void AfterAdd(Card card);
+    public interface IZone
+    {
+        Zone Name { get; }
+        void Add(Card card);
+        void Remove(Card card);
+    }
 }
