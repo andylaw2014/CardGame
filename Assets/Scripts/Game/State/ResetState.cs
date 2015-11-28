@@ -2,13 +2,13 @@ public class ResetState : GameState
 {
     public ResetState(bool isFirstPlayer) : base(isFirstPlayer)
     {
-        StateText += " Reset Phase";
+        StateText += " Reset GamePhase";
     }
 
     public override void StateCall()
     {
-        if(IsYourTurn()&& !GameController.Instance.Player.IsResourceAllFull())
-            GameController.Instance.ResourcePanel.Activate();
+        if (IsYourTurn() && !GameController2.Instance.Player.IsResourceAllFull())
+            GameController2.Instance.ResourcePanel.Activate();
     }
 
     public override bool NextPhaseClickable()

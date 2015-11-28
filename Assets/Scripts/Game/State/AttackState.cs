@@ -2,14 +2,14 @@ public class AttackState : GameState
 {
     public AttackState(bool isFirstPlayer) : base(isFirstPlayer)
     {
-        StateText += " Attack Phase";
+        StateText += " Attack GamePhase";
     }
 
     public override void StateCall()
     {
-        GameController.Instance.InitialCombatHandler();
+        GameController2.Instance.InitialCombatHandler();
         if (IsYourTurn())
-            GameController.Instance.Player.ToggleAttackableEffect(true);
+            GameController2.Instance.Player.ToggleAttackableEffect(true);
     }
 
     public override bool NextPhaseClickable()
@@ -25,8 +25,8 @@ public class AttackState : GameState
     public override void EndStateCall()
     {
         if (!IsYourTurn()) return;
-        GameController.Instance.Player.AddAttackors();
-        GameController.Instance.Player.ToggleAttackableEffect(false);
-        GameController.Instance.Combat.SumbitAttackor();
+        GameController2.Instance.Player.AddAttackors();
+        GameController2.Instance.Player.ToggleAttackableEffect(false);
+        GameController2.Instance.Combat.SumbitAttackor();
     }
 }

@@ -1,21 +1,20 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 // Hold the decklist of player using.
 public class DeckList : MonoBehaviour
 {
+    // Instance of DeckList object.
+    private static DeckList me;
     // Decklist storing the names of prefabs.
     public List<string> Deck;
 
-    // Instance of DeckList object.
-    private static DeckList me;
-    
-    void Start()
+    private void Start()
     {
         Deck = new List<string>();
     }
-    
-    void Awake()
+
+    private void Awake()
     {
         // New level will not destory this object.
         DontDestroyOnLoad(gameObject);

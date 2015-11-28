@@ -1,11 +1,11 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 
 // ChangeMenu Class triggers parent's Animator to "Disappear" and triggers another menu's Animator to "Appear"
 public class ChangeMenu : MonoBehaviour
 {
     // New menu to be appeared
-    public GameObject Menu; 
+    public GameObject Menu;
 
     // Trigger change menu
     public void Change()
@@ -23,5 +23,4 @@ public class ChangeMenu : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         transform.parent.gameObject.SetActive(false);
     }
-
 }

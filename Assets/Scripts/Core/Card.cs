@@ -1,10 +1,14 @@
-using UnityEngine;
-using Core.Zone;
+using Assets.Scripts.Core.Zone;
 
-namespace Core
+namespace Assets.Scripts.Core
 {
-    public class Card : MonoBehaviour
+    public class Card
     {
+        public Card(Player Owner)
+        {
+            this.Owner = Owner;
+        }
+
         public Player Owner { get; set; }
         public OrderedZone Zone { get; private set; }
 

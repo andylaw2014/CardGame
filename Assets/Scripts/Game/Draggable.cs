@@ -1,15 +1,15 @@
-using Infrastructure;
+using Assets.Scripts.Infrastructure;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 // Allow card to be dragged.
 public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    private GameObject _placeHolder;
+    private bool _dragEnd;
     private Vector3 _mouseOffSet; // Hold the offset between mosue and object center.
     private Transform _parent;
-    private bool _dragEnd;
+    private GameObject _placeHolder;
 
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -56,6 +56,4 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         transform.rotation = Quaternion.identity;
         Destroy(_placeHolder);
     }
-
-
 }

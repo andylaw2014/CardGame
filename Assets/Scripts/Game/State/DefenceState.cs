@@ -2,14 +2,14 @@ public class DefenceState : GameState
 {
     public DefenceState(bool isFirstPlayer) : base(isFirstPlayer)
     {
-        StateText += " Defence Phase";
+        StateText += " Defence GamePhase";
     }
 
     public override void StateCall()
     {
         if (IsYourTurn()) return;
-        GameController.Instance.Player.ToggleDefencableEffect(true);
-        GameController.Instance.Opponent.ToggleAttackingEffect(true);
+        GameController2.Instance.Player.ToggleDefencableEffect(true);
+        GameController2.Instance.Opponent.ToggleAttackingEffect(true);
     }
 
     public override bool NextPhaseClickable()
@@ -25,8 +25,8 @@ public class DefenceState : GameState
     public override void EndStateCall()
     {
         if (IsYourTurn()) return;
-        GameController.Instance.Player.ToggleDefencableEffect(false);
-        GameController.Instance.Opponent.ToggleAttackingEffect(false);
-        GameController.Instance.Opponent.ToggleAttackableEffect(false);
+        GameController2.Instance.Player.ToggleDefencableEffect(false);
+        GameController2.Instance.Opponent.ToggleAttackingEffect(false);
+        GameController2.Instance.Opponent.ToggleAttackableEffect(false);
     }
 }

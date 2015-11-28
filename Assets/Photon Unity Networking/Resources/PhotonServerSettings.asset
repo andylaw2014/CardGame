@@ -40,4 +40,5 @@ MonoBehaviour:
   - RpcPlayCard
   - AddSelector
   - AddAttackor
+  - NextPhase
   DisableAutoOpenWizard: 1

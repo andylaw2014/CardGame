@@ -1,4 +1,4 @@
-namespace Infrastructure.EventAggregator
+namespace Assets.Scripts.Infrastructure.EventAggregator
 {
     public interface IHandle
     {

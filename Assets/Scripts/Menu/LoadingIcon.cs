@@ -9,10 +9,10 @@ public class LoadingIcon : MonoBehaviour
     // FPS of sprites.
     public int FramesPerSecond;
 
-    void OnGUI()
+    private void OnGUI()
     {
         // Change sprite depend on time.
-        int index = (int)((Time.time * FramesPerSecond) % Frames.Length);
+        var index = (int) ((Time.time*FramesPerSecond)%Frames.Length);
         GetComponent<Image>().sprite = Frames[index];
     }
 }

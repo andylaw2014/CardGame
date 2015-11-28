@@ -2,7 +2,7 @@ public class AttackCounterState : GameState
 {
     public AttackCounterState(bool isFirstPlayer) : base(isFirstPlayer)
     {
-        StateText += " Attack Counter Phase";
+        StateText += " Attack Counter GamePhase";
     }
 
     public override bool NextPhaseClickable()

@@ -4,19 +4,25 @@ using UnityEngine.UI;
 
 public class CardController : MonoBehaviour, IPointerEnterHandler
 {
+    private readonly Color _attackColor = new Color(1, 153/255f, 153/255f, 1);
+
+    private readonly Color _orignalColor = Color.white;
+    private readonly Color _playableColor = new Color(153/255f, 1, 153/255f, 1);
+    private readonly Color _selectableColor = new Color(153/255f, 1, 153/255f, 1);
+    private readonly Color _selectedColor = new Color(1, 1, 153/255f, 1);
+    private bool _allowToPlay;
+
+    private int _id = -1;
+    private Value<EnumType.Resource> _resource;
+    private bool _selectable;
+    private Value<EnumType.Card> _value;
+    public int Attack;
+    public int Crystal;
+    public int Deuterium;
     public CardImageController ImageController;
 
     public int MaxHp;
-    public int Attack;
     public int Metal;
-    public int Crystal;
-    public int Deuterium;
-
-    private readonly Color _orignalColor = Color.white;
-    private readonly Color _playableColor = new Color(153/255f,1,153/255f,1);
-    private readonly Color _selectableColor = new Color(153 / 255f, 1, 153 / 255f, 1);
-    private readonly Color _selectedColor = new Color(1, 1, 153 / 255f, 1);
-    private readonly Color _attackColor = new Color(1, 153 / 255f, 153 / 255f, 1);
 
     [HideInInspector]
     public int Id
@@ -51,7 +57,7 @@ public class CardController : MonoBehaviour, IPointerEnterHandler
                 Destroy(GetComponent<PlayCard>());
         }
     }
-    
+
     [HideInInspector]
     public bool Selectable
     {
@@ -66,14 +72,19 @@ public class CardController : MonoBehaviour, IPointerEnterHandler
         }
     }
 
-    private int _id = -1;
-    private bool _allowToPlay;
-    private bool _selectable;
-    private Value<EnumType.Resource> _resource;
-    private Value<EnumType.Card> _value;
+    // View the card on card view
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        // Ensure only card face front can be viewed
+        if (!IsFront) return;
+        var cardViewController =
+            GameObject.FindGameObjectWithTag("CardView").GetComponent<CardViewController>();
+        if (cardViewController != null)
+            cardViewController.SetImage(ImageController.Front);
+    }
 
     // Use this for initialization
-    void Awake()
+    private void Awake()
     {
         _resource = new Value<EnumType.Resource>();
         _resource[EnumType.Resource.Metal] = Metal;
@@ -84,7 +95,6 @@ public class CardController : MonoBehaviour, IPointerEnterHandler
         _value[EnumType.Card.MaxHp] = MaxHp;
         _value[EnumType.Card.Hp] = MaxHp;
         _value[EnumType.Card.Attack] = Attack;
-
     }
 
     public void SetParent(Transform parent)
@@ -110,45 +120,11 @@ public class CardController : MonoBehaviour, IPointerEnterHandler
 
     public void Play()
     {
-
     }
 
     public bool IsSelected()
     {
         return GetComponent<Selectable>().IsSelected;
-    }
-
-    #region Stats
-    public void SetResource(EnumType.Resource resource, int value)
-    {
-        _resource[resource] = value;
-    }
-
-    public int GetResource(EnumType.Resource resource)
-    {
-        return _resource[resource];
-    }
-
-    public void SetStats(EnumType.Card card, int value)
-    {
-        _value[card] = value;
-    }
-
-    public int GetStats(EnumType.Card card)
-    {
-        return _value[card];
-    }
-    #endregion
-
-    // View the card on card view
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        // Ensure only card face front can be viewed
-        if (!IsFront) return;
-        var cardViewController =
-            GameObject.FindGameObjectWithTag("CardView").GetComponent<CardViewController>();
-        if (cardViewController != null)
-            cardViewController.SetImage(ImageController.Front);
     }
 
     public void TogglePlayableGlow(bool turnOn)
@@ -170,4 +146,28 @@ public class CardController : MonoBehaviour, IPointerEnterHandler
     {
         GetComponent<Image>().color = turnOn ? _attackColor : _selectableColor;
     }
+
+    #region Stats
+
+    public void SetResource(EnumType.Resource resource, int value)
+    {
+        _resource[resource] = value;
+    }
+
+    public int GetResource(EnumType.Resource resource)
+    {
+        return _resource[resource];
+    }
+
+    public void SetStats(EnumType.Card card, int value)
+    {
+        _value[card] = value;
+    }
+
+    public int GetStats(EnumType.Card card)
+    {
+        return _value[card];
+    }
+
+    #endregion
 }

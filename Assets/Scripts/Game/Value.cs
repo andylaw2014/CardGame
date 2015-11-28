@@ -6,7 +6,7 @@ public class Value<T>
 
     public Value()
     {
-        _resource = new Dictionary<T, int> ();
+        _resource = new Dictionary<T, int>();
     }
 
     public int this[T i]

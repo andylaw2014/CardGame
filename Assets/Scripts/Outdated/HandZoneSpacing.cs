@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 public class HandZoneSpacing : MonoBehaviour
 {
@@ -8,19 +7,20 @@ public class HandZoneSpacing : MonoBehaviour
 
     public void RearrangeLayout()
     {
-        HorizontalLayoutGroup mHorizontalLayoutGroup = GetComponent<HorizontalLayoutGroup>();
-        LayoutElement[] mImages = mHorizontalLayoutGroup.GetComponentsInChildren<LayoutElement>();
+        var mHorizontalLayoutGroup = GetComponent<HorizontalLayoutGroup>();
+        var mImages = mHorizontalLayoutGroup.GetComponentsInChildren<LayoutElement>();
         if (mImages.Length > 0)
         {
-            float width = GetComponent<RectTransform>().rect.width - (GetComponent<HorizontalLayoutGroup>().padding.left + GetComponent<HorizontalLayoutGroup>().padding.right);
-            float calSpacing = (width - mImages.Length * mImages[0].preferredWidth) / (mImages.Length - 1);
+            var width = GetComponent<RectTransform>().rect.width -
+                        (GetComponent<HorizontalLayoutGroup>().padding.left +
+                         GetComponent<HorizontalLayoutGroup>().padding.right);
+            var calSpacing = (width - mImages.Length*mImages[0].preferredWidth)/(mImages.Length - 1);
             mHorizontalLayoutGroup.spacing = (defaultSpacing < calSpacing) ? defaultSpacing : calSpacing;
         }
     }
 
-    void Update()
+    private void Update()
     {
-
         RearrangeLayout();
     }
 }

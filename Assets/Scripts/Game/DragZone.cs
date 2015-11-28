@@ -8,7 +8,7 @@ public class DragZone : MonoBehaviour, IDropHandler
         var afterDrag = eventData.pointerDrag.GetComponent<AfterDrag>();
         if (afterDrag == null) return;
         var drag = eventData.pointerDrag.GetComponent<Draggable>();
-        if(drag!=null)
+        if (drag != null)
             drag.EndDrag();
         afterDrag.Execute();
     }

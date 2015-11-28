@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Infrastructure.Trackable
+namespace Assets.Scripts.Infrastructure.Trackable
 {
     public class TrackableList<T> : TrackableCollection<T>
     {

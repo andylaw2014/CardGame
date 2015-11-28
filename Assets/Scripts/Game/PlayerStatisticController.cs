@@ -3,21 +3,27 @@ using UnityEngine.UI;
 
 public class PlayerStatisticController : MonoBehaviour
 {
-    public int MaxHp;
-    public Text HpText;
-    public Text MetalText;
+    private Value<EnumType.Resource> _resource;
     public Text CrystalText;
     public Text DeuteriumText;
+
+    [HideInInspector] public int Hp;
+
+    public Text HpText;
     public Value<EnumType.Resource> Max;
-    [HideInInspector]
-    public int Hp;
+    public int MaxHp;
+    public Text MetalText;
 
-    private Value<EnumType.Resource>  _resource;
+    public int this[EnumType.Resource i]
+    {
+        get { return _resource[i]; }
+        set { _resource[i] = value; }
+    }
 
-    void Awake()
+    private void Awake()
     {
         Hp = MaxHp;
-        _resource= new Value<EnumType.Resource>();
+        _resource = new Value<EnumType.Resource>();
         Max = new Value<EnumType.Resource>();
         Max[EnumType.Resource.Metal] = 0;
         Max[EnumType.Resource.Crystal] = 0;
@@ -25,12 +31,13 @@ public class PlayerStatisticController : MonoBehaviour
         ResetResource();
     }
 
-    void OnGUI()
+    private void OnGUI()
     {
         HpText.text = "HP: " + Hp + " / " + MaxHp;
         MetalText.text = "Metal: " + _resource[EnumType.Resource.Metal] + " / " + Max[EnumType.Resource.Metal];
         CrystalText.text = "Crystal: " + _resource[EnumType.Resource.Crystal] + " / " + Max[EnumType.Resource.Crystal];
-        DeuteriumText.text = "Deuterium: " + _resource[EnumType.Resource.Deuterium] + " / " + Max[EnumType.Resource.Deuterium];
+        DeuteriumText.text = "Deuterium: " + _resource[EnumType.Resource.Deuterium] + " / " +
+                             Max[EnumType.Resource.Deuterium];
     }
 
     public void ResetResource()
@@ -38,11 +45,5 @@ public class PlayerStatisticController : MonoBehaviour
         _resource[EnumType.Resource.Metal] = Max[EnumType.Resource.Metal];
         _resource[EnumType.Resource.Crystal] = Max[EnumType.Resource.Crystal];
         _resource[EnumType.Resource.Deuterium] = Max[EnumType.Resource.Deuterium];
-    }
-
-    public int this[EnumType.Resource i]
-    {
-        get { return _resource[i]; }
-        set { _resource[i] = value; }
     }
 }

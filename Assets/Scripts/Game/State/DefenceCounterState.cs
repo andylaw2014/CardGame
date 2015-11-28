@@ -2,7 +2,7 @@ public class DefenceCounterState : GameState
 {
     public DefenceCounterState(bool isFirstPlayer) : base(isFirstPlayer)
     {
-        StateText += " Defence Counter Phase";
+        StateText += " Defence Counter GamePhase";
     }
 
     public override bool NextPhaseClickable()
@@ -17,16 +17,15 @@ public class DefenceCounterState : GameState
 
     public override void EndStateCall()
     {
-        var combat = GameController.Instance.Combat;
-        var target = IsYourTurn() ? GameController.Instance.Opponent : GameController.Instance.Player;
-        var attacter = IsYourTurn() ? GameController.Instance.Player : GameController.Instance.Opponent;
+        var combat = GameController2.Instance.Combat;
+        var target = IsYourTurn() ? GameController2.Instance.Opponent : GameController2.Instance.Player;
+        var attacter = IsYourTurn() ? GameController2.Instance.Player : GameController2.Instance.Opponent;
 
-            foreach (var id in combat.SelectAttackSet)
-            {
-                var card = attacter.FindCardControllerByIdInBoard(id);
-                target.Stats.Hp -= card.Attack;
-            }
-
+        foreach (var id in combat.SelectAttackSet)
+        {
+            var card = attacter.FindCardControllerByIdInBoard(id);
+            target.Stats.Hp -= card.Attack;
+        }
     }
 
     public override Type NextState()

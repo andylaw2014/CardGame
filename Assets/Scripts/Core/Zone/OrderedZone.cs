@@ -1,17 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
-using Infrastructure;
+using Assets.Scripts.Infrastructure;
 
-namespace Core.Zone
+namespace Assets.Scripts.Core.Zone
 {
     public abstract class OrderedZone : IEnumerable<Card>
     {
-        public readonly Player Owner;
-        public abstract Zone Name { get; }
-        protected readonly Game Game;
         private readonly List<Card> _cards;
+        protected readonly Game Game;
+        public readonly Player Owner;
 
-        OrderedZone(Game game, Player owner)
+        protected OrderedZone(Game game, Player owner)
         {
             Game = game;
             Owner = owner;
@@ -50,6 +49,8 @@ namespace Core.Zone
 
         protected Card PopTop()
         {
+            if (_cards.Count <= 0)
+                return null;
             var card = _cards[0];
             _cards.RemoveAt(0);
             return card;

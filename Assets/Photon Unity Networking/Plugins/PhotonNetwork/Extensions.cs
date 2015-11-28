@@ -1,4 +1,4 @@
-﻿// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // <copyright file="Extensions.cs" company="Exit Games GmbH">
 //   PhotonNetwork Framework for Unity - Copyright (C) 2011 Exit Games GmbH
 // </copyright>
@@ -32,13 +32,13 @@ public static class Extensions
     /// <summary>compares the squared magnitude of target - second to given float value</summary>
     public static bool AlmostEquals(this Vector3 target, Vector3 second, float sqrMagnitudePrecision)
     {
-        return (target - second).sqrMagnitude < sqrMagnitudePrecision;  // TODO: inline vector methods to optimize?
+        return (target - second).sqrMagnitude < sqrMagnitudePrecision;  
     }
 
     /// <summary>compares the squared magnitude of target - second to given float value</summary>
     public static bool AlmostEquals(this Vector2 target, Vector2 second, float sqrMagnitudePrecision)
     {
-        return (target - second).sqrMagnitude < sqrMagnitudePrecision;  // TODO: inline vector methods to optimize?
+        return (target - second).sqrMagnitude < sqrMagnitudePrecision; 
     }
 
     /// <summary>compares the angle between target and second to given float value</summary>

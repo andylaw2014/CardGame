@@ -3,6 +3,8 @@ using UnityEngine.EventSystems;
 
 public class Selectable : MonoBehaviour, IPointerClickHandler
 {
+    private bool _selected;
+
     public bool IsSelected
     {
         get { return _selected; }
@@ -16,8 +18,6 @@ public class Selectable : MonoBehaviour, IPointerClickHandler
         }
     }
 
-    private bool _selected;
-    
     public void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.button != PointerEventData.InputButton.Left) return;

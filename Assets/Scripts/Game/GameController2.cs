@@ -1,17 +1,17 @@
 using UnityEngine;
 
-public class GameController : MonoBehaviour
+public class GameController2 : MonoBehaviour
 {
-    public static GameController Instance { get; private set; }
+    public CombatHandler Combat;
+    public ResourcePanelController ResourcePanel;
+    public static GameController2 Instance { get; private set; }
     public bool IsFirstPlayer { get; private set; }
     public PlayerController Player { get; private set; }
     public PlayerController Opponent { get; private set; }
     public GameState Phase { get; private set; }
     public GameGuiController GuiController { get; private set; }
-    public ResourcePanelController ResourcePanel;
-    public CombatHandler Combat;
-    
-    void Awake()
+
+    private void Awake()
     {
         // UNDONE: Random instead
         IsFirstPlayer = PhotonNetwork.isMasterClient;
@@ -25,7 +25,7 @@ public class GameController : MonoBehaviour
             DestroyImmediate(this);
     }
 
-    void Start()
+    private void Start()
     {
         // UNDONE: Draw from deck
         Phase = new ResetState(true);
@@ -56,14 +56,14 @@ public class GameController : MonoBehaviour
         Player.AddResource(resource);
         if (reset)
             Player.ResetResource();
-        GetComponent<PhotonView>().RPC("RpcAddResource", PhotonTargets.Others, (byte)resource, reset);
+        GetComponent<PhotonView>().RPC("RpcAddResource", PhotonTargets.Others, (byte) resource, reset);
     }
 
 
     [PunRPC]
     public void RpcAddResource(byte data, bool reset)
     {
-        var resource = (EnumType.Resource)data;
+        var resource = (EnumType.Resource) data;
         Opponent.AddResource(resource);
         if (reset)
             Opponent.ResetResource();
@@ -98,7 +98,8 @@ public class GameController : MonoBehaviour
         return true && Player.IsDefencable(id);
     }
 
-    #region Phase
+    #region GamePhase
+
     public void NextPhase()
     {
         SetPhase(Phase.NextState());
@@ -107,65 +108,83 @@ public class GameController : MonoBehaviour
     public void SetPhase(GameState.Type gameState)
     {
         RpcSetPhase((byte) gameState);
-        GetComponent<PhotonView>().RPC("RpcSetPhase", PhotonTargets.Others, (byte)gameState);
+        GetComponent<PhotonView>().RPC("RpcSetPhase", PhotonTargets.Others, (byte) gameState);
     }
 
     [PunRPC]
     private void RpcSetPhase(byte data)
     {
         Phase.EndStateCall();
-        var gameState = (GameState.Type)data;
+        var gameState = (GameState.Type) data;
         switch (gameState)
         {
             case GameState.Type.Player1Reset:
-                Phase = new ResetState(true); break;
+                Phase = new ResetState(true);
+                break;
             case GameState.Type.Player1Draw:
-                Phase = new DrawState(true); break;
+                Phase = new DrawState(true);
+                break;
             case GameState.Type.Player1Main:
-                Phase = new MainState(true); break;
+                Phase = new MainState(true);
+                break;
             case GameState.Type.Player1Atk:
-                Phase = new AttackState(true); break;
+                Phase = new AttackState(true);
+                break;
             case GameState.Type.Player1Def:
-                Phase = new DefenceState(true); break;
+                Phase = new DefenceState(true);
+                break;
             case GameState.Type.Player1AtkCot:
-                Phase = new AttackCounterState(true); break;
+                Phase = new AttackCounterState(true);
+                break;
             case GameState.Type.Player1DefCot:
-                Phase = new DefenceCounterState(true); break;
+                Phase = new DefenceCounterState(true);
+                break;
             case GameState.Type.Player1SecMain:
-                Phase = new SecondMainState(true); break;
+                Phase = new SecondMainState(true);
+                break;
             case GameState.Type.Player2Reset:
-                Phase = new ResetState(false); break;
+                Phase = new ResetState(false);
+                break;
             case GameState.Type.Player2Draw:
-                Phase = new DrawState(false); break;
+                Phase = new DrawState(false);
+                break;
             case GameState.Type.Player2Main:
-                Phase = new MainState(false); break;
+                Phase = new MainState(false);
+                break;
             case GameState.Type.Player2Atk:
-                Phase = new AttackState(false); break;
+                Phase = new AttackState(false);
+                break;
             case GameState.Type.Player2Def:
-                Phase = new DefenceState(false); break;
+                Phase = new DefenceState(false);
+                break;
             case GameState.Type.Player2AtkCot:
-                Phase = new AttackCounterState(false); break;
+                Phase = new AttackCounterState(false);
+                break;
             case GameState.Type.Player2DefCot:
-                Phase = new DefenceCounterState(false); break;
+                Phase = new DefenceCounterState(false);
+                break;
             case GameState.Type.Player2SecMain:
-                Phase = new SecondMainState(false); break;
+                Phase = new SecondMainState(false);
+                break;
         }
-        
+
         GuiController.NextPhaseButton.interactable = Phase.NextPhaseClickable();
         Phase.StateCall();
     }
+
     #endregion
 
     #region Select
+
     public void InitialCombatHandler()
     {
-        Combat=new CombatHandler();
+        Combat = new CombatHandler();
     }
 
     [PunRPC]
     public void AddAttackor(int id)
     {
-        Debug.Log("AddAttackor"+id);
+        Debug.Log("AddAttackor" + id);
         Combat.AddAttackor(id);
     }
 
@@ -173,6 +192,6 @@ public class GameController : MonoBehaviour
     {
         GetComponent<PhotonView>().RPC("AddAttackor", PhotonTargets.Others, id);
     }
-    
+
     #endregion
 }

@@ -1,20 +1,20 @@
 using System;
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    private const int MaxResource = 10;
+    private Dictionary<int, CardController> _board;
+
+    private Dictionary<int, CardController> _hand;
+    private bool _isPlayer;
+    private int _maxId;
     public GameObject HandZone;
     public GameObject MinionZone;
     public PlayerStatisticController Stats;
 
-    private Dictionary<int, CardController> _hand;
-    private Dictionary<int, CardController> _board;
-    private bool _isPlayer;
-    private int _maxId;
-    private const int MaxResource = 10;
-
-    void Awake()
+    private void Awake()
     {
         _hand = new Dictionary<int, CardController>();
         _board = new Dictionary<int, CardController>();
@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour
         var cardController = FindCardControllerByIdInHand(id);
         if (!cardController.IsPlayable())
             return false;
-        foreach (EnumType.Resource resource in Enum.GetValues(typeof(EnumType.Resource)))
+        foreach (EnumType.Resource resource in Enum.GetValues(typeof (EnumType.Resource)))
         {
             if (Stats[resource] < cardController.GetResource(resource))
                 return false;
@@ -67,7 +67,7 @@ public class PlayerController : MonoBehaviour
     public void Play(int id)
     {
         var cardController = FindCardControllerByIdInHand(id);
-        foreach (EnumType.Resource resource in Enum.GetValues(typeof(EnumType.Resource)))
+        foreach (EnumType.Resource resource in Enum.GetValues(typeof (EnumType.Resource)))
         {
             Stats[resource] -= cardController.GetResource(resource);
         }
@@ -99,7 +99,7 @@ public class PlayerController : MonoBehaviour
 
     public bool IsResourceAllFull()
     {
-        foreach (EnumType.Resource resource in Enum.GetValues(typeof(EnumType.Resource)))
+        foreach (EnumType.Resource resource in Enum.GetValues(typeof (EnumType.Resource)))
         {
             if (!IsResourceFull(resource))
                 return false;
@@ -116,7 +116,7 @@ public class PlayerController : MonoBehaviour
     {
         foreach (var card in _hand)
         {
-            if (turnOn && GameController.Instance.IsCardPlayable(card.Key))
+            if (turnOn && GameController2.Instance.IsCardPlayable(card.Key))
                 card.Value.TogglePlayableGlow(true);
             else
                 card.Value.TogglePlayableGlow(false);
@@ -127,7 +127,7 @@ public class PlayerController : MonoBehaviour
     {
         foreach (var card in _board)
         {
-            if (GameController.Instance.IsCardAttackable(card.Key) && turnOn)
+            if (GameController2.Instance.IsCardAttackable(card.Key) && turnOn)
             {
                 card.Value.Selectable = true;
                 card.Value.ToggleSelectableGlow(true);
@@ -143,8 +143,8 @@ public class PlayerController : MonoBehaviour
 
     public void ToggleAttackingEffect(bool turnOn)
     {
-        Debug.Log("T"+ GameController.Instance.Combat.SelectAttackSet.Count);
-        foreach (var id in GameController.Instance.Combat.SelectAttackSet)
+        Debug.Log("T" + GameController2.Instance.Combat.SelectAttackSet.Count);
+        foreach (var id in GameController2.Instance.Combat.SelectAttackSet)
         {
             Debug.Log(id);
             var card = FindCardControllerByIdInBoard(id);
@@ -156,7 +156,7 @@ public class PlayerController : MonoBehaviour
     {
         foreach (var card in _board)
         {
-            if (GameController.Instance.IsCardDefencable(card.Key) && turnOn)
+            if (GameController2.Instance.IsCardDefencable(card.Key) && turnOn)
             {
                 card.Value.Selectable = true;
                 card.Value.ToggleSelectableGlow(true);
@@ -174,7 +174,7 @@ public class PlayerController : MonoBehaviour
         foreach (var card in _board)
         {
             if (card.Value.IsSelected())
-                GameController.Instance.Combat.AddAttackor(card.Key);
+                GameController2.Instance.Combat.AddAttackor(card.Key);
         }
     }
 

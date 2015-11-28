@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Random = System.Random;
 
-namespace Infrastructure
+namespace Assets.Scripts.Infrastructure
 {
     public static class Utility
     {
@@ -22,7 +23,7 @@ namespace Infrastructure
 
         public static void Shuffle<T>(this IList<T> list)
         {
-            var rng = new System.Random();
+            var rng = new Random();
             var n = list.Count;
             while (n > 1)
             {

@@ -76,7 +76,6 @@ namespace ExitGames.Client.Photon
 
             websocketConnectionObject = new GameObject("websocketConnectionObject");
             MonoBehaviour mb = websocketConnectionObject.AddComponent<MonoBehaviour>();
-            // TODO: not hidden for debug
             //websocketConnectionObject.hideFlags = HideFlags.HideInHierarchy;
             UnityEngine.Object.DontDestroyOnLoad(websocketConnectionObject);
 

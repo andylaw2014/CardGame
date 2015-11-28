@@ -3,71 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Infrastructure.EventAggregator
+namespace Assets.Scripts.Infrastructure.EventAggregator
 {
     public class EventAggregator : IEventAggregator
     {
-        private class WeakEventHandler
-        {
-            private readonly WeakReference _weakReference;
-            private readonly Dictionary<Type, MethodInfo> _supportedHandlers;
-
-            public bool IsDead
-            {
-                get { return _weakReference.Target == null; }
-            }
-
-            public WeakEventHandler(object handler)
-            {
-                _weakReference = new WeakReference(handler);
-                _supportedHandlers = new Dictionary<Type, MethodInfo>();
-
-                var interfaces = handler.GetType().GetInterfaces()
-                    .Where(x => typeof(IHandle).IsAssignableFrom(x) && x.IsGenericType);
-
-                foreach (var @interface in interfaces)
-                {
-                    var type = @interface.GetGenericArguments()[0];
-                    var method = @interface.GetMethod("Handle");
-                    _supportedHandlers[type] = method;
-                }
-            }
-
-            public bool Matches(object instance)
-            {
-                return _weakReference.Target == instance;
-            }
-
-            public bool Handle(Type messageType, object message)
-            {
-                var target = _weakReference.Target;
-                if (target == null)
-                {
-                    return false;
-                }
-
-                foreach (var pair in _supportedHandlers)
-                {
-                    if (!pair.Key.IsAssignableFrom(messageType)) continue;
-                    var result = pair.Value.Invoke(target, new[] { message });
-                    if (result != null)
-                    {
-                        HandlerResultProcessing(target, result);
-                    }
-                }
-
-                return true;
-            }
-
-            public bool Handles(Type messageType)
-            {
-                return _supportedHandlers.Any(pair => pair.Key.IsAssignableFrom(messageType));
-            }
-        }
+        private static readonly Action<object, object> HandlerResultProcessing = (target, result) => { };
 
         private readonly List<WeakEventHandler> _handlers;
-
-        private static readonly Action<object, object> HandlerResultProcessing = (target, result) => { };
 
         public EventAggregator()
         {
@@ -95,9 +37,10 @@ namespace Infrastructure.EventAggregator
                 }
             }
         }
-        
+
         public void Publish(object message)
         {
+            Log.Verbose(message);
             Publish(message, action => action());
         }
 
@@ -132,6 +75,64 @@ namespace Infrastructure.EventAggregator
                     }
                 }
             });
+        }
+
+        private class WeakEventHandler
+        {
+            private readonly Dictionary<Type, MethodInfo> _supportedHandlers;
+            private readonly WeakReference _weakReference;
+
+            public WeakEventHandler(object handler)
+            {
+                _weakReference = new WeakReference(handler);
+                _supportedHandlers = new Dictionary<Type, MethodInfo>();
+
+                var interfaces = handler.GetType().GetInterfaces()
+                    .Where(x => typeof (IHandle).IsAssignableFrom(x) && x.IsGenericType);
+
+                foreach (var @interface in interfaces)
+                {
+                    var type = @interface.GetGenericArguments()[0];
+                    var method = @interface.GetMethod("Handle");
+                    _supportedHandlers[type] = method;
+                }
+            }
+
+            public bool IsDead
+            {
+                get { return _weakReference.Target == null; }
+            }
+
+            public bool Matches(object instance)
+            {
+                return _weakReference.Target == instance;
+            }
+
+            public bool Handle(Type messageType, object message)
+            {
+                var target = _weakReference.Target;
+                if (target == null)
+                {
+                    return false;
+                }
+
+                foreach (var pair in _supportedHandlers)
+                {
+                    if (!pair.Key.IsAssignableFrom(messageType)) continue;
+                    var result = pair.Value.Invoke(target, new[] {message});
+                    if (result != null)
+                    {
+                        HandlerResultProcessing(target, result);
+                    }
+                }
+
+                return true;
+            }
+
+            public bool Handles(Type messageType)
+            {
+                return _supportedHandlers.Any(pair => pair.Key.IsAssignableFrom(messageType));
+            }
         }
     }
 }

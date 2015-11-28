@@ -3,11 +3,11 @@ using UnityEngine.UI;
 
 public class GameGuiController : MonoBehaviour
 {
-    public static GameGuiController Instance { get; private set; }
+    public Sprite CardBack; // Card back
+    public Button NextPhaseButton; // Button to end current phase
 
     public Text PhaseText; // GUI text to show current phase.
-    public Button NextPhaseButton;  // Button to end current phase
-    public Sprite CardBack;  // Card back
+    public static GameGuiController Instance { get; private set; }
 
     private void Awake()
     {
@@ -19,6 +19,6 @@ public class GameGuiController : MonoBehaviour
 
     private void OnGUI()
     {
-        PhaseText.text = GameController.Instance.Phase.StateText;
+        PhaseText.text = GameController2.Instance.Phase.StateText;
     }
 }
