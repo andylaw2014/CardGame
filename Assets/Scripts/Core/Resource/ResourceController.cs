@@ -18,7 +18,7 @@ namespace Assets.Scripts.Core.Resource
             Owner = owner;
             _count = new int [2][];
             for(var i=0;i< _count.Length;i++)
-                _count[i] = new [] {0,0,0};
+                _count[i] = new [] {0,0,0,30};
         }
 
         public void Update()
@@ -41,6 +41,7 @@ namespace Assets.Scripts.Core.Resource
         {
             for (var i = 0; i < _count[0].Length; i++)
                     _count[(int)Type.Current][i] = _count[(int)Type.Maximum][i];
+            Update();
         }
     }
 }

@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using Assets.Scripts.Core.Phase;
 using Assets.Scripts.Infrastructure;
 using Assets.Scripts.Infrastructure.EventAggregator;
+using Assets.Scripts.UI.Command;
 
 namespace Assets.Scripts.Core
 {
@@ -18,27 +20,67 @@ namespace Assets.Scripts.Core
         private readonly Player _player;
         private readonly EventAggregator _publisher;
         private GamePhase _phase;
-        private readonly GameController _gameController;
+        public readonly GameController GameController;
+        private readonly IdFactory _idFactory;
+        private readonly Dictionary<string, Card> _cardCache;  
 
         public Game(GameController gameController, User firstUser)
         {
             // Initialization
             _publisher = new EventAggregator();
-            _gameController = gameController;
+            GameController = gameController;
             _firstUser = firstUser ;
             Log.Verbose("Is First Player:" + _firstUser);
             _player = new Player(this, User.You);
             _opponent = new Player(this, User.Opponent);
+            _idFactory = new IdFactory(_firstUser== User.You);
+            _cardCache= new Dictionary<string, Card>();
         }
 
-        public void NextPhaseButton()
+        public void NextPhase()
         {
             _phase.Next();
         }
 
-        public Card InitialCard(string name, Player player)
+        public bool Handle(IUiCommand command)
         {
-            throw  new NotImplementedException();
+            Log.Verbose("Handle UI Command");
+            return _phase.Handle(command);
+        }
+
+        public Card GetCardById(string id)
+        {
+            Card card;
+            return _cardCache.TryGetValue(id, out card) ? card : null;
+        }
+
+        public void PlayCardFromHand(string id)
+        {
+            Card card;
+            if (!_cardCache.TryGetValue(id, out card))
+                return;
+            card.Owner.PlayCard(card);
+        }
+
+        // TODO: Draw Card From Deck
+        public void DrawCardFromDeck()
+        {
+            Log.Verbose("Draw Test Card From Deck");
+            GameController.RpcDrawCard("TestCard", true);
+        }
+
+        public void DrawCard(string cardName, string id, User user)
+        {
+            var player = GetPlayer(user);
+            var card = new Card(player, cardName , id);
+            Log.Verbose("Add to card cache: "+ id);
+            _cardCache.Add(id, card);
+            player.DrawCard(card);
+        }
+
+        public string GenerateId()
+        {
+            return _idFactory.Generate();
         }
 
         public void Start()
@@ -46,6 +88,7 @@ namespace Assets.Scripts.Core
             Log.Verbose("Game Start");
             _phase = new ResetPhase(this,_firstUser);
             Update();
+            DrawCardFromDeck();
         }
 
         public void Update()

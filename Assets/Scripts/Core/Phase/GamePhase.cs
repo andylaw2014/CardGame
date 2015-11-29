@@ -17,9 +17,10 @@ namespace Assets.Scripts.Core.Phase
             _game.Publish(new StartPhaseMessage(this));
         }
 
-        public virtual void Handle(IUiCommand command)
+        // Return is handled
+        public virtual bool Handle(IUiCommand command)
         {
-            
+            return false;
         }
 
         public void Next()

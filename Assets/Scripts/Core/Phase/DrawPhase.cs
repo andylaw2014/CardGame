@@ -4,6 +4,8 @@ namespace Assets.Scripts.Core.Phase
     {
         public DrawPhase(Game game, Game.User owner) : base(game, owner)
         {
+            if(owner == Game.User.You)
+                game.DrawCardFromDeck();
         }
 
         protected override string Name

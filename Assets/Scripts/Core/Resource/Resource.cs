@@ -4,6 +4,7 @@ namespace Assets.Scripts.Core.Resource
     {
         Metal,
         Crystal,
-        Deuterium
+        Deuterium,
+        Hp
     }
 }

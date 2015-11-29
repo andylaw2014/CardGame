@@ -1,7 +1,23 @@
+using UnityEngine;
+using UnityEngine.EventSystems;
+
 namespace Assets.Scripts.UI
 {
-    public interface Targetable
+    public class Targetable : MonoBehaviour, IDropHandler
     {
-        bool IsTargetable();
+        public enum Type
+        {
+            Card,
+            Zone
+        }
+
+        public Type Source;
+
+        public void OnDrop(PointerEventData eventData)
+        {
+            var drag = eventData.pointerDrag.GetComponent<Draggable>();
+            if (drag != null)
+                drag.Destination = this;
+        }
     }
 }

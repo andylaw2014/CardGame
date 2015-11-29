@@ -4,6 +4,8 @@ namespace Assets.Scripts.Core.Phase
     {
         public ResetPhase(Game game, Game.User owner) : base(game, owner)
         {
+            if(owner == Game.User.You)
+                game.GameController.GuiController.ShowResourcePanelController();
         }
 
         protected override string Name

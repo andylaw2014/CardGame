@@ -22,6 +22,9 @@ namespace Assets.Scripts.UI
             if (resourceController.Owner.User != User)
                 return;
             Log.Verbose("PlayerStatsController: Handle ResourceChangeMessage");
+
+            HpText.text = "HP: " + resourceController.GetResource(Resource.Hp, ResourceController.Type.Current) + " / "
+                          + resourceController.GetResource(Resource.Hp, ResourceController.Type.Maximum);
             MetalText.text = "Metal: " + resourceController.GetResource(Resource.Metal, ResourceController.Type.Current) +
                              " / "
                              + resourceController.GetResource(Resource.Metal, ResourceController.Type.Maximum);

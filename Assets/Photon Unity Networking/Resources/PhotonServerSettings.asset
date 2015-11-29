@@ -21,24 +21,17 @@ MonoBehaviour:
   JoinLobby: 1
   EnableLobbyStatistics: 0
   RpcList:
+  - AddResource
   - Chat
   - DestroyRpc
+  - DrawCard
   - InstantiateRpc
+  - NextPhase
   - OnAwakeRPC
   - PickupItemInit
+  - PlayCard
   - PunPickup
   - PunPickupSimple
   - PunRespawn
   - RequestForPickupTimes
-  - OppYouDraw
-  - RPCSetState
-  - OppAddMana
-  - OppPlayCard
-  - RpcSetPhase
-  - RpcDrawCard
-  - RpcAddResource
-  - RpcPlayCard
-  - AddSelector
-  - AddAttackor
-  - NextPhase
   DisableAutoOpenWizard: 1
