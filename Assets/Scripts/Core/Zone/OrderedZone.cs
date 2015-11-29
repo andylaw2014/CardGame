@@ -1,31 +1,66 @@
 using System.Collections;
 using System.Collections.Generic;
+using Assets.Scripts.Infrastructure;
 
-public abstract class OrderedZone : AbstractGameObject, IEnumerable<Card>, IZone
+namespace Assets.Scripts.Core.Zone
 {
-    public IEnumerator<Card> GetEnumerator()
+    public abstract class OrderedZone : IEnumerable<Card>
     {
-        throw new System.NotImplementedException();
-    }
+        private readonly List<Card> _cards;
+        protected readonly Game Game;
+        public readonly Player Owner;
 
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return GetEnumerator();
-    }
+        protected OrderedZone(Game game, Player owner)
+        {
+            Game = game;
+            Owner = owner;
+            _cards = new List<Card>();
+        }
 
-    public abstract Zone Name { get; }
-    public void Remove(Card card)
-    {
-        throw new System.NotImplementedException();
-    }
+        public IEnumerator<Card> GetEnumerator()
+        {
+            return _cards.GetEnumerator();
+        }
 
-    public void AfterRemove(Card card)
-    {
-        throw new System.NotImplementedException();
-    }
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
-    public void AfterAdd(Card card)
-    {
-        throw new System.NotImplementedException();
+        public void Add(Card card)
+        {
+            _cards.Add(card);
+            AfterAdd(card);
+        }
+
+        public void AddFront(Card card)
+        {
+            _cards.Insert(0, card);
+            AfterAdd(card);
+        }
+
+        protected abstract void AfterAdd(Card card);
+
+        public void Remove(Card card)
+        {
+            _cards.Remove(card);
+            AfterRemove(card);
+        }
+
+        protected Card PopTop()
+        {
+            if (_cards.Count <= 0)
+                return null;
+            var card = _cards[0];
+            _cards.RemoveAt(0);
+            return card;
+        }
+
+        protected abstract void AfterRemove(Card card);
+
+        public void Shuffle()
+        {
+            _cards.Shuffle();
+        }
     }
 }

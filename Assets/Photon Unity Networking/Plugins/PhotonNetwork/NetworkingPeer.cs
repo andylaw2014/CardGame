@@ -641,7 +641,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         // read game properties and cache them locally
         if (this.CurrentGame != null && gameProperties != null)
         {
-            this.CurrentGame.CacheProperties(gameProperties);
+            this.CurrentGame.InternalCacheProperties(gameProperties);
             SendMonoMessage(PhotonNetworkingMessage.OnPhotonCustomRoomPropertiesChanged, gameProperties);
             if (PhotonNetwork.automaticallySyncScene)
             {
@@ -858,7 +858,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
     {
         Hashtable newProps = new Hashtable() { { GamePropertyKey.MasterClientId, nextMasterId } };
         Hashtable prevProps = new Hashtable() { { GamePropertyKey.MasterClientId, this.mMasterClientId } };
-        return this.OpSetPropertiesOfRoom(newProps, false, prevProps);
+        return this.OpSetPropertiesOfRoom(newProps, expectedProperties: prevProps, webForward: false);
     }
 
     private Hashtable GetActorPropertiesForActorNr(Hashtable actorProperties, int actorNr)
@@ -1141,7 +1141,11 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
             {
                 Debug.LogError("Operation " + operationResponse.OperationCode + " failed in a server-side plugin. Check the configuration in the Dashboard. Message from server-plugin: " + operationResponse.DebugMessage);
             }
-            else// if (PhotonNetwork.logLevel >= PhotonLogLevel.Informational)
+            else if (operationResponse.ReturnCode == ErrorCode.NoRandomMatchFound)
+            {
+                Debug.LogWarning("Operation failed: " + operationResponse.ToStringFull());
+            }
+            else
             {
                 Debug.LogError("Operation failed: " + operationResponse.ToStringFull() + " Server: " + this.server);
             }
@@ -2160,11 +2164,11 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
 
             if (owningPv)
             {
-                Debug.LogWarning("Received RPC \"" + inMethodName + "\" for viewID " + netViewID + " but this PhotonView does not exist! View was/is ours." + (ownerSent ? " Owner called." : " Remote called.") + " By: " + sender.ID);
+                Debug.LogWarning("Received RPC \"" + inMethodName + "\" for viewID " + netViewID + " but this PhotonView does not exist! View was/is ours." + (ownerSent ? " User called." : " Remote called.") + " By: " + sender.ID);
             }
             else
             {
-                Debug.LogWarning("Received RPC \"" + inMethodName + "\" for viewID " + netViewID + " but this PhotonView does not exist! Was remote PV." + (ownerSent ? " Owner called." : " Remote called.") + " By: " + sender.ID + " Maybe GO was destroyed but RPC not cleaned up.");
+                Debug.LogWarning("Received RPC \"" + inMethodName + "\" for viewID " + netViewID + " but this PhotonView does not exist! Was remote PV." + (ownerSent ? " User called." : " Remote called.") + " By: " + sender.ID + " Maybe GO was destroyed but RPC not cleaned up.");
             }
             return;
         }
@@ -2257,7 +2261,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
             for (int index = 0; index < cachedRPCMethods.Count; index++)
             {
                 MethodInfo mInfo = cachedRPCMethods[index];
-                if (mInfo.Name == inMethodName)
+                if (mInfo.Name.Equals(inMethodName))
                 {
                     foundMethods++;
                     ParameterInfo[] pArray = mInfo.GetParameters();
@@ -2849,12 +2853,11 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         this.OpRaiseEvent(PunEvent.OwnershipTransfer, new int[] { viewID, playerID }, true, new RaiseEventOptions() { Receivers = ReceiverGroup.All });   // All sends to all via server (including self)
     }
 
-    public void LocalCleanPhotonView(PhotonView view)
+    public bool LocalCleanPhotonView(PhotonView view)
     {
-        view.destroyedByPhotonNetworkOrQuit = true;
-        this.photonViewList.Remove(view.viewID);
+        view.removedFromLocalViewList = true;
+        return this.photonViewList.Remove(view.viewID);
     }
-
 
     public PhotonView GetPhotonView(int viewID)
     {

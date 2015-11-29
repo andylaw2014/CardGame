@@ -1,34 +1,35 @@
 using UnityEngine;
 using UnityEngine.UI;
+using MonoBehaviour = Photon.MonoBehaviour;
 
-public class NetworkManager : Photon.MonoBehaviour
+public class NetworkManager : MonoBehaviour
 {
-    public GameObject ScrollViewContent;
-    public GameObject RoomListItem;
-    public Button NewButton;
-    public Button CreateButton;
     public Button CancelButton;
+    public Button CreateButton;
+    public Button NewButton;
+    public GameObject RoomListItem;
     public Text RoomNameInputField;
+    public GameObject ScrollViewContent;
 
-    void Start()
+    private void Start()
     {
         PhotonNetwork.ConnectUsingSettings("0.1");
     }
 
-    void Awake()
-    {	
+    private void Awake()
+    {
         DontDestroyOnLoad(gameObject);
     }
 
-    void OnJoinedLobby()
+    private void OnJoinedLobby()
     {
-		if(NewButton!=null)
-        	NewButton.interactable = true;
-		if(CreateButton!=null)
-        	CreateButton.interactable = true;
+        if (NewButton != null)
+            NewButton.interactable = true;
+        if (CreateButton != null)
+            CreateButton.interactable = true;
     }
 
-    void OnReceivedRoomListUpdate()
+    private void OnReceivedRoomListUpdate()
     {
         if (ScrollViewContent != null)
         {
@@ -47,7 +48,7 @@ public class NetworkManager : Photon.MonoBehaviour
         }
     }
 
-    void OnGUI()
+    private void OnGUI()
     {
         GUILayout.Label(PhotonNetwork.connectionStateDetailed.ToString());
     }
@@ -57,7 +58,7 @@ public class NetworkManager : Photon.MonoBehaviour
         var roomName = RoomNameInputField.text;
         if (string.IsNullOrEmpty(roomName) || IsRoomExists(roomName) || roomName.Length > 20) return;
 
-        if (PhotonNetwork.CreateRoom(RoomNameInputField.text, new RoomOptions() { maxPlayers = 2, isVisible = true }, null))
+        if (PhotonNetwork.CreateRoom(RoomNameInputField.text, new RoomOptions {maxPlayers = 2, isVisible = true}, null))
         {
             CreateButton.interactable = false;
             CancelButton.interactable = true;
@@ -69,13 +70,13 @@ public class NetworkManager : Photon.MonoBehaviour
         }
     }
 
-	void OnEnterEdit()
-	{
-		DestroyImmediate(gameObject);
-		Application.LoadLevel("Edit");
-	}
+    private void OnEnterEdit()
+    {
+        DestroyImmediate(gameObject);
+        Application.LoadLevel("Edit");
+    }
 
-    void OnLeftRoom()
+    private void OnLeftRoom()
     {
         if (CancelButton != null)
         {
@@ -89,18 +90,18 @@ public class NetworkManager : Photon.MonoBehaviour
         }
     }
 
-    void OnJoinedRoom()
+    private void OnJoinedRoom()
     {
         if (!PhotonNetwork.isMasterClient)
             Application.LoadLevel("Main");
     }
 
-    void OnPhotonPlayerConnected()
+    private void OnPhotonPlayerConnected()
     {
         Application.LoadLevel("Main");
     }
 
-    void OnPhotonPlayerDisconnected()
+    private void OnPhotonPlayerDisconnected()
     {
         PhotonNetwork.LeaveRoom();
     }
@@ -111,7 +112,7 @@ public class NetworkManager : Photon.MonoBehaviour
     }
 
     private bool IsRoomExists(string name)
-    { 
+    {
         foreach (var room in PhotonNetwork.GetRoomList())
         {
             if (room.name.Equals(name))

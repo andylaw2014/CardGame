@@ -35,14 +35,14 @@ public class PhotonViewInspector : Editor
         }
 
         EditorGUILayout.BeginHorizontal();
-        // Owner
+        // User
         if (isProjectPrefab)
         {
-            EditorGUILayout.LabelField("Owner:", "Set at runtime");
+            EditorGUILayout.LabelField("User:", "Set at runtime");
         }
         else if (m_Target.isSceneView)
         {
-            EditorGUILayout.LabelField("Owner", "Scene");
+            EditorGUILayout.LabelField("User", "Scene");
         }
         else
         {
@@ -54,7 +54,7 @@ public class PhotonViewInspector : Editor
                 ownerInfo = "<no playername set>";
             }
 
-            EditorGUILayout.LabelField("Owner", "[" + m_Target.ownerId + "] " + ownerInfo);
+            EditorGUILayout.LabelField("User", "[" + m_Target.ownerId + "] " + ownerInfo);
         }
 
         // ownership requests

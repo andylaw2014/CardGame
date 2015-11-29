@@ -1,8 +1,8 @@
-public interface IZone
+namespace Assets.Scripts.Core.Zone
 {
-    Zone Name { get; }
-
-    void Remove(Card card);
-    void AfterRemove(Card card);
-    void AfterAdd(Card card);
+    public interface IZone
+    {
+        void Add(Card card);
+        void Remove(Card card);
+    }
 }

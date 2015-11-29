@@ -62,13 +62,17 @@ public interface IPunObservable
 }
 
 /// <summary>
-/// Defines all the methods that PUN will call in specific situations, except OnPhotonSerializeView. Implemented by PunBehaviour.
+/// This interface is used as definition of all callback methods of PUN, except OnPhotonSerializeView. Preferably, implement them individually.
 /// </summary>
 /// <remarks>
+/// This interface is available for completeness, more than for actually implementing it in a game.
+/// You can implement each method individually in any MonoMehaviour, without implementing IPunCallbacks.
+/// 
+/// PUN calls all callbacks by name. Don't use implement callbacks with fully qualified name.
+/// Example: IPunCallbacks.OnConnectedToPhoton won't get called by Unity's SendMessage().
+/// 
 /// PUN will call these methods on any script that implements them, analog to Unity's events and callbacks.
 /// The situation that triggers the call is described per method.
-///
-/// Please simply extend PunBehaviour to implement individual methods.
 ///
 /// OnPhotonSerializeView is NOT called like these callbacks! It's usage frequency is much higher and it is implemented in: IPunObservable.
 /// </remarks>
@@ -99,10 +103,11 @@ public interface IPunCallbacks
     void OnLeftRoom();
 
     /// <summary>
-    /// Called after switching to a new MasterClient when the current one leaves. The former already got removed from the player list.
+    /// Called after switching to a new MasterClient when the current one leaves.
     /// </summary>
     /// <remarks>
     /// This is not called when this client enters a room.
+    /// The former MasterClient is still in the player list when this method get called.
     /// </remarks>
     void OnMasterClientSwitched(PhotonPlayer newMasterClient);
 
@@ -426,6 +431,19 @@ namespace Photon
             }
         }
 
+        /// <summary>
+        /// This property is only here to notify developers when they use the outdated value.
+        /// </summary>
+        /// <remarks>
+        /// If Unity 5.x logs a compiler warning "Use the new keyword if hiding was intended" or 
+        /// "The new keyword is not required", you may suffer from an Editor issue.
+        /// Try to modify networkView with a if-def condition:
+        /// 
+        /// #if UNITY_EDITOR
+        /// new
+        /// #endif
+        /// public PhotonView networkView
+        /// </remarks>
         new public PhotonView networkView
         {
             get
@@ -441,10 +459,13 @@ namespace Photon
     /// This class provides a .photonView and all callbacks/events that PUN can call. Override the events/methods you want to use.
     /// </summary>
     /// <remarks>
-    /// This class implements IPunCallbacks where the callback methods are described.
     /// By extending this class, you can implement individual methods as override.
+    /// 
     /// Visual Studio and MonoDevelop should provide the list of methods when you begin typing "override".
-    /// Your implementation does not have to call "base.method()".
+    /// <b>Your implementation does not have to call "base.method()".</b>
+    ///     
+    /// This class implements IPunCallbacks, which is used as definition of all PUN callbacks.
+    /// Don't implement IPunCallbacks in your classes. Instead, implent PunBehaviour or individual methods.
     /// </remarks>
     /// \ingroup publicApi
     // the documentation for the interface methods becomes inherited when Doxygen builds it.
@@ -478,10 +499,11 @@ namespace Photon
         }
 
         /// <summary>
-        /// Called after switching to a new MasterClient when the current one leaves. The former already got removed from the player list.
+        /// Called after switching to a new MasterClient when the current one leaves.
         /// </summary>
         /// <remarks>
         /// This is not called when this client enters a room.
+        /// The former MasterClient is still in the player list when this method get called.
         /// </remarks>
         public virtual void OnMasterClientSwitched(PhotonPlayer newMasterClient)
         {

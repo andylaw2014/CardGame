@@ -1,65 +1,64 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class Draggable1 : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler {
-	
-	public Transform parentToReturnTo = null;
-	public Transform placeholderParent = null;
+public class Draggable1 : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+{
+    public Transform parentToReturnTo;
 
-	GameObject placeholder = null;
-	
-	public void OnBeginDrag(PointerEventData eventData) {
-		placeholder = new GameObject();
-		placeholder.transform.SetParent( this.transform.parent );
-		LayoutElement le = placeholder.AddComponent<LayoutElement>();
-		le.preferredWidth = this.GetComponent<LayoutElement>().preferredWidth;
-		le.preferredHeight = this.GetComponent<LayoutElement>().preferredHeight;
-		le.flexibleWidth = 0;
-		le.flexibleHeight = 0;
+    private GameObject placeholder;
+    public Transform placeholderParent;
 
-		placeholder.transform.SetSiblingIndex( this.transform.GetSiblingIndex() );
-		
-		parentToReturnTo = this.transform.parent;
-		placeholderParent = parentToReturnTo;
-		this.transform.SetParent( this.transform.parent.parent );
-		
-		GetComponent<CanvasGroup>().blocksRaycasts = false;
-	}
-	
-	public void OnDrag(PointerEventData eventData) {
-		this.transform.position = eventData.position;
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        placeholder = new GameObject();
+        placeholder.transform.SetParent(transform.parent);
+        var le = placeholder.AddComponent<LayoutElement>();
+        le.preferredWidth = GetComponent<LayoutElement>().preferredWidth;
+        le.preferredHeight = GetComponent<LayoutElement>().preferredHeight;
+        le.flexibleWidth = 0;
+        le.flexibleHeight = 0;
 
-		if(placeholder.transform.parent != placeholderParent)
-			placeholder.transform.SetParent(placeholderParent);
+        placeholder.transform.SetSiblingIndex(transform.GetSiblingIndex());
 
-		int newSiblingIndex = placeholderParent.childCount;
+        parentToReturnTo = transform.parent;
+        placeholderParent = parentToReturnTo;
+        transform.SetParent(transform.parent.parent);
 
-		for(int i=0; i < placeholderParent.childCount; i++) {
-			if(this.transform.position.x < placeholderParent.GetChild(i).position.x) {
+        GetComponent<CanvasGroup>().blocksRaycasts = false;
+    }
 
-				newSiblingIndex = i;
+    public void OnDrag(PointerEventData eventData)
+    {
+        transform.position = eventData.position;
 
-				if(placeholder.transform.GetSiblingIndex() < newSiblingIndex)
-					newSiblingIndex--;
+        if (placeholder.transform.parent != placeholderParent)
+            placeholder.transform.SetParent(placeholderParent);
 
-				break;
-			}
-		}
+        var newSiblingIndex = placeholderParent.childCount;
 
-		placeholder.transform.SetSiblingIndex(newSiblingIndex);
+        for (var i = 0; i < placeholderParent.childCount; i++)
+        {
+            if (transform.position.x < placeholderParent.GetChild(i).position.x)
+            {
+                newSiblingIndex = i;
 
-	}
-	
-	public void OnEndDrag(PointerEventData eventData) {
-		this.transform.SetParent( parentToReturnTo );
-		this.transform.SetSiblingIndex( placeholder.transform.GetSiblingIndex() );
-		GetComponent<CanvasGroup>().blocksRaycasts = true;
+                if (placeholder.transform.GetSiblingIndex() < newSiblingIndex)
+                    newSiblingIndex--;
 
-		Destroy(placeholder);
-	}
-	
-	
-	
+                break;
+            }
+        }
+
+        placeholder.transform.SetSiblingIndex(newSiblingIndex);
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        transform.SetParent(parentToReturnTo);
+        transform.SetSiblingIndex(placeholder.transform.GetSiblingIndex());
+        GetComponent<CanvasGroup>().blocksRaycasts = true;
+
+        Destroy(placeholder);
+    }
 }

@@ -1,10 +1,13 @@
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.UI;
 
 // For Quit button only.
 public class QuitButton : MonoBehaviour
 {
-    void Start()
+    private void Start()
     {
         // Add OnClick listener
         GetComponent<Button>().onClick.AddListener(OnClick);
@@ -14,7 +17,7 @@ public class QuitButton : MonoBehaviour
     private void OnClick()
     {
 #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
+        EditorApplication.isPlaying = false;
 #else
 		Application.Quit();
 #endif

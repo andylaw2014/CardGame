@@ -2,15 +2,22 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Infrastructure.Trackable
+namespace Assets.Scripts.Infrastructure.Trackable
 {
     public abstract class TrackableCollection<T> : IEnumerable<T>
     {
         // Avoid null EventHandler
         public EventHandler<TrackableCollectionChangeEventArgs<T>> AddedEventHandler = delegate { };
-        public EventHandler<TrackableCollectionChangeEventArgs<T>> RemovedEventHandler = delegate { };
-        public EventHandler<TrackableCollectionChangeEventArgs<T>> InsertedEventHandler = delegate { };
         public EventHandler<TrackableCollectionChangeEventArgs<T>> ClearEventHandler = delegate { };
+        public EventHandler<TrackableCollectionChangeEventArgs<T>> InsertedEventHandler = delegate { };
+        public EventHandler<TrackableCollectionChangeEventArgs<T>> RemovedEventHandler = delegate { };
+
+        public abstract IEnumerator<T> GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
         public void Add(T item)
         {
@@ -56,16 +63,10 @@ namespace Infrastructure.Trackable
             ClearCollection();
         }
 
-        public abstract IEnumerator<T> GetEnumerator();
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
         protected abstract bool AddToCollection(T item); // Return true if add to collection successfully
         protected abstract bool RemoveFromCollection(T item); // Return true if remove from collection successfully
-        protected abstract bool InsertToCollection(int index, T item); // // Return true if insert to collection successfully
+        protected abstract bool InsertToCollection(int index, T item);
+        // // Return true if insert to collection successfully
         protected abstract void ClearCollection();
     }
 }

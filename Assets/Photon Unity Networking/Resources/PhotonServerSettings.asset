@@ -16,28 +16,22 @@ MonoBehaviour:
   ServerAddress: 
   ServerPort: 5055
   AppID: 3a231ffa-125e-42f7-bbec-8b1e228984a4
-  PreferredRegion: 0
+  PreferredRegion: 2
   EnabledRegions: -1
   JoinLobby: 1
   EnableLobbyStatistics: 0
   RpcList:
+  - AddResource
   - Chat
   - DestroyRpc
+  - DrawCard
   - InstantiateRpc
+  - NextPhase
   - OnAwakeRPC
   - PickupItemInit
+  - PlayCard
   - PunPickup
   - PunPickupSimple
   - PunRespawn
   - RequestForPickupTimes
-  - OppYouDraw
-  - RPCSetState
-  - OppAddMana
-  - OppPlayCard
-  - RpcSetPhase
-  - RpcDrawCard
-  - RpcAddResource
-  - RpcPlayCard
-  - AddSelector
-  - AddAttackor
   DisableAutoOpenWizard: 1
