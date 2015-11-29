@@ -181,6 +181,7 @@ GameObject:
   - 224: {fileID: 93056136}
   - 222: {fileID: 93056138}
   - 114: {fileID: 93056137}
+  - 114: {fileID: 93056139}
   m_Layer: 5
   m_Name: Stat
   m_TagString: Stat
@@ -243,6 +244,22 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 93056135}
+--- !u!114 &93056139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 93056135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 584d45e5e264a394499bde7c40d7bcf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CrystalText: {fileID: 634983985}
+  DeuteriumText: {fileID: 1024696505}
+  HpText: {fileID: 95758009}
+  MetalText: {fileID: 1423197410}
+  Owner: 1
 --- !u!1 &95758007
 GameObject:
   m_ObjectHideFlags: 0
@@ -1421,7 +1438,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 224: {fileID: 730225729}
-  - 114: {fileID: 730225730}
   m_Layer: 5
   m_Name: Opponent
   m_TagString: Opponent
@@ -1449,20 +1465,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: .5, y: .5}
---- !u!114 &730225730
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 730225728}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca00c4aedaa46e0419798139186a96ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HandZone: {fileID: 287512026}
-  MinionZone: {fileID: 140332630}
-  Stats: {fileID: 0}
 --- !u!1001 &732740760
 Prefab:
   m_ObjectHideFlags: 0
@@ -1869,6 +1871,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49f2d5384cb529f4dabd134e7a001a51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Player: {fileID: 2101097007}
+  Opponent: {fileID: 93056139}
 --- !u!1 &946698923
 GameObject:
   m_ObjectHideFlags: 0
@@ -2443,7 +2447,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 224: {fileID: 1715432379}
-  - 114: {fileID: 1715432380}
   m_Layer: 5
   m_Name: Player
   m_TagString: Player
@@ -2471,20 +2474,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: .5, y: .5}
---- !u!114 &1715432380
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1715432378}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca00c4aedaa46e0419798139186a96ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HandZone: {fileID: 946698923}
-  MinionZone: {fileID: 578945039}
-  Stats: {fileID: 0}
 --- !u!224 &1749524568 stripped
 RectTransform:
   m_PrefabParentObject: {fileID: 22400004, guid: 05a81c3d5091440058129444d28322f3,
@@ -2577,6 +2566,7 @@ GameObject:
   - 224: {fileID: 2101097006}
   - 222: {fileID: 2101097009}
   - 114: {fileID: 2101097008}
+  - 114: {fileID: 2101097007}
   m_Layer: 5
   m_Name: Stat
   m_TagString: Stat
@@ -2606,6 +2596,22 @@ RectTransform:
   m_AnchoredPosition: {x: -430, y: -310}
   m_SizeDelta: {x: 200, y: 220}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &2101097007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2101097005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 584d45e5e264a394499bde7c40d7bcf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CrystalText: {fileID: 1910559686}
+  DeuteriumText: {fileID: 1470857083}
+  HpText: {fileID: 481907874}
+  MetalText: {fileID: 2129590714}
+  Owner: 0
 --- !u!114 &2101097008
 MonoBehaviour:
   m_ObjectHideFlags: 0

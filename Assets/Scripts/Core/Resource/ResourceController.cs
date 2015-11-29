@@ -1,28 +1,46 @@
-using System;
+using Assets.Scripts.Core.Message;
 
 namespace Assets.Scripts.Core.Resource
 {
     public class ResourceController
     {
-        private readonly int[] _count;
 
-        public ResourceController()
+        public enum Type
         {
-            _count = new[] {0, 0, 0};
+            Current, Maximum
         }
 
-        public event EventHandler<ResourceChangeEventArgs> ResourceChange = (sender, args) => { };
+        public readonly Player Owner;
+        private readonly int[][] _count;
 
-        public int GetResource(Resource resource)
+        public ResourceController(Player owner)
         {
-            return _count[(int) resource];
+            Owner = owner;
+            _count = new int [2][];
+            for(var i=0;i< _count.Length;i++)
+                _count[i] = new [] {0,0,0};
         }
 
-        public void SetResource(Resource resource, int value)
+        public void Update()
         {
-            var before = _count[(int) resource];
-            _count[(int) resource] = value;
-            ResourceChange(this, new ResourceChangeEventArgs(resource, before, value));
+            Owner.Game.Publish(new ResourceChangeMessage(this));
+        }
+
+        public int GetResource(Resource resource,Type type)
+        {
+            return _count[(int) type][(int) resource];
+        }
+
+        public void SetResource(Resource resource, Type type, int value)
+        {
+            _count[(int)type][(int)resource] = value;
+            Update();
+        }
+
+        public void RestoreAll()
+        {
+            for (var i = 0; i < _count[0].Length; i++)
+                    _count[(int)Type.Current][i] = _count[(int)Type.Maximum][i];
         }
     }
 }

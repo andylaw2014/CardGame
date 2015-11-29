@@ -84,10 +84,10 @@ public class PhotonViewHandler : EditorWindow
         {
             if (view.ownerId > 0)
             {
-                Debug.Log("Re-Setting Owner ID of: " + view);
+                Debug.Log("Re-Setting User ID of: " + view);
             }
             view.ownerId = 0;   // simply make sure no owner is set (cause room always uses 0)
-            view.prefix = -1;  
+            view.prefix = -1;   // TODO: prefix could be settable via inspector per scene?!
 
             if (view.viewID != 0)
             {
@@ -153,7 +153,9 @@ public class PhotonViewHandler : EditorWindow
             //Debug.LogWarning("Some subId was adjusted."); // this log is only interesting for Exit Games
         }
     }
-    
+
+    // TODO fail if no ID was available anymore
+    // TODO look up lower numbers if offset hits max?!
     public static int GetID(int idOffset, HashSet<int> usedInstanceViewNumbers)
     {
         while (idOffset < PhotonNetwork.MAX_VIEW_IDS)
@@ -167,7 +169,8 @@ public class PhotonViewHandler : EditorWindow
 
         return idOffset;
     }
-    
+
+    //TODO: check if this can be internal protected (as source in editor AND as dll)
     public static void LoadAllScenesToFix()
     {
         string[] scenes = System.IO.Directory.GetFiles(".", "*.unity", SearchOption.AllDirectories);
@@ -176,7 +179,7 @@ public class PhotonViewHandler : EditorWindow
         {
             EditorApplication.OpenScene(scene);
 
-            PhotonViewHandler.HierarchyChange();
+            PhotonViewHandler.HierarchyChange();//TODO: most likely on load also triggers a hierarchy change
 
             EditorApplication.SaveScene();
         }

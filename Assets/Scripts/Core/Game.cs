@@ -28,7 +28,7 @@ namespace Assets.Scripts.Core
             _firstUser = firstUser ;
             Log.Verbose("Is First Player:" + _firstUser);
             _player = new Player(this, User.You);
-            _opponent = new Player(this, User.You);
+            _opponent = new Player(this, User.Opponent);
         }
 
         public void NextPhaseButton()
@@ -45,6 +45,13 @@ namespace Assets.Scripts.Core
         {
             Log.Verbose("Game Start");
             _phase = new ResetPhase(this,_firstUser);
+            Update();
+        }
+
+        public void Update()
+        {
+            _opponent.Update();
+            _player.Update();
         }
 
         public void SetPhase(GamePhase phase)

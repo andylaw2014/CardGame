@@ -7,6 +7,8 @@ namespace Assets.Scripts.Core
     {
         private GuiController _guiController;
         public Game Game { get; private set; }
+        public PlayerStatsController Player;
+        public PlayerStatsController Opponent;
 
         private void Awake()
         {
@@ -15,6 +17,8 @@ namespace Assets.Scripts.Core
             Game = new Game(this, first);
             _guiController = GetComponent<GuiController>();
             Game.Subscribe(_guiController);
+            Game.Subscribe(Player);
+            Game.Subscribe(Opponent);
         }
 
         private void Start()
