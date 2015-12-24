@@ -8,6 +8,11 @@
 // <author>developer@exitgames.com</author>
 // ----------------------------------------------------------------------------
 
+#if UNITY_5 && !UNITY_5_0 && !UNITY_5_1 && !UNITY_5_2
+#define UNITY_MIN_5_3
+#endif
+
+
 using System;
 using UnityEditor;
 using UnityEngine;
@@ -35,14 +40,14 @@ public class PhotonViewInspector : Editor
         }
 
         EditorGUILayout.BeginHorizontal();
-        // User
+        // Owner
         if (isProjectPrefab)
         {
-            EditorGUILayout.LabelField("User:", "Set at runtime");
+            EditorGUILayout.LabelField("Owner:", "Set at runtime");
         }
         else if (m_Target.isSceneView)
         {
-            EditorGUILayout.LabelField("User", "Scene");
+            EditorGUILayout.LabelField("Owner", "Scene");
         }
         else
         {
@@ -54,7 +59,7 @@ public class PhotonViewInspector : Editor
                 ownerInfo = "<no playername set>";
             }
 
-            EditorGUILayout.LabelField("User", "[" + m_Target.ownerId + "] " + ownerInfo);
+            EditorGUILayout.LabelField("Owner", "[" + m_Target.ownerId + "] " + ownerInfo);
         }
 
         // ownership requests
@@ -133,7 +138,9 @@ public class PhotonViewInspector : Editor
         }
 
         GUI.color = Color.white;
+        #if !UNITY_MIN_5_3
         EditorGUIUtility.LookLikeControls();
+        #endif
     }
 
     private void DrawSpecificTypeSerializationOptions()

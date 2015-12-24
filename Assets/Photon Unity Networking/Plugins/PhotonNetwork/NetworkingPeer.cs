@@ -4,6 +4,7 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Linq;
 using ExitGames.Client.Photon;
 using System;
 using System.Collections;
@@ -684,6 +685,12 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
             {
                 otherP.Add(player);
             }
+        }
+
+        string debug = "";
+        foreach (PhotonPlayer player in mPlayerListCopy)
+        {
+            debug += player != null ? player.name : "null";
         }
 
         this.mOtherPlayerListCopy = otherP.ToArray();
@@ -1823,7 +1830,10 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                     int newOwnerId = transferViewToUserID[1];
 
                     PhotonView pv = PhotonView.Find(requestedViewId);
-                    pv.ownerId = newOwnerId;
+                    if (pv != null)
+                    {
+                        pv.ownerId = newOwnerId;
+                    }
 
                     break;
                 }
@@ -2164,11 +2174,11 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
 
             if (owningPv)
             {
-                Debug.LogWarning("Received RPC \"" + inMethodName + "\" for viewID " + netViewID + " but this PhotonView does not exist! View was/is ours." + (ownerSent ? " User called." : " Remote called.") + " By: " + sender.ID);
+                Debug.LogWarning("Received RPC \"" + inMethodName + "\" for viewID " + netViewID + " but this PhotonView does not exist! View was/is ours." + (ownerSent ? " Owner called." : " Remote called.") + " By: " + sender.ID);
             }
             else
             {
-                Debug.LogWarning("Received RPC \"" + inMethodName + "\" for viewID " + netViewID + " but this PhotonView does not exist! Was remote PV." + (ownerSent ? " User called." : " Remote called.") + " By: " + sender.ID + " Maybe GO was destroyed but RPC not cleaned up.");
+                Debug.LogWarning("Received RPC \"" + inMethodName + "\" for viewID " + netViewID + " but this PhotonView does not exist! Was remote PV." + (ownerSent ? " Owner called." : " Remote called.") + " By: " + sender.ID + " Maybe GO was destroyed but RPC not cleaned up.");
             }
             return;
         }
@@ -3842,12 +3852,12 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         object sceneId = PhotonNetwork.room.customProperties[NetworkingPeer.CurrentSceneProperty];
         if (sceneId is int)
         {
-            if (Application.loadedLevel != (int)sceneId)
+            if (SceneManagerHelper.ActiveSceneBuildIndex != (int)sceneId)
                 PhotonNetwork.LoadLevel((int)sceneId);
         }
         else if (sceneId is string)
         {
-            if (Application.loadedLevelName != (string)sceneId)
+            if (SceneManagerHelper.ActiveSceneName != (string)sceneId)
                 PhotonNetwork.LoadLevel((string)sceneId);
         }
     }
@@ -3868,11 +3878,11 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         if (PhotonNetwork.room.customProperties.ContainsKey(NetworkingPeer.CurrentSceneProperty))
         {
             object levelIdInProps = PhotonNetwork.room.customProperties[NetworkingPeer.CurrentSceneProperty];
-            if (levelIdInProps is int && Application.loadedLevel == (int)levelIdInProps)
+            if (levelIdInProps is int && SceneManagerHelper.ActiveSceneBuildIndex == (int)levelIdInProps)
             {
                 return;
             }
-            if (levelIdInProps is string && Application.loadedLevelName.Equals((string)levelIdInProps))
+            if (levelIdInProps is string && SceneManagerHelper.ActiveSceneName != null && SceneManagerHelper.ActiveSceneName.Equals((string)levelIdInProps))
             {
                 return;
             }

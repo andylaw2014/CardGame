@@ -1,4 +1,5 @@
 using Assets.Scripts.Infrastructure;
+using Assets.Scripts.UI;
 using Assets.Scripts.UI.Command;
 
 namespace Assets.Scripts.Core.Phase
@@ -8,8 +9,7 @@ namespace Assets.Scripts.Core.Phase
         public MainPhase(Game game, Game.User owner) : base(game, owner)
         {
         }
-
-
+        
         public override bool Handle(IUiCommand command)
         {
             Log.Verbose("Main Phase Handle: IUiCommand");
@@ -17,6 +17,7 @@ namespace Assets.Scripts.Core.Phase
                 return false;
             var dragCommand = command as DragCommand;
             if (dragCommand == null) return false;
+            if(dragCommand.Destination.Source != Targetable.Type.Zone) return false;
             var id = dragCommand.Source.name;
             var card =_game.GetCardById(id);
             if (!card.Owner.IsPlayable(card)) return false;
