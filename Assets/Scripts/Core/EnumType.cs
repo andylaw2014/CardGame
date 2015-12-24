@@ -1,4 +1,4 @@
-namespace Assets.Scripts.Gui
+namespace Assets.Scripts.Core
 {
     public enum ButtonType
     {

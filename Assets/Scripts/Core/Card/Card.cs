@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace Assets.Scripts.Core.Card
@@ -7,11 +6,27 @@ namespace Assets.Scripts.Core.Card
     {
         private CardStats _cardStats;
 
+        private string _id = "";
+
         /// <summary>
         ///     For initial value and inspector view only.
         /// </summary>
         public int Hp, Atk, Metal, Crystal, Deuterium;
-        
+
+        public PlayerType Owner { get; set; }
+        public ZoneType Zone { get; set; }
+        /// <summary>
+        ///     Card id.
+        /// </summary>
+        public string Id
+        {
+            get { return _id; }
+            set
+            {
+                if (value != null && _id == "")
+                    _id = value;
+            }
+        }
 
         // Use this for initialization
         private void Start()

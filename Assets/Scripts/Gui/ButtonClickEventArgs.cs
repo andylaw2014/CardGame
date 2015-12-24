@@ -1,4 +1,5 @@
 using System;
+using Assets.Scripts.Core;
 
 namespace Assets.Scripts.Gui
 {
