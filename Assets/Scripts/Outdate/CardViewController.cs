@@ -1,12 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CardViewController : MonoBehaviour
+namespace Assets.Scripts.Outdate
 {
-    public Image ImageView;
-
-    public void SetImage(Sprite image)
+    public class CardViewController : MonoBehaviour
     {
-        ImageView.sprite = image;
+        public Image ImageView;
+
+        public void SetImage(Sprite image)
+        {
+            ImageView.sprite = image;
+        }
     }
 }

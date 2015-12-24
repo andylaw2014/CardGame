@@ -1,4 +1,6 @@
+using Assets.Scripts.Outdate.Menu;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using MonoBehaviour = Photon.MonoBehaviour;
 
@@ -73,7 +75,7 @@ public class NetworkManager : MonoBehaviour
     private void OnEnterEdit()
     {
         DestroyImmediate(gameObject);
-        Application.LoadLevel("Edit");
+        SceneManager.LoadScene("Edit");
     }
 
     private void OnLeftRoom()
@@ -86,19 +88,19 @@ public class NetworkManager : MonoBehaviour
         else
         {
             DestroyImmediate(gameObject);
-            Application.LoadLevel("Menu");
+            SceneManager.LoadScene("Menu");
         }
     }
 
     private void OnJoinedRoom()
     {
         if (!PhotonNetwork.isMasterClient)
-            Application.LoadLevel("Main");
+            SceneManager.LoadScene("Main");
     }
 
     private void OnPhotonPlayerConnected()
     {
-        Application.LoadLevel("Main");
+        SceneManager.LoadScene("Main");
     }
 
     private void OnPhotonPlayerDisconnected()

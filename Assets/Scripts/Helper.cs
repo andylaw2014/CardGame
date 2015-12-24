@@ -1,30 +1,25 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public static class Helper
+namespace Assets.Scripts
 {
-    public static T FindComponentInChildWithTag<T>(this GameObject parent, string tag) where T : Component
+    public static class Helper
     {
-        var t = parent.transform;
-        foreach (Transform tr in t)
+        public static T FindComponentInChildWithTag<T>(this GameObject parent, string tag) where T : Component
         {
-            if (tr.tag == tag)
-            {
-                return tr.GetComponent<T>();
-            }
+            return (from Transform tr in parent.transform where tr.tag == tag select tr.GetComponent<T>()).FirstOrDefault();
         }
-        return null;
-    }
 
-    public static GameObject FindChildWithTag(this GameObject parent, string tag)
-    {
-        var t = parent.transform;
-        foreach (Transform tr in t)
+        public static GameObject FindChildWithTag(this GameObject parent, string tag)
         {
-            if (tr.tag == tag)
-            {
-                return tr.gameObject;
-            }
+            return (from Transform tr in parent.transform where tr.tag == tag select tr.gameObject).FirstOrDefault();
         }
-        return null;
+
+        public static IEnumerable<T> GetValues<T>()
+        {
+            return Enum.GetValues(typeof(T)).Cast<T>();
+        }
     }
 }

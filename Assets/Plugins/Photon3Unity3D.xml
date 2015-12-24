@@ -19,7 +19,7 @@
             </summary>
             <remarks>
             A shallow copy of a collection copies only the elements of the collection, whether they are
-            reference types or value types, but it does not copy the objects that the references refer
+            reference keys or value keys, but it does not copy the objects that the references refer
             to. The references in the new collection point to the same objects that the references in
             the original collection point to.
             </remarks>
@@ -225,7 +225,7 @@
         <member name="M:ExitGames.Client.Photon.EnetPeer.CreateAndEnqueueCommand(System.Byte,System.Byte[],System.Byte)">
             <summary>reliable-udp-level function to send some byte[] to the server via un/reliable command</summary>
             <remarks>only called when a custom operation should be send</remarks>
-            <param name="commandType">(enet) command type</param>
+            <param name="commandType">(enet) command key</param>
             <param name="payload">data to carry (operation)</param>
             <param name="channelNumber">channel in which to send</param>
             <returns>the invocation ID for this operation (the payload)</returns>
@@ -359,7 +359,7 @@
             in use (room names are their IDs).
             
             This method is used as general callback for all operations. Each response corresponds to a certain 
-            "type" of operation by its OperationCode (see: <see cref="!:Operations"/>).
+            "key" of operation by its OperationCode (see: <see cref="!:Operations"/>).
             <para></para>
             </remarks>
             <example>
@@ -393,7 +393,7 @@
             The creation of an event is often triggered by an operation (called by this client or an other). 
             
             Each event carries its specific content in its Parameters. Your application knows which content to
-            expect by checking the event's 'type', given by the event's Code.
+            expect by checking the event's 'key', given by the event's Code.
             
             Events can be defined and extended server-side. 
             
@@ -637,7 +637,7 @@
             </remarks>
         </member>
         <member name="F:ExitGames.Client.Photon.PhotonPeer.NoSocket">
-            <summary>False if this library build contains C# Socket code. If true, you must set some type as SocketImplementation before connecting.</summary>
+            <summary>False if this library build contains C# Socket code. If true, you must set some key as SocketImplementation before connecting.</summary>
         </member>
         <member name="M:ExitGames.Client.Photon.PhotonPeer.TrafficStatsReset">
             <summary>
@@ -838,9 +838,9 @@
             <summary>
             Channel-less wrapper for OpCustom().
             </summary>
-            <param name="customOpCode">Operations are handled by their byte\-typed code.
+            <param name="customOpCode">Operations are handled by their byte\-keyd code.
             The codes of the "LoadBalancong" application are in the class <see cref="!:ExitGames.Client.Photon.LoadBalancing.OperationCode"/>.</param>
-            <param name="customOpParameters">Containing parameters as key\-value pair. The key is byte\-typed, while the value is any serializable datatype.</param>
+            <param name="customOpParameters">Containing parameters as key\-value pair. The key is byte\-keyd, while the value is any serializable datakey.</param>
             <param name="sendReliable">Selects if the operation must be acknowledged or not. If false, the
                                        operation is not guaranteed to reach the server.</param>
             <returns>If operation could be enqueued for sending</returns>
@@ -855,9 +855,9 @@
             are defined server side as byte keys of values, which a client sends as customOpParameters
             accordingly.<para></para>
             This is explained in more detail as "<see cref="!:Operations" text="Custom Operations"/>".
-            <param name="customOpCode">Operations are handled by their byte\-typed code. The codes of the
+            <param name="customOpCode">Operations are handled by their byte\-keyd code. The codes of the
                                        "LoadBalancing" application are in the class <see cref="!:ExitGames.Client.Photon.LoadBalancing.OperationCode"/>.</param>
-            <param name="customOpParameters">Containing parameters as key\-value pair. The key is byte\-typed, while the value is any serializable datatype.</param>
+            <param name="customOpParameters">Containing parameters as key\-value pair. The key is byte\-keyd, while the value is any serializable datakey.</param>
             <param name="sendReliable">Selects if the operation must be acknowledged or not. If false, the
                                        operation is not guaranteed to reach the server.</param>
             <param name="channelId">The channel in which this operation should be sent.</param>
@@ -872,9 +872,9 @@
             
              Use this only after encryption was established by EstablishEncryption and waiting for the OnStateChanged callback.
              </summary>
-             <param name="customOpCode">Operations are handled by their byte\-typed code. The codes of the
+             <param name="customOpCode">Operations are handled by their byte\-keyd code. The codes of the
                                         "LoadBalancing" application are in the class <see cref="!:ExitGames.Client.Photon.LoadBalancing.OperationCode"/>.</param>
-             <param name="customOpParameters">Containing parameters as key\-value pair. The key is byte\-typed, while the value is any serializable datatype.</param>
+             <param name="customOpParameters">Containing parameters as key\-value pair. The key is byte\-keyd, while the value is any serializable datakey.</param>
              <param name="sendReliable">Selects if the operation must be acknowledged or not. If false, the
                                         operation is not guaranteed to reach the server.</param>
              <param name="channelId">The channel in which this operation should be sent.</param>
@@ -899,14 +899,14 @@
         </member>
         <member name="M:ExitGames.Client.Photon.PhotonPeer.RegisterType(System.Type,System.Byte,ExitGames.Client.Photon.SerializeMethod,ExitGames.Client.Photon.DeserializeMethod)">
              <summary>
-             Registers new types/classes for de/serialization and the fitting methods to call for this type.
+             Registers new keys/classes for de/serialization and the fitting methods to call for this key.
              </summary>
              <remarks>
              SerializeMethod and DeserializeMethod are complementary: Feed the product of serializeMethod to
              the constructor, to get a comparable instance of the object.
             
              After registering a Type, it can be used in events and operations and will be serialized like
-             built-in types.
+             built-in keys.
              </remarks>
              <param name="customType">Type (class) to register.</param>
              <param name="code">A byte-code used as shortcut during transfer of this Type.</param>
@@ -1329,15 +1329,15 @@
             Container for an Operation request, which is a code and parameters.
             </summary>
             <remarks>
-            On the lowest level, Photon only allows byte-typed keys for operation parameters.
-            The values of each such parameter can be any serializable datatype: byte, int, hashtable and many more.
+            On the lowest level, Photon only allows byte-keyd keys for operation parameters.
+            The values of each such parameter can be any serializable datakey: byte, int, hashtable and many more.
             </remarks>
         </member>
         <member name="F:ExitGames.Client.Photon.OperationRequest.OperationCode">
-            <summary>Byte-typed code for an operation - the short identifier for the server's method to call.</summary>
+            <summary>Byte-keyd code for an operation - the short identifier for the server's method to call.</summary>
         </member>
         <member name="F:ExitGames.Client.Photon.OperationRequest.Parameters">
-            <summary>The parameters of the operation - each identified by a byte-typed code in Photon.</summary>
+            <summary>The parameters of the operation - each identified by a byte-keyd code in Photon.</summary>
         </member>
         <member name="T:ExitGames.Client.Photon.OperationResponse">
             <summary>
@@ -1345,12 +1345,12 @@
             The indexer of this class actually provides access to the Parameters Dictionary.
             </summary>
             <remarks>
-            The OperationCode defines the type of operation called on Photon and in turn also the Parameters that
+            The OperationCode defines the key of operation called on Photon and in turn also the Parameters that
             are set in the request. Those are provided as Dictionary with byte-keys.
             There are pre-defined constants for various codes defined in the LoadBalancing application. 
             Check: OperationCode, ParameterCode, etc.
             <para></para>
-            An operation's request is summarized by the ReturnCode: a short typed code for &quot;Ok&quot; or
+            An operation's request is summarized by the ReturnCode: a short keyd code for &quot;Ok&quot; or
             some different result. The code's meaning is specific per operation. An optional DebugMessage can be
             provided to simplify debugging.
             <para></para>
@@ -1370,7 +1370,7 @@
             <summary>An optional string sent by the server to provide readable feedback in error-cases. Might be null.</summary>
         </member>
         <member name="F:ExitGames.Client.Photon.OperationResponse.Parameters">
-            <summary>A Dictionary of values returned by an operation, using byte-typed keys per value.</summary>
+            <summary>A Dictionary of values returned by an operation, using byte-keyd keys per value.</summary>
         </member>
         <member name="M:ExitGames.Client.Photon.OperationResponse.ToString">
             <summary>ToString() override.</summary>
@@ -1390,7 +1390,7 @@
         <member name="T:ExitGames.Client.Photon.EventData">
             <summary>
             Contains all components of a Photon Event.
-            Event Parameters, like OperationRequests and OperationResults, consist of a Dictionary with byte-typed keys per value.
+            Event Parameters, like OperationRequests and OperationResults, consist of a Dictionary with byte-keyd keys per value.
             </summary>
             <remarks>
             The indexer of this class provides access to the Parameters Dictionary.
@@ -1400,7 +1400,7 @@
             </remarks>
         </member>
         <member name="F:ExitGames.Client.Photon.EventData.Code">
-            <summary>The event code identifies the type of event.</summary>
+            <summary>The event code identifies the key of event.</summary>
         </member>
         <!-- Badly formed XML comment ignored for member "F:ExitGames.Client.Photon.EventData.Parameters" -->
         <member name="M:ExitGames.Client.Photon.EventData.ToString">
@@ -1420,12 +1420,12 @@
         </member>
         <member name="T:ExitGames.Client.Photon.GpType">
             <summary>
-              The gp type.
+              The gp key.
             </summary>
         </member>
         <member name="F:ExitGames.Client.Photon.GpType.Unknown">
             <summary>
-              Unkown type.
+              Unkown key.
             </summary>
         </member>
         <member name="F:ExitGames.Client.Photon.GpType.Array">
@@ -1433,7 +1433,7 @@
               An array of objects.
             </summary>
             <remarks>
-              This type is new in version 1.5.
+              This key is new in version 1.5.
             </remarks>
         </member>
         <member name="F:ExitGames.Client.Photon.GpType.Boolean">
@@ -1466,7 +1466,7 @@
               A 32-bit floating-point value.
             </summary>
             <remarks>
-              This type is new in version 1.5.
+              This key is new in version 1.5.
             </remarks>
         </member>
         <member name="F:ExitGames.Client.Photon.GpType.Dictionary">
@@ -1474,7 +1474,7 @@
               A dictionary
             </summary>
             <remarks>
-              This type is new in version 1.6.
+              This key is new in version 1.6.
             </remarks>
         </member>
         <member name="F:ExitGames.Client.Photon.GpType.Double">
@@ -1482,7 +1482,7 @@
               A 64-bit floating-point value.
             </summary>
             <remarks>
-              This type is new in version 1.5.
+              This key is new in version 1.5.
             </remarks>
         </member>
         <member name="F:ExitGames.Client.Photon.GpType.Hashtable">
@@ -1517,29 +1517,29 @@
         </member>
         <member name="F:ExitGames.Client.Photon.GpType.Custom">
             <summary>
-              A costum type
+              A costum key
             </summary>
         </member>
         <member name="F:ExitGames.Client.Photon.GpType.Null">
             <summary>
-              Null value don't have types.
+              Null value don't have keys.
             </summary>
         </member>
         <member name="T:ExitGames.Client.Photon.SerializeMethod">
             <summary>
-            Type of serialization methods to add custom type support.
-            Use PhotonPeer.ReisterType() to register new types with serialization and deserialization methods.
+            Type of serialization methods to add custom key support.
+            Use PhotonPeer.ReisterType() to register new keys with serialization and deserialization methods.
             </summary>
             <param name="customObject">The method will get objects passed that were registered with it in RegisterType().</param>
-            <returns>Return a byte[] that resembles the object passed in. The framework will surround it with length and type info, so don't include it.</returns>
+            <returns>Return a byte[] that resembles the object passed in. The framework will surround it with length and key info, so don't include it.</returns>
         </member>
         <member name="T:ExitGames.Client.Photon.DeserializeMethod">
             <summary>
-            Type of deserialization methods to add custom type support.
-            Use PhotonPeer.RegisterType() to register new types with serialization and deserialization methods.
+            Type of deserialization methods to add custom key support.
+            Use PhotonPeer.RegisterType() to register new keys with serialization and deserialization methods.
             </summary>
-            <param name="serializedCustomObject">The framwork passes in the data it got by the associated SerializeMethod. The type code and length are stripped and applied before a DeserializeMethod is called.</param>
-            <returns>Return a object of the type that was associated with this method through RegisterType().</returns>
+            <param name="serializedCustomObject">The framwork passes in the data it got by the associated SerializeMethod. The key code and length are stripped and applied before a DeserializeMethod is called.</param>
+            <returns>Return a object of the key that was associated with this method through RegisterType().</returns>
         </member>
         <member name="T:ExitGames.Client.Photon.Protocol">
             <summary>
@@ -1567,7 +1567,7 @@
         </member>
         <member name="M:ExitGames.Client.Photon.Protocol.Serialize(System.Int16,System.Byte[],System.Int32@)">
             <summary>
-            Serializes a short typed value into a byte-array (target) starting at the also given targetOffset.
+            Serializes a short keyd value into a byte-array (target) starting at the also given targetOffset.
             The altered offset is known to the caller, because it is given via a referenced parameter.
             </summary>
             <param name="value">The short value to be serialized</param>
@@ -1576,7 +1576,7 @@
         </member>
         <member name="M:ExitGames.Client.Photon.Protocol.Serialize(System.Int32,System.Byte[],System.Int32@)">
             <summary>
-            Serializes an int typed value into a byte-array (target) starting at the also given targetOffset.
+            Serializes an int keyd value into a byte-array (target) starting at the also given targetOffset.
             The altered offset is known to the caller, because it is given via a referenced parameter.
             </summary>
             <param name="value">The int value to be serialized</param>
@@ -1585,7 +1585,7 @@
         </member>
         <member name="M:ExitGames.Client.Photon.Protocol.Serialize(System.Single,System.Byte[],System.Int32@)">
             <summary>
-            Serializes an float typed value into a byte-array (target) starting at the also given targetOffset.
+            Serializes an float keyd value into a byte-array (target) starting at the also given targetOffset.
             The altered offset is known to the caller, because it is given via a referenced parameter.
             </summary>
             <param name="value">The float value to be serialized</param>
@@ -1594,7 +1594,7 @@
         </member>
         <member name="M:ExitGames.Client.Photon.Protocol.Deserialize(System.Int16@,System.Byte[],System.Int32@)">
             <summary>
-            Deserialize fills the given short typed value with the given byte-array (source) starting at the also given offset.
+            Deserialize fills the given short keyd value with the given byte-array (source) starting at the also given offset.
             The result is placed in a variable (value). There is no need to return a value because the parameter value is given by reference.
             The altered offset is this way also known to the caller.
             </summary>
@@ -1604,12 +1604,12 @@
         </member>
         <member name="M:ExitGames.Client.Photon.Protocol.DeserializeInteger(System.IO.MemoryStream)">
             <summary>
-            DeserializeInteger returns an Integer typed value from the given Memorystream.
+            DeserializeInteger returns an Integer keyd value from the given Memorystream.
             </summary>
         </member>
         <member name="M:ExitGames.Client.Photon.Protocol.Deserialize(System.Int32@,System.Byte[],System.Int32@)">
             <summary>
-            Deserialize fills the given int typed value with the given byte-array (source) starting at the also given offset.
+            Deserialize fills the given int keyd value with the given byte-array (source) starting at the also given offset.
             The result is placed in a variable (value). There is no need to return a value because the parameter value is given by reference.
             The altered offset is this way also known to the caller.
             </summary>
@@ -1619,7 +1619,7 @@
         </member>
         <member name="M:ExitGames.Client.Photon.Protocol.Deserialize(System.Single@,System.Byte[],System.Int32@)">
             <summary>
-            Deserialize fills the given float typed value with the given byte-array (source) starting at the also given offset.
+            Deserialize fills the given float keyd value with the given byte-array (source) starting at the also given offset.
             The result is placed in a variable (value). There is no need to return a value because the parameter value is given by reference.
             The altered offset is this way also known to the caller.
             </summary>
