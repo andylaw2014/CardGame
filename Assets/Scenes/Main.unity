@@ -959,7 +959,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
 --- !u!1 &481907872
 GameObject:
   m_ObjectHideFlags: 0
@@ -1433,12 +1433,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 723917533}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 554e07349803a0c44a545ded89e9692c, type: 3}
+  m_Script: {fileID: 11500000, guid: f25f1c780f8374d49a016b15d8d351c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   CrystalButton: {fileID: 757712423}
   DeuteriumButton: {fileID: 2110253696}
-  GameController: {fileID: 0}
   MetalButton: {fileID: 1007662813}
 --- !u!1 &730225728
 GameObject:
@@ -1448,6 +1447,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 224: {fileID: 730225729}
+  - 114: {fileID: 730225730}
   m_Layer: 5
   m_Name: Opponent
   m_TagString: Opponent
@@ -1475,6 +1475,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &730225730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 730225728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee5936339fe08b54783e31a4d46ca1b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Battlefield: {fileID: 140332630}
+  Hand: {fileID: 287512026}
+  Stats: {fileID: 93056139}
 --- !u!1001 &732740760
 Prefab:
   m_ObjectHideFlags: 0
@@ -1841,8 +1855,8 @@ MonoBehaviour:
   ObservedComponents:
   - {fileID: 0}
   ObservedComponentsFoldoutOpen: 1
-  viewIdField: 2
-  instantiationId: 2
+  viewIdField: 1
+  instantiationId: 1
   isRuntimeInstantiated: 0
 --- !u!4 &793905657
 Transform:
@@ -2220,7 +2234,7 @@ RectTransform:
   - {fileID: 1715432379}
   - {fileID: 723917534}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
@@ -2432,6 +2446,74 @@ RectTransform:
   m_AnchoredPosition: {x: 25, y: -60}
   m_SizeDelta: {x: -50, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1628756129
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1628756132}
+  - 114: {fileID: 1628756131}
+  - 114: {fileID: 1628756130}
+  m_Layer: 0
+  m_Name: GuiMediator
+  m_TagString: GuiMediator
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1628756130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1628756129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4c0b47430a87de42b2ac66b88b918c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CardBack: {fileID: 21300000, guid: 41fb64318f9d75443a90d1b2e780972f, type: 3}
+  CardView: {fileID: 265886034}
+  ResourcePanelController: {fileID: 723917537}
+--- !u!114 &1628756131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1628756129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ownerId: 0
+  group: 0
+  prefixBackup: -1
+  observed: {fileID: 0}
+  synchronization: 0
+  onSerializeTransformOption: 3
+  onSerializeRigidBodyOption: 2
+  ownershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 0}
+  ObservedComponentsFoldoutOpen: 1
+  viewIdField: 2
+  instantiationId: 2
+  isRuntimeInstantiated: 0
+--- !u!4 &1628756132
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1628756129}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
 --- !u!1 &1715432378
 GameObject:
   m_ObjectHideFlags: 0
@@ -2440,6 +2522,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 224: {fileID: 1715432379}
+  - 114: {fileID: 1715432380}
   m_Layer: 5
   m_Name: Player
   m_TagString: Player
@@ -2467,6 +2550,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1715432380
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1715432378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee5936339fe08b54783e31a4d46ca1b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Battlefield: {fileID: 578945039}
+  Hand: {fileID: 946698923}
+  Stats: {fileID: 2101097007}
 --- !u!224 &1749524568 stripped
 RectTransform:
   m_PrefabParentObject: {fileID: 22400004, guid: 05a81c3d5091440058129444d28322f3,
@@ -2601,10 +2698,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf3b48f9ae1c5b240afacb7a27abb340, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CrystalText: {fileID: 0}
-  DeuteriumText: {fileID: 0}
-  HpText: {fileID: 0}
-  MetalText: {fileID: 0}
+  CrystalText: {fileID: 1910559686}
+  DeuteriumText: {fileID: 1470857083}
+  HpText: {fileID: 481907874}
+  MetalText: {fileID: 2129590714}
   Parent: {fileID: 0}
 --- !u!114 &2101097008
 MonoBehaviour:

@@ -69,5 +69,11 @@ namespace Assets.Scripts.Utility
         {
             return player == PlayerType.Player ? PlayerType.Player : PlayerType.Opponent;
         }
+
+        public static void MoveToParent(this GameObject source, GameObject parent)
+        {
+            source.transform.SetParent(parent.transform);
+            source.transform.localScale = Vector3.one;
+        }
     }
 }

@@ -9,7 +9,6 @@ using UnityEngine.UI;
 
 namespace Assets.Scripts.Gui
 {
-    //TODO: Set the tag of this GameObject
     /// <summary>
     ///     Use to interact between UI elements and game core.
     /// </summary>
@@ -17,9 +16,9 @@ namespace Assets.Scripts.Gui
     {
         // You should store the card id and the referenced gameobject
         private Dictionary<string, GameObject> _idDictionary;
-        public Sprite CardBack; // TODO: Add reference at inspector
-        public Image CardView; // TODO: Add reference at inspector
-        public ResourcePanelController ResourcePanelController; // TODO: Add reference at inspector
+        public Sprite CardBack;
+        public Image CardView;
+        public ResourcePanelController ResourcePanelController;
 
         /// <summary>
         ///     This is call when a button is clicked.
@@ -143,6 +142,16 @@ namespace Assets.Scripts.Gui
             // You need a new UI element that allow the selection of cards with given ID.
             // At the end of selection (or cancel if allowed), call onClose (string[] selected)
             // selected is the arrays of selected card id(s). It should be null if it is canceled.
+        }
+
+        /// <summary>
+        ///     Set a card to be draggable or not.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="draggable"></param>
+        public void SetDraggable(string id, bool draggable)
+        {
+            // TODO: Set Draggable
         }
     }
 }

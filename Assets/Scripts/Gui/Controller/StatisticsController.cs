@@ -6,12 +6,11 @@ namespace Assets.Scripts.Gui.Controller
 {
     public class StatisticsController : MonoBehaviour
     {
-        // TODO: Add references at inspector
         public Text CrystalText;
         public Text DeuteriumText;
         public Text HpText;
         public Text MetalText;
-        public GameObject Parent;
+        public PlayerController Parent;
 
         /// <summary>
         ///     Set the text of the text box.
