@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Assets.Scripts.Core;
 using Assets.Scripts.Core.Statistics;
+using Assets.Scripts.Gui.Controller;
 using Assets.Scripts.Gui.Event;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,6 +19,7 @@ namespace Assets.Scripts.Gui
         private Dictionary<string, GameObject> _idDictionary;
         public Sprite CardBack; // TODO: Add reference at inspector
         public Image CardView; // TODO: Add reference at inspector
+        public ResourcePanelController ResourcePanelController; // TODO: Add reference at inspector
 
         /// <summary>
         ///     This is call when a button is clicked.
@@ -52,7 +54,7 @@ namespace Assets.Scripts.Gui
         /// <param name="stats"></param>
         public void UpdatePlayerStats(PlayerType type, PlayerStats stats)
         {
-            //TODO: Update player statistics
+            // TODO: Update player statistics
         }
 
         /// <summary>
@@ -62,7 +64,7 @@ namespace Assets.Scripts.Gui
         /// <param name="clickable"></param>
         public void SetButtonClickable(ButtonType type, bool clickable)
         {
-            //TODO: Set button clickable
+            // TODO: Set button clickable
         }
 
         /// <summary>
@@ -76,7 +78,7 @@ namespace Assets.Scripts.Gui
         /// <param name="destination"></param>
         public void CreateCard(string cardName, string id, PlayerType owner, ZoneType destination)
         {
-            //TODO: Create card
+            // TODO: Create card
         }
 
         /// <summary>
@@ -87,7 +89,7 @@ namespace Assets.Scripts.Gui
         /// <param name="destination"></param>
         public void MoveCard(string id, PlayerType owner, ZoneType destination)
         {
-            //TODO: Move card
+            // TODO: Move card
         }
 
         /// <summary>
@@ -96,7 +98,7 @@ namespace Assets.Scripts.Gui
         /// <param name="text"></param>
         public void SetPhaseText(string text)
         {
-            //TODO: Set phase text
+            // TODO: Set phase text
         }
 
         /// <summary>
@@ -106,15 +108,39 @@ namespace Assets.Scripts.Gui
         /// <param name="isFront"></param>
         public void SetCardIsFront(string id, bool isFront)
         {
-            //TODO: Set card IsFront
+            // TODO: Set card IsFront
         }
 
         /// <summary>
-        /// 
+        ///     Enable ResourcePanel and call onClose after a button is clicked.
+        ///     The bools is to decide whether the button is clickable or not.
         /// </summary>
-        public void EnableResourcePanel()
+        /// <param name="onClose"></param>
+        /// <param name="metalEnable"></param>
+        /// <param name="crystalEnable"></param>
+        /// <param name="deuteriumEnable"></param>
+        public void EnableResourcePanel(Action<ResourceType> onClose, bool metalEnable = true,
+            bool crystalEnable = true, bool deuteriumEnable = true)
         {
-            //TODO: Enable ResourcePanel
+            // TODO: Enable ResourcePanel
+            // call onClose(ResourceType t) after a button is clicked where t is the button clicked.
+        }
+
+        /// <summary>
+        ///     Enable a selection of card and call onClose after selection.
+        ///     Other than card id, Keyword.TargetPlayer and Keyword.TargetOpponent should be allowed.
+        /// </summary>
+        /// <param name="onClose"></param>
+        /// <param name="idList">ID of the cards which is able to select.</param>
+        /// <param name="allowMultiple">Allow multiple selections.</param>
+        /// <param name="allowCancel">Allow to cacel the selection</param>
+        public void EnableSelection(Action<string[]> onClose, string[] idList, bool allowMultiple = true,
+            bool allowCancel = false)
+        {
+            // TODO:Enable Selection
+            // You need a new UI element that allow the selection of cards with given ID.
+            // At the end of selection (or cancel if allowed), call onClose (string[] selected)
+            // selected is the arrays of selected card id(s). It should be null if it is canceled.
         }
     }
 }

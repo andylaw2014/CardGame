@@ -6,7 +6,7 @@ namespace Assets.Scripts.Core.Statistics
     {
         public CardStats()
         {
-            foreach (var type in Helper.GetValues<CardStatsType>())
+            foreach (var type in Extension.GetValues<CardStatsType>())
             {
                 Set(type, 0);
             }

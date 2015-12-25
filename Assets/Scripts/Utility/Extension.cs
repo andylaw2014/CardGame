@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Utility
 {
-    public static class Helper
+    public static class Extension
     {
         public static T FindComponentInChildWithTag<T>(this GameObject parent, string tag) where T : Component
         {

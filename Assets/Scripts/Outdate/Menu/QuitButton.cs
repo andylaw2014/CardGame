@@ -1,9 +1,6 @@
-#if UNITY_EDITOR
+using UnityEngine.UI;
 using UnityEngine;
 using UnityEditor;
-#endif
-using UnityEngine;
-using UnityEngine.UI;
 
 // For Quit button only.
 

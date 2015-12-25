@@ -11,7 +11,6 @@ namespace Assets.Scripts.Gui
     public class Card : MonoBehaviour
     {
         private Image _cardImage;
-        private CardStats _cardStats;
         private GuiMediator _guiMediator;
 
         private string _id = "";
@@ -51,8 +50,6 @@ namespace Assets.Scripts.Gui
         /// </summary>
         private void Awake()
         {
-            _cardStats = new CardStats();
-            InitialStats();
             _guiMediator = GameObject.FindGameObjectWithTag(Tag.GuiMediator).GetComponent<GuiMediator>();
             _cardImage = GetComponent<Image>();
         }
@@ -67,19 +64,7 @@ namespace Assets.Scripts.Gui
                 _guiMediator.CardView.sprite = Image;
         }
 
-        /// <summary>
-        ///     Initialization of statistics.
-        /// </summary>
-        private void InitialStats()
-        {
-            SetStats(CardStatsType.Hp, Stats.Hp);
-            SetStats(CardStatsType.Atk, Stats.Atk);
-            SetStats(CardStatsType.Metal, Stats.Metal);
-            SetStats(CardStatsType.Crystal, Stats.Crystal);
-            SetStats(CardStatsType.Deuterium, Stats.Deuterium);
-        }
-
-        private void UpdateInspectorStats(CardStatsType type, int value)
+        public void SetStats(CardStatsType type, int value)
         {
             switch (type)
             {
@@ -98,18 +83,28 @@ namespace Assets.Scripts.Gui
                 case CardStatsType.Deuterium:
                     Stats.Deuterium = value;
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(type.GetType().Name, type, null);
             }
-        }
-
-        public void SetStats(CardStatsType type, int value)
-        {
-            _cardStats[type] = value;
-            UpdateInspectorStats(type, value);
         }
 
         public int GetStats(CardStatsType type)
         {
-            return _cardStats[type];
+            switch (type)
+            {
+                case CardStatsType.Hp:
+                    return Stats.Hp;
+                case CardStatsType.Atk:
+                    return Stats.Atk;
+                case CardStatsType.Metal:
+                    return Stats.Metal;
+                case CardStatsType.Crystal:
+                    return Stats.Crystal;
+                case CardStatsType.Deuterium:
+                    return Stats.Deuterium;
+                default:
+                    throw new ArgumentOutOfRangeException(type.GetType().Name, type, null);
+            }
         }
 
         /// <summary>
