@@ -1,10 +1,12 @@
 #if UNITY_EDITOR
+using UnityEngine;
 using UnityEditor;
 #endif
 using UnityEngine;
 using UnityEngine.UI;
 
 // For Quit button only.
+
 namespace Assets.Scripts.Outdate.Menu
 {
     public class QuitButton : MonoBehaviour

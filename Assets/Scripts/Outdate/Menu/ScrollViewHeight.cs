@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // For ScrollView use only.
+
 namespace Assets.Scripts.Outdate.Menu
 {
     public class ScrollViewHeight : MonoBehaviour

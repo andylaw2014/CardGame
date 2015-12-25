@@ -1,35 +1,46 @@
 using System;
 using System.Collections.Generic;
 using Assets.Scripts.Core;
-using Assets.Scripts.Core.Card;
+using Assets.Scripts.Core.Statistics;
+using Assets.Scripts.Gui.Event;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.Gui
 {
+    //TODO: Set the tag of this GameObject
     /// <summary>
     ///     Use to interact between UI elements and game core.
     /// </summary>
     public class GuiMediator : MonoBehaviour
     {
+        // You should store the card id and the referenced gameobject
         private Dictionary<string, GameObject> _idDictionary;
-            // You should store the card id and the referenced gameobject
+        public Sprite CardBack; // TODO: Add reference at inspector
+        public Image CardView; // TODO: Add reference at inspector
 
         /// <summary>
         ///     This is call when a button is clicked.
         /// </summary>
-        public event EventHandler<ButtonClickEventArgs> OnButtonClick = (sender, args) => { }; // Do not remove the empty function
+        /// <remarks>Do not remove the empty function.</remarks>
+        public event EventHandler<ButtonClickEventArgs> OnButtonClick = (sender, args) => { };
 
         /// <summary>
         ///     This is call when a card drag to another card.
         /// </summary>
-        public event EventHandler<CardDragToCardEventArgs> OnCardDragToCard = (sender, args) => { }; // Do not remove the empty function
+        /// <remarks>Do not remove the empty function.</remarks>
+        public event EventHandler<CardDragToCardEventArgs> OnCardDragToCard = (sender, args) => { };
 
         /// <summary>
         ///     This is call when a card drag to another zone.
         /// </summary>
-        public event EventHandler<CardDragToZoneEventArgs> OnCardDragToZone = (sender, args) => { }; // Do not remove the empty function
+        /// <remarks>Do not remove the empty function.</remarks>
+        public event EventHandler<CardDragToZoneEventArgs> OnCardDragToZone = (sender, args) => { };
 
-        private void Start()
+        /// <summary>
+        ///     Use this for initialization
+        /// </summary>
+        private void Awake()
         {
             _idDictionary = new Dictionary<string, GameObject>();
         }
@@ -55,7 +66,7 @@ namespace Assets.Scripts.Gui
         }
 
         /// <summary>
-        ///     Create a card (gameobject) and return its "card" component.
+        ///     Create a card (GameObject) and return its "card" component.
         ///     Assign the card with given id.
         ///     The card created should place at given zone.
         /// </summary>
@@ -63,11 +74,9 @@ namespace Assets.Scripts.Gui
         /// <param name="id"></param>
         /// <param name="owner">Owner of the card</param>
         /// <param name="destination"></param>
-        /// <returns></returns>
-        public Card CreateCard(string cardName, string id, PlayerType owner, ZoneType destination)
+        public void CreateCard(string cardName, string id, PlayerType owner, ZoneType destination)
         {
             //TODO: Create card
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -78,7 +87,26 @@ namespace Assets.Scripts.Gui
         /// <param name="destination"></param>
         public void MoveCard(string id, PlayerType owner, ZoneType destination)
         {
-            //TODO: Move Card
+            //TODO: Move card
+        }
+
+        /// <summary>
+        ///     Set the text of Phase Text
+        /// </summary>
+        /// <param name="text"></param>
+        public void SetPhaseText(string text)
+        {
+            //TODO: Set phase text
+        }
+
+        /// <summary>
+        ///     Set the card IsFront property.
+        /// </summary>
+        /// <param name="id">Card id.</param>
+        /// <param name="isFront"></param>
+        public void SetCardIsFront(string id, bool isFront)
+        {
+            //TODO: Set card IsFront
         }
     }
 }

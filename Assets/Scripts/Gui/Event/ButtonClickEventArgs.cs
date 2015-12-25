@@ -1,7 +1,7 @@
 using System;
 using Assets.Scripts.Core;
 
-namespace Assets.Scripts.Gui
+namespace Assets.Scripts.Gui.Event
 {
     public class ButtonClickEventArgs : EventArgs
     {

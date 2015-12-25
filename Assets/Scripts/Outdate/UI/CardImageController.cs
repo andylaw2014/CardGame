@@ -3,14 +3,15 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 // Control card image between front image and card back. 
+
 namespace Assets.Scripts.Outdate.UI
 {
     public class CardImageController : MonoBehaviour, IPointerEnterHandler
     {
-        private bool _isFront;
         private Image _image;
-        public Sprite Front;
+        private bool _isFront;
         public Sprite Back; // Front image of card.
+        public Sprite Front;
 
         [HideInInspector]
         public bool IsFront
@@ -24,15 +25,15 @@ namespace Assets.Scripts.Outdate.UI
             }
         }
 
-        private void Awake()
-        {
-            _image = GameObject.FindGameObjectWithTag("CardView").GetComponentsInChildren<Image>()[1];
-        }
-
         public void OnPointerEnter(PointerEventData eventData)
         {
             if (_isFront)
                 _image.sprite = Front;
+        }
+
+        private void Awake()
+        {
+            _image = GameObject.FindGameObjectWithTag("CardView").GetComponentsInChildren<Image>()[1];
         }
     }
 }

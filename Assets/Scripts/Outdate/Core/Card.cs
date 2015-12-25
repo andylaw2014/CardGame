@@ -6,10 +6,10 @@ namespace Assets.Scripts.Outdate.Core
     {
         public readonly string Id;
         public readonly string Name;
-        private int _metal;
         private int _crystal;
         private int _deuterium;
         private int _hp;
+        private int _metal;
 
         public Card(Player owner, string name, string id)
         {
@@ -18,19 +18,19 @@ namespace Assets.Scripts.Outdate.Core
             Id = id;
         }
 
+        public Player Owner { get; set; }
+
+        public bool Equals(Card other)
+        {
+            return Id.Equals(other.Id) && Name.Equals(other.Name);
+        }
+
         public void SetCard(CardController card)
         {
             _metal = card.Metal;
             _crystal = card.Crystal;
             _deuterium = card.Deuterium;
             _hp = card.Hp;
-        }
-
-        public Player Owner { get; set; }
-
-        public bool Equals(Card other)
-        {
-            return Id.Equals(other.Id) && Name.Equals(other.Name);
         }
 
         public int GetCost(Resource.Resource type)

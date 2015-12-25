@@ -2,27 +2,31 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Hold the decklist of player using.
-public class DeckList : MonoBehaviour
+
+namespace Assets.Scripts
 {
-    // Instance of DeckList object.
-    private static DeckList me;
-    // Decklist storing the names of prefabs.
-    public List<string> Deck;
-
-    private void Start()
+    public class DeckList : MonoBehaviour
     {
-        Deck = new List<string>();
-    }
+        // Instance of DeckList object.
+        private static DeckList me;
+        // Decklist storing the names of prefabs.
+        public List<string> Deck;
 
-    private void Awake()
-    {
-        // New level will not destory this object.
-        DontDestroyOnLoad(gameObject);
+        private void Start()
+        {
+            Deck = new List<string>();
+        }
 
-        // Ensure only one DeckList object.
-        if (me == null)
-            me = this;
-        else
-            DestroyImmediate(gameObject);
+        private void Awake()
+        {
+            // New level will not destory this object.
+            DontDestroyOnLoad(gameObject);
+
+            // Ensure only one DeckList object.
+            if (me == null)
+                me = this;
+            else
+                DestroyImmediate(gameObject);
+        }
     }
 }

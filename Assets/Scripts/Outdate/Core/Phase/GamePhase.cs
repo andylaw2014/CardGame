@@ -5,10 +5,8 @@ namespace Assets.Scripts.Outdate.Core.Phase
 {
     public abstract class GamePhase
     {
-        public readonly Game.User Owner;
-        protected abstract string Name { get; }
-        protected abstract GamePhase NextPhase { get; }
         protected readonly Game _game;
+        public readonly Game.User Owner;
 
         protected GamePhase(Game game, Game.User owner)
         {
@@ -16,6 +14,9 @@ namespace Assets.Scripts.Outdate.Core.Phase
             Owner = owner;
             _game.Publish(new StartPhaseMessage(this));
         }
+
+        protected abstract string Name { get; }
+        protected abstract GamePhase NextPhase { get; }
 
         // Return is handled
         public virtual bool Handle(IUiCommand command)

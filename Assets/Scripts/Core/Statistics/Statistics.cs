@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Assets.Scripts.Core
+namespace Assets.Scripts.Core.Statistics
 {
     public abstract class Statistics<T>
     {

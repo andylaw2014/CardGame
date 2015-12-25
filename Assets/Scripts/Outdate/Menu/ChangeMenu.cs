@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 
 // ChangeMenu Class triggers parent's Animator to "Disappear" and triggers another menu's Animator to "Appear"
+
 namespace Assets.Scripts.Outdate.Menu
 {
     public class ChangeMenu : MonoBehaviour

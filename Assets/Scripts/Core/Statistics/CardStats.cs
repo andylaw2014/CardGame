@@ -1,4 +1,6 @@
-namespace Assets.Scripts.Core.Card
+using Assets.Scripts.Utility;
+
+namespace Assets.Scripts.Core.Statistics
 {
     public class CardStats : Statistics<CardStatsType>
     {

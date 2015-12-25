@@ -14,26 +14,27 @@ namespace Assets.Scripts.Outdate.Core
             Opponent
         }
 
+        private readonly Dictionary<string, Card> _cardCache;
+
         private readonly User _firstUser;
+        private readonly IdFactory _idFactory;
         private readonly Player _opponent;
         private readonly Player _player;
         private readonly EventAggregator _publisher;
-        private GamePhase _phase;
         public readonly GameController GameController;
-        private readonly IdFactory _idFactory;
-        private readonly Dictionary<string, Card> _cardCache;  
+        private GamePhase _phase;
 
         public Game(GameController gameController, User firstUser)
         {
             // Initialization
             _publisher = new EventAggregator();
             GameController = gameController;
-            _firstUser = firstUser ;
+            _firstUser = firstUser;
             Log.Verbose("Is First Player:" + _firstUser);
             _player = new Player(this, User.You);
             _opponent = new Player(this, User.Opponent);
-            _idFactory = new IdFactory(_firstUser== User.You);
-            _cardCache= new Dictionary<string, Card>();
+            _idFactory = new IdFactory(_firstUser == User.You);
+            _cardCache = new Dictionary<string, Card>();
         }
 
         public void NextPhase()
@@ -71,8 +72,8 @@ namespace Assets.Scripts.Outdate.Core
         public void DrawCard(string cardName, string id, User user)
         {
             var player = GetPlayer(user);
-            var card = new Card(player, cardName , id);
-            Log.Verbose("Add to card cache: "+ id);
+            var card = new Card(player, cardName, id);
+            Log.Verbose("Add to card cache: " + id);
             _cardCache.Add(id, card);
             player.DrawCard(card);
         }
@@ -85,7 +86,7 @@ namespace Assets.Scripts.Outdate.Core
         public void Start()
         {
             Log.Verbose("Game Start");
-            _phase = new ResetPhase(this,_firstUser);
+            _phase = new ResetPhase(this, _firstUser);
             Update();
             DrawCardFromDeck();
         }

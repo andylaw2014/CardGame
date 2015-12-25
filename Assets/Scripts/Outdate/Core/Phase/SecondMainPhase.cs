@@ -10,6 +10,16 @@ namespace Assets.Scripts.Outdate.Core.Phase
         {
         }
 
+        protected override string Name
+        {
+            get { return "Second Main Phase"; }
+        }
+
+        protected override GamePhase NextPhase
+        {
+            get { return new ResetPhase(_game, _game.OpponentUser(Owner)); }
+        }
+
         public override bool Handle(IUiCommand command)
         {
             Log.Verbose("Second Main Phase Handle: IUiCommand");
@@ -23,16 +33,6 @@ namespace Assets.Scripts.Outdate.Core.Phase
             if (!card.Owner.IsPlayable(card)) return false;
             _game.GameController.RpcPlayCard(id);
             return true;
-        }
-
-        protected override string Name
-        {
-            get { return "Second Main Phase"; }
-        }
-
-        protected override GamePhase NextPhase
-        {
-            get { return new ResetPhase(_game, _game.OpponentUser(Owner)); }
         }
     }
 }

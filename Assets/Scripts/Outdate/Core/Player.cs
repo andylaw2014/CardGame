@@ -7,12 +7,12 @@ namespace Assets.Scripts.Outdate.Core
 {
     public class Player
     {
-        public readonly Game Game;
         private readonly List<Card> _battlefield;
         private readonly List<Card> _hand;
-        public readonly Game.User User;
         private readonly ResourceController _resourceController;
+        public readonly Game Game;
         private readonly int MaximumResource = 10;
+        public readonly Game.User User;
 
         public Player(Game game, Game.User user)
         {
@@ -25,7 +25,7 @@ namespace Assets.Scripts.Outdate.Core
 
         public void DrawCard(Card card)
         {
-            Log.Verbose("Player "+User+": Draw Card");
+            Log.Verbose("Player " + User + ": Draw Card");
             _hand.Add(card);
             Game.Publish(new DrawCardMessage(this, card));
         }
@@ -52,23 +52,23 @@ namespace Assets.Scripts.Outdate.Core
             return playable;
         }
 
-        public void AddResource(Resource.Resource resource, bool reset=false)
+        public void AddResource(Resource.Resource resource, bool reset = false)
         {
             var max = _resourceController.GetResource(resource, ResourceController.Type.Maximum);
-            _resourceController.SetResource(resource,ResourceController.Type.Maximum, max+1);
-            if(reset)
+            _resourceController.SetResource(resource, ResourceController.Type.Maximum, max + 1);
+            if (reset)
                 _resourceController.RestoreAll();
         }
 
         public bool IsResourceFull(Resource.Resource resource)
         {
-            return _resourceController.GetResource(resource, ResourceController.Type.Maximum)>= MaximumResource ;
+            return _resourceController.GetResource(resource, ResourceController.Type.Maximum) >= MaximumResource;
         }
 
         private bool CheckCost(Card card, Resource.Resource resource)
         {
             return _resourceController.GetResource(resource, ResourceController.Type.Current) >=
-                           card.GetCost(resource);
+                   card.GetCost(resource);
         }
 
         public void ResetCost()
@@ -79,9 +79,10 @@ namespace Assets.Scripts.Outdate.Core
         private void RemoveCost(Card card, Resource.Resource resource)
         {
             var current = _resourceController.GetResource(resource, ResourceController.Type.Current);
-            var cost =  card.GetCost(resource);
-            _resourceController.SetResource(resource, ResourceController.Type.Current, current-cost);
+            var cost = card.GetCost(resource);
+            _resourceController.SetResource(resource, ResourceController.Type.Current, current - cost);
         }
+
         public void Update()
         {
             _resourceController.Update();

@@ -2,16 +2,26 @@ namespace Assets.Scripts.Core
 {
     public enum ButtonType
     {
-        NextPhaseButton, Undefined
+        NextPhaseButton,
+        Undefined
     }
 
     public enum PlayerType
     {
-        Player, Oopponent
+        Player,
+        Oopponent
     }
 
     public enum ZoneType
     {
-        Hand, BattleField
+        Hand,
+        BattleField
+    }
+
+    public enum ResourceType
+    {
+        Metal,
+        Crystal,
+        Deuterium
     }
 }

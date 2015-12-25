@@ -4,7 +4,7 @@ namespace Assets.Scripts.Outdate.Core.Phase
     {
         public DrawPhase(Game game, Game.User owner) : base(game, owner)
         {
-            if(owner == Game.User.You)
+            if (owner == Game.User.You)
                 game.DrawCardFromDeck();
         }
 

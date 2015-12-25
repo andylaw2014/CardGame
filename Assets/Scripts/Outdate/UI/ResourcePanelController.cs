@@ -9,8 +9,8 @@ namespace Assets.Scripts.Outdate.UI
     {
         public Button CrystalButton;
         public Button DeuteriumButton;
-        public Button MetalButton;
         public GameController GameController;
+        public Button MetalButton;
 
         private void Awake()
         {
@@ -23,8 +23,9 @@ namespace Assets.Scripts.Outdate.UI
         {
             MetalButton.interactable = !GameController.Game.GetPlayer(Game.User.You).IsResourceFull(Resource.Metal);
             CrystalButton.interactable = !GameController.Game.GetPlayer(Game.User.You).IsResourceFull(Resource.Crystal);
-            DeuteriumButton.interactable = !GameController.Game.GetPlayer(Game.User.You).IsResourceFull(Resource.Deuterium);
-            gameObject.SetActive(MetalButton.interactable|| CrystalButton.interactable || DeuteriumButton.interactable);
+            DeuteriumButton.interactable =
+                !GameController.Game.GetPlayer(Game.User.You).IsResourceFull(Resource.Deuterium);
+            gameObject.SetActive(MetalButton.interactable || CrystalButton.interactable || DeuteriumButton.interactable);
         }
 
         private void AddResource(Resource resource)

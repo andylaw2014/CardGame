@@ -4,6 +4,7 @@ namespace Assets.Scripts.Outdate.Infrastructure
     {
         private readonly bool _type;
         private int _current;
+
         public IdFactory(bool type)
         {
             _type = type;

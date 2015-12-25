@@ -8,20 +8,16 @@ using UnityEngine.UI;
 
 namespace Assets.Scripts.Outdate.UI
 {
-    public class GuiController : MonoBehaviour, IHandle<StartPhaseMessage>, IHandle<DrawCardMessage>,IHandle<PlayCardMessage>
+    public class GuiController : MonoBehaviour, IHandle<StartPhaseMessage>, IHandle<DrawCardMessage>,
+        IHandle<PlayCardMessage>
     {
-        private GameController _gameController;
         private Dictionary<string, GameObject> _cardCache;
+        private GameController _gameController;
         public Button NextPhaseButton;
         public PlayerController OpponentCtr;
         public Text PhaseText;
         public PlayerController PlayerCtr;
         public ResourcePanelController ResourcePanelController;
-
-        public void ShowResourcePanelController()
-        {
-            ResourcePanelController.Activate();
-        }
 
         public void Handle(DrawCardMessage message)
         {
@@ -31,11 +27,25 @@ namespace Assets.Scripts.Outdate.UI
             DrawCard(card.Name, card.Id, user);
         }
 
+        public void Handle(PlayCardMessage message)
+        {
+            var user = GetPlayerController(message.Player.User);
+            GameObject card;
+            if (!_cardCache.TryGetValue(message.Card.Id, out card)) return;
+            user.AddToMinion(card);
+            card.GetComponent<CardImageController>().IsFront = true;
+        }
+
         public void Handle(StartPhaseMessage message)
         {
             Log.Verbose("GuiController: Handle StartPhaseMessage");
             NextPhaseButton.interactable = message.Phase.Owner == Game.User.You;
             PhaseText.text = message.Phase.ToString();
+        }
+
+        public void ShowResourcePanelController()
+        {
+            ResourcePanelController.Activate();
         }
 
         public PlayerController GetPlayerController(Game.User who)
@@ -72,15 +82,6 @@ namespace Assets.Scripts.Outdate.UI
                 NextPhaseButton.interactable = false;
                 GetComponent<PhotonView>().RPC("NextPhase", PhotonTargets.AllViaServer);
             });
-        }
-
-        public void Handle(PlayCardMessage message)
-        {
-            var user = GetPlayerController(message.Player.User);
-            GameObject card;
-            if (!_cardCache.TryGetValue(message.Card.Id, out card)) return;
-            user.AddToMinion(card);
-            card.GetComponent<CardImageController>().IsFront = true;
         }
     }
 }

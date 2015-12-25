@@ -7,9 +7,9 @@ namespace Assets.Scripts.Outdate.Core
     public class GameController : MonoBehaviour
     {
         public GuiController GuiController;
-        public Game Game { get; private set; }
-        public PlayerStatsController Player;
         public PlayerStatsController Opponent;
+        public PlayerStatsController Player;
+        public Game Game { get; private set; }
 
         private void Awake()
         {
@@ -37,7 +37,7 @@ namespace Assets.Scripts.Outdate.Core
         private void DrawCard(string cardName, string id, bool isYou)
         {
             var user = isYou ? Game.User.You : Game.User.Opponent;
-            Game.DrawCard(cardName, id , user);
+            Game.DrawCard(cardName, id, user);
         }
 
         public void RpcDrawCard(string cardName, bool isYou)
@@ -47,7 +47,7 @@ namespace Assets.Scripts.Outdate.Core
             GetComponent<PhotonView>().RPC("DrawCard", PhotonTargets.Others, cardName, id, !isYou);
             DrawCard(cardName, id, isYou);
         }
-        
+
         [PunRPC]
         private void PlayCard(string id)
         {
@@ -65,7 +65,7 @@ namespace Assets.Scripts.Outdate.Core
         {
             var res = (Resource.Resource) resource;
             var user = isYou ? Game.User.You : Game.User.Opponent;
-            Game.GetPlayer(user).AddResource(res,true);
+            Game.GetPlayer(user).AddResource(res, true);
         }
 
         public void RpcAddResource(Resource.Resource resource)

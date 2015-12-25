@@ -528,7 +528,8 @@ namespace Assets.Scripts.Outdate.DeckEdit
             return colorArray;
         }
 
-        private static void GetValue<T>(string key, T list, ArrayType arrayType, int vectorNumber, Action<T, byte[]> convert)
+        private static void GetValue<T>(string key, T list, ArrayType arrayType, int vectorNumber,
+            Action<T, byte[]> convert)
             where T : IList
         {
             if (PlayerPrefs.HasKey(key))

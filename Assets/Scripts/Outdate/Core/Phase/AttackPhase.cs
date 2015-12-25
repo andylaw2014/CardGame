@@ -1,4 +1,3 @@
-
 namespace Assets.Scripts.Outdate.Core.Phase
 {
     public class AttackPhase : GamePhase

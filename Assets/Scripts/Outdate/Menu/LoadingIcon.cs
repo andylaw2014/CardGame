@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // Use for loading icon animation only.
+
 namespace Assets.Scripts.Outdate.Menu
 {
     public class LoadingIcon : MonoBehaviour
