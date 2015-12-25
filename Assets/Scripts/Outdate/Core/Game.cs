@@ -1,7 +1,7 @@
 using System.Collections.Generic;
+using Assets.Scripts.Infrastructure.EventAggregator;
 using Assets.Scripts.Outdate.Core.Phase;
 using Assets.Scripts.Outdate.Infrastructure;
-using Assets.Scripts.Outdate.Infrastructure.EventAggregator;
 using Assets.Scripts.Outdate.UI.Command;
 
 namespace Assets.Scripts.Outdate.Core

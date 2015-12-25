@@ -108,5 +108,13 @@ namespace Assets.Scripts.Gui
         {
             //TODO: Set card IsFront
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void EnableResourcePanel()
+        {
+            //TODO: Enable ResourcePanel
+        }
     }
 }

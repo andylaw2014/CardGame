@@ -1,8 +1,8 @@
+using Assets.Scripts.Infrastructure.EventAggregator;
 using Assets.Scripts.Outdate.Core;
 using Assets.Scripts.Outdate.Core.Message;
 using Assets.Scripts.Outdate.Core.Resource;
 using Assets.Scripts.Outdate.Infrastructure;
-using Assets.Scripts.Outdate.Infrastructure.EventAggregator;
 using UnityEngine;
 using UnityEngine.UI;
 
