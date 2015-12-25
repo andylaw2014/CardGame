@@ -1,5 +1,6 @@
 using Assets.Scripts.Core.Phase;
 using Assets.Scripts.Infrastructure.EventAggregator;
+using Assets.Scripts.Infrastructure.IdFactory;
 
 namespace Assets.Scripts.Core
 {
@@ -7,6 +8,7 @@ namespace Assets.Scripts.Core
     {
         private readonly PlayerType _first;
         private readonly GameController _gameController;
+        private readonly IIdFactory _idFactory;
         private readonly EventAggregator _publisher;
         private BasePhase _phase;
 
@@ -20,6 +22,7 @@ namespace Assets.Scripts.Core
             _publisher = new EventAggregator();
             _gameController = gameController;
             _first = first;
+            _idFactory = new CardIdFactory();
         }
 
         /// <summary>
@@ -49,6 +52,16 @@ namespace Assets.Scripts.Core
         {
             _phase = phase;
             _phase.Start();
+        }
+
+        /// <summary>
+        ///     Return unique card id.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public string GetCardId(PlayerType type)
+        {
+            return _idFactory.GetId(_first == type ? CardIdFactory.FirstPlayer : CardIdFactory.SecondPlayer);
         }
     }
 }

@@ -16,6 +16,7 @@ TagManager:
   - DetailCard
   - ChosenDeck
   - ChoiceDeck
+  - GuiMediator
   layers:
   - Default
   - TransparentFX

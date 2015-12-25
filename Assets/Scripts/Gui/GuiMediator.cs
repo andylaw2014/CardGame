@@ -68,7 +68,7 @@ namespace Assets.Scripts.Gui
         }
 
         /// <summary>
-        ///     Create a card (GameObject) and return its "card" component.
+        ///     Create a card (GameObject) and return its Card component.
         ///     Assign the card with given id.
         ///     The card created should place at given zone.
         /// </summary>
@@ -76,9 +76,11 @@ namespace Assets.Scripts.Gui
         /// <param name="id"></param>
         /// <param name="owner">Owner of the card</param>
         /// <param name="destination"></param>
-        public void CreateCard(string cardName, string id, PlayerType owner, ZoneType destination)
+        /// <returns>Card component</returns>
+        public Card CreateCard(string cardName, string id, PlayerType owner, ZoneType destination)
         {
             // TODO: Create card
+            throw new NotImplementedException();
         }
 
         /// <summary>
