@@ -9,7 +9,7 @@ namespace Assets.Scripts.Core
     public enum PlayerType
     {
         Player,
-        Oopponent
+        Opponent
     }
 
     public enum ZoneType
