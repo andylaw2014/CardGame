@@ -17,7 +17,7 @@ namespace Assets.Scripts.Core.Phase
             Parent = parent;
         }
 
-        protected abstract BasePhase NextPhase { get; }
+        protected abstract BasePhase NextPhase();
 
         /// <summary>
         ///     Start the phase.
@@ -29,8 +29,8 @@ namespace Assets.Scripts.Core.Phase
         }
 
         /// <summary>
-        /// To be overriden by child.
-        /// Execute after PhaseStartMessage.
+        ///     To be overriden by child.
+        ///     Execute after PhaseStartMessage.
         /// </summary>
         protected virtual void Execute()
         {
@@ -42,7 +42,13 @@ namespace Assets.Scripts.Core.Phase
         public void Next()
         {
             Game.Publish(new PhaseEndMessage(this));
-            Game.SetPhase(NextPhase);
+            Game.SetPhase(NextPhase());
         }
+
+        /// <summary>
+        ///     Get the name of phase.
+        /// </summary>
+        /// <returns></returns>
+        public abstract string GetName();
     }
 }

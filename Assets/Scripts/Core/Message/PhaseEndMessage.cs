@@ -2,7 +2,7 @@ using Assets.Scripts.Core.Phase;
 
 namespace Assets.Scripts.Core.Message
 {
-    class PhaseEndMessage
+    public class PhaseEndMessage : GameMessage
     {
         public readonly BasePhase Phase;
 

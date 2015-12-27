@@ -65,11 +65,21 @@ namespace Assets.Scripts.Utility
             }
         }
 
+        /// <summary>
+        ///     Get the Opposite of PlayerType.
+        /// </summary>
+        /// <param name="player"></param>
+        /// <returns></returns>
         public static PlayerType Oopponent(this PlayerType player)
         {
             return player == PlayerType.Player ? PlayerType.Player : PlayerType.Opponent;
         }
 
+        /// <summary>
+        ///     Move a GameObject from parent to another.
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="parent"></param>
         public static void MoveToParent(this GameObject source, GameObject parent)
         {
             source.transform.SetParent(parent.transform);

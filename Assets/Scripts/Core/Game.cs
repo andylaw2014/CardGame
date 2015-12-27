@@ -1,37 +1,43 @@
+using System;
+using Assets.Scripts.Core.Event;
+using Assets.Scripts.Core.Message;
 using Assets.Scripts.Core.Phase;
 using Assets.Scripts.Infrastructure.EventAggregator;
 using Assets.Scripts.Infrastructure.IdFactory;
 
 namespace Assets.Scripts.Core
 {
-    public class Game
+    public class Game : IHandle<CardParentChangeMessage>, IHandle<CardZoneChangeMessage>,
+        IHandle<PlayerStatsChangeMessage>
     {
+        private readonly EventAggregator _eventAggregator;
         private readonly PlayerType _first;
-        private readonly GameController _gameController;
         private readonly IIdFactory _idFactory;
-        private readonly EventAggregator _publisher;
         private BasePhase _phase;
 
         /// <summary>
         ///     Constructor of Game.
         /// </summary>
-        /// <param name="gameController"></param>
         /// <param name="first">The first Player</param>
-        public Game(GameController gameController, PlayerType first)
+        public Game(PlayerType first)
         {
-            _publisher = new EventAggregator();
-            _gameController = gameController;
+            _eventAggregator = new EventAggregator();
+            _eventAggregator.Subscribe(this);
             _first = first;
             _idFactory = new CardIdFactory();
         }
+
+        public event EventHandler<PhaseChangeEventArg> OnPhaseChange = (sender, arg) => { };
+        public event EventHandler<CardChangeEventArg> OnCardMove = (sender, arg) => { };
+        public event EventHandler<PlayerChangeEventArg> OnPlayerStatsChange = (sender, arg) => { };
 
         /// <summary>
         ///     Publish an in-game message.
         /// </summary>
         /// <param name="message">Message to publish.</param>
-        public void Publish(object message)
+        public void Publish(GameMessage message)
         {
-            _publisher.Publish(message);
+            _eventAggregator.Publish(message);
         }
 
         /// <summary>
@@ -41,7 +47,7 @@ namespace Assets.Scripts.Core
         /// <param name="subscriber"></param>
         public void Subscribe(object subscriber)
         {
-            _publisher.Subscribe(subscriber);
+            _eventAggregator.Subscribe(subscriber);
         }
 
         /// <summary>
@@ -51,6 +57,7 @@ namespace Assets.Scripts.Core
         public void SetPhase(BasePhase phase)
         {
             _phase = phase;
+            OnPhaseChange(this, new PhaseChangeEventArg(_phase));
             _phase.Start();
         }
 
@@ -63,5 +70,24 @@ namespace Assets.Scripts.Core
         {
             return _idFactory.GetId(_first == type ? CardIdFactory.FirstPlayer : CardIdFactory.SecondPlayer);
         }
+
+        #region Handle
+
+        public void Handle(CardParentChangeMessage message)
+        {
+            OnCardMove(this, new CardChangeEventArg(message.Card));
+        }
+
+        public void Handle(CardZoneChangeMessage message)
+        {
+            OnCardMove(this, new CardChangeEventArg(message.Card));
+        }
+
+        public void Handle(PlayerStatsChangeMessage message)
+        {
+            OnPlayerStatsChange(this, new PlayerChangeEventArg(message.Player));
+        }
+
+        #endregion
     }
 }
