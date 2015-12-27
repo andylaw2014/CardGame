@@ -14,16 +14,19 @@ namespace Assets.Scripts.Core
         private readonly PlayerType _first;
         private readonly IIdFactory _idFactory;
         private BasePhase _phase;
+        private readonly GameController _gameController;
 
         /// <summary>
         ///     Constructor of Game.
         /// </summary>
+        /// <param name="gameController"></param>
         /// <param name="first">The first Player</param>
-        public Game(PlayerType first)
+        public Game(GameController gameController, PlayerType first)
         {
             _eventAggregator = new EventAggregator();
             _eventAggregator.Subscribe(this);
             _first = first;
+            _gameController = gameController;
             _idFactory = new CardIdFactory();
         }
 

@@ -12,7 +12,7 @@ namespace Assets.Scripts.Core
         private void Awake()
         {
             // TODO: Random Start
-            _game = new Game(PhotonNetwork.isMasterClient ? PlayerType.Player : PlayerType.Opponent);
+            _game = new Game(this, PhotonNetwork.isMasterClient ? PlayerType.Player : PlayerType.Opponent);
             _game.OnPhaseChange += OnPhaseChange;
             _game.OnCardMove += OnCardMove;
             _game.OnPlayerStatsChange += OnPlayerStatsChange;

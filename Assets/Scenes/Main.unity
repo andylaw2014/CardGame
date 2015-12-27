@@ -1826,6 +1826,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 793905657}
   - 114: {fileID: 793905655}
+  - 114: {fileID: 793905656}
   m_Layer: 0
   m_Name: Game
   m_TagString: GameController
@@ -1858,6 +1859,18 @@ MonoBehaviour:
   viewIdField: 1
   instantiationId: 1
   isRuntimeInstantiated: 0
+--- !u!114 &793905656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 793905654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec8c81c2182c52b4cb2cce3246d43666, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GuiMediator: {fileID: 1628756130}
 --- !u!4 &793905657
 Transform:
   m_ObjectHideFlags: 0
