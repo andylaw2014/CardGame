@@ -2491,6 +2491,8 @@ MonoBehaviour:
   CardBack: {fileID: 21300000, guid: 41fb64318f9d75443a90d1b2e780972f, type: 3}
   CardView: {fileID: 265886034}
   ResourcePanelController: {fileID: 723917537}
+  Player: {fileID: 1715432380}
+  Opponent: {fileID: 730225730}
 --- !u!114 &1628756131
 MonoBehaviour:
   m_ObjectHideFlags: 0

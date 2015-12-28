@@ -19,6 +19,8 @@ namespace Assets.Scripts.Gui
         public Sprite CardBack;
         public Image CardView;
         public ResourcePanelController ResourcePanelController;
+        public PlayerController Player;
+        public PlayerController Opponent;
 
         /// <summary>
         ///     This is call when a button is clicked.
