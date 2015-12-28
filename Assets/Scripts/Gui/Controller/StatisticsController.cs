@@ -20,6 +20,21 @@ namespace Assets.Scripts.Gui.Controller
         public void SetText(PlayerStatsType type, string text)
         {
             // TODO: Set text
+            switch (type)
+            {
+                case PlayerStatsType.Hp:
+                    HpText.text = text;
+                    break;
+                case PlayerStatsType.Metal:
+                    MetalText.text = text;
+                    break;
+                case PlayerStatsType.Crystal:
+                    CrystalText.text = text;
+                    break;
+                case PlayerStatsType.Deuterium:
+                    DeuteriumText.text = text;
+                    break;
+            }
         }
     }
 }

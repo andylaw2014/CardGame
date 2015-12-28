@@ -1,3 +1,4 @@
+using Assets.Scripts.Utility;
 using UnityEngine;
 
 namespace Assets.Scripts.Gui.Controller
@@ -15,6 +16,7 @@ namespace Assets.Scripts.Gui.Controller
         public void MoveToHand(GameObject card)
         {
             // TODO: Move card to hand
+            Extension.MoveToParent(card,Hand);
             // Use MoveToParent
         }
 
@@ -25,6 +27,7 @@ namespace Assets.Scripts.Gui.Controller
         public void MoveToBattlefield(GameObject card)
         {
             // TODO: Move card to Battlefield
+            Extension.MoveToParent(card, Battlefield);
             // Use MoveToParent
         }
     }
