@@ -34,4 +34,6 @@ MonoBehaviour:
   - PunPickupSimple
   - PunRespawn
   - RequestForPickupTimes
+  - RpcAddResource
+  - RpcNextPhase
   DisableAutoOpenWizard: 1

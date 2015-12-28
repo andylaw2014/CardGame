@@ -255,11 +255,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf3b48f9ae1c5b240afacb7a27abb340, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CrystalText: {fileID: 0}
-  DeuteriumText: {fileID: 0}
-  HpText: {fileID: 0}
-  MetalText: {fileID: 0}
-  Parent: {fileID: 0}
+  CrystalText: {fileID: 634983985}
+  DeuteriumText: {fileID: 1024696505}
+  HpText: {fileID: 95758009}
+  MetalText: {fileID: 1423197410}
+  Parent: {fileID: 730225730}
 --- !u!1 &95758007
 GameObject:
   m_ObjectHideFlags: 0
@@ -2716,7 +2716,7 @@ MonoBehaviour:
   DeuteriumText: {fileID: 1470857083}
   HpText: {fileID: 481907874}
   MetalText: {fileID: 2129590714}
-  Parent: {fileID: 0}
+  Parent: {fileID: 1715432380}
 --- !u!114 &2101097008
 MonoBehaviour:
   m_ObjectHideFlags: 0
