@@ -120,8 +120,8 @@ namespace Assets.Scripts.Gui
         /// <param name="metalEnable"></param>
         /// <param name="crystalEnable"></param>
         /// <param name="deuteriumEnable"></param>
-        public void EnableResourcePanel(Action<ResourceType> onClose, bool metalEnable = true,
-            bool crystalEnable = true, bool deuteriumEnable = true)
+        public void EnableResourcePanel(Action<ResourceType> onClose, bool metalEnable,
+            bool crystalEnable, bool deuteriumEnable)
         {
             // TODO: Enable ResourcePanel
             // call onClose(ResourceType t) after a button is clicked where t is the button clicked.
@@ -135,8 +135,8 @@ namespace Assets.Scripts.Gui
         /// <param name="idList">ID of the cards which is able to select.</param>
         /// <param name="allowMultiple">Allow multiple selections.</param>
         /// <param name="allowCancel">Allow to cacel the selection</param>
-        public void EnableSelection(Action<string[]> onClose, string[] idList, bool allowMultiple = true,
-            bool allowCancel = false)
+        public void EnableSelection(Action<string[]> onClose, string[] idList, bool allowMultiple,
+            bool allowCancel)
         {
             // TODO:Enable Selection
             // You need a new UI element that allow the selection of cards with given ID.

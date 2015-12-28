@@ -6,6 +6,11 @@ namespace Assets.Scripts.Core.Phase
         {
         }
 
+        protected override void Execute()
+        {
+            Game.AddResourceByPanel(Parent);
+        }
+
         protected override BasePhase NextPhase()
         {
             return new AttackPhase(Game, Parent);

@@ -11,6 +11,15 @@ namespace Assets.Scripts.Core.Statistics
                 Set(type, 0);
             }
         }
+
+        public CardStats(Gui.Card.Statistics stats)
+        {
+            Set(CardStatsType.Hp, stats.Hp);
+            Set(CardStatsType.Atk, stats.Atk);
+            Set(CardStatsType.Metal, stats.Metal);
+            Set(CardStatsType.Crystal, stats.Crystal);
+            Set(CardStatsType.Deuterium, stats.Deuterium);
+        }
     }
 
     public enum CardStatsType

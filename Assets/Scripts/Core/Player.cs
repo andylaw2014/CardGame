@@ -10,7 +10,6 @@ namespace Assets.Scripts.Core
         private readonly Game _game;
         private readonly List<Card> _hand;
         private readonly PlayerStats _stats;
-        private readonly int MaximumResource = 10;
         public readonly PlayerType Type;
 
         public Player(Game game, PlayerType type)

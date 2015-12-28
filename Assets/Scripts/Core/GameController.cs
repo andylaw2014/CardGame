@@ -34,5 +34,15 @@ namespace Assets.Scripts.Core
             var card = args.Card;
             GuiMediator.MoveCard(card.Id, card.Parent, card.Zone);
         }
+
+        public Gui.Card CreateCard(string cardName, string id, PlayerType owner, ZoneType destination)
+        {
+            return GuiMediator.CreateCard(cardName, id, owner, destination);
+        }
+
+        public void EnableResourcePanel(bool metalEnable = true, bool crystalEnable = true, bool deuteriumEnable = true)
+        {
+            
+        }
     }
 }

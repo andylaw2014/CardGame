@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
 using Assets.Scripts.Core.Event;
 using Assets.Scripts.Core.Message;
 using Assets.Scripts.Core.Phase;
+using Assets.Scripts.Core.Statistics;
 using Assets.Scripts.Infrastructure.EventAggregator;
 using Assets.Scripts.Infrastructure.IdFactory;
+using Assets.Scripts.Utility;
 
 namespace Assets.Scripts.Core
 {
@@ -12,9 +15,11 @@ namespace Assets.Scripts.Core
     {
         private readonly EventAggregator _eventAggregator;
         private readonly PlayerType _first;
-        private readonly IIdFactory _idFactory;
-        private BasePhase _phase;
         private readonly GameController _gameController;
+        private readonly IIdFactory _idFactory;
+        private readonly Dictionary<PlayerType, Player> _players;
+        private BasePhase _phase;
+        private readonly int _maximumResource = 10;
 
         /// <summary>
         ///     Constructor of Game.
@@ -28,6 +33,9 @@ namespace Assets.Scripts.Core
             _first = first;
             _gameController = gameController;
             _idFactory = new CardIdFactory();
+            _players = new Dictionary<PlayerType, Player>();
+            foreach (var type in Extension.GetValues<PlayerType>())
+                _players.Add(type, new Player(this, type));
         }
 
         public event EventHandler<PhaseChangeEventArg> OnPhaseChange = (sender, arg) => { };
@@ -72,6 +80,67 @@ namespace Assets.Scripts.Core
         public string GetCardId(PlayerType type)
         {
             return _idFactory.GetId(_first == type ? CardIdFactory.FirstPlayer : CardIdFactory.SecondPlayer);
+        }
+
+        /// <summary>
+        ///     Create a Card and Gui Card.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="cardName"></param>
+        /// <param name="zone"></param>
+        /// <returns></returns>
+        public Card CreateCard(PlayerType type, string cardName, ZoneType zone)
+        {
+            var id = GetCardId(type);
+            var cardComponent = _gameController.CreateCard(cardName, id, type, zone);
+            var cardStats = new CardStats(cardComponent.Stats);
+            return new Card(this, id, cardStats);
+        }
+
+        /// <summary>
+        ///     Get Player object.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public Player GetPlayer(PlayerType type)
+        {
+            return _players[type];
+        }
+
+        public void AddResourceByPanel(PlayerType type)
+        {
+            var player = GetPlayer(type);
+            var enableMetal = player[PlayerStatsType.MaxMetal] < _maximumResource;
+            var enableCrystal = player[PlayerStatsType.MaxCrystal] < _maximumResource;
+            var enableDeuterium = player[PlayerStatsType.MaxDeuterium] < _maximumResource;
+            _gameController.EnableResourcePanel(enableMetal, enableCrystal, enableDeuterium);
+        }
+
+        public void AddResource(PlayerType pType, ResourceType rType, int value)
+        {
+            var player = GetPlayer(pType);
+            switch (rType)
+            {
+                case ResourceType.Metal:
+                    player[PlayerStatsType.MaxMetal] += value;
+                    break;
+                case ResourceType.Crystal:
+                    player[PlayerStatsType.MaxCrystal] += value;
+                    break;
+                case ResourceType.Deuterium:
+                    player[PlayerStatsType.MaxDeuterium] += value;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(rType.ToString(), rType, null);
+            }
+        }
+
+        /// <summary>
+        ///     Start the game.
+        /// </summary>
+        public void Start()
+        {
+            SetPhase(new MainPhase(this, _first));
         }
 
         #region Handle
