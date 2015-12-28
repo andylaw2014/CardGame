@@ -8,7 +8,8 @@ namespace Assets.Scripts.Core.Phase
 
         protected override void Execute()
         {
-            Game.AddResourceByPanel(Parent);
+            if(Parent==PlayerType.Player)
+                Game.AddResourceByPanel(Parent);
         }
 
         protected override BasePhase NextPhase()

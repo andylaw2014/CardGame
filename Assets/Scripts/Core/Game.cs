@@ -13,13 +13,13 @@ namespace Assets.Scripts.Core
     public class Game : IHandle<CardParentChangeMessage>, IHandle<CardZoneChangeMessage>,
         IHandle<PlayerStatsChangeMessage>
     {
+        private const int MaximumResource = 10;
         private readonly EventAggregator _eventAggregator;
         private readonly PlayerType _first;
         private readonly GameController _gameController;
         private readonly IIdFactory _idFactory;
         private readonly Dictionary<PlayerType, Player> _players;
         private BasePhase _phase;
-        private readonly int _maximumResource = 10;
 
         /// <summary>
         ///     Constructor of Game.
@@ -110,12 +110,19 @@ namespace Assets.Scripts.Core
         public void AddResourceByPanel(PlayerType type)
         {
             var player = GetPlayer(type);
-            var enableMetal = player[PlayerStatsType.MaxMetal] < _maximumResource;
-            var enableCrystal = player[PlayerStatsType.MaxCrystal] < _maximumResource;
-            var enableDeuterium = player[PlayerStatsType.MaxDeuterium] < _maximumResource;
-            _gameController.EnableResourcePanel(enableMetal, enableCrystal, enableDeuterium);
+            var enableMetal = player[PlayerStatsType.MaxMetal] < MaximumResource;
+            var enableCrystal = player[PlayerStatsType.MaxCrystal] < MaximumResource;
+            var enableDeuterium = player[PlayerStatsType.MaxDeuterium] < MaximumResource;
+            _gameController.EnableResourcePanel(rtype => { _gameController.AddResource(type, rtype, 1); }
+                , enableMetal, enableCrystal, enableDeuterium);
         }
 
+        /// <summary>
+        ///     Use GameController AddResource instead.
+        /// </summary>
+        /// <param name="pType"></param>
+        /// <param name="rType"></param>
+        /// <param name="value"></param>
         public void AddResource(PlayerType pType, ResourceType rType, int value)
         {
             var player = GetPlayer(pType);
@@ -141,6 +148,14 @@ namespace Assets.Scripts.Core
         public void Start()
         {
             SetPhase(new MainPhase(this, _first));
+        }
+
+        /// <summary>
+        ///     Move to next phase.
+        /// </summary>
+        public void NextPhase()
+        {
+            _phase.Next();
         }
 
         #region Handle

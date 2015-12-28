@@ -1871,6 +1871,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GuiMediator: {fileID: 1628756130}
+  StartGame: 1
 --- !u!4 &793905657
 Transform:
   m_ObjectHideFlags: 0

@@ -1,5 +1,7 @@
+using System;
 using Assets.Scripts.Core.Event;
 using Assets.Scripts.Gui;
+using Assets.Scripts.Gui.Event;
 using UnityEngine;
 
 namespace Assets.Scripts.Core
@@ -8,6 +10,7 @@ namespace Assets.Scripts.Core
     {
         private Game _game;
         public GuiMediator GuiMediator;
+        public bool StartGame;
 
         private void Awake()
         {
@@ -16,6 +19,20 @@ namespace Assets.Scripts.Core
             _game.OnPhaseChange += OnPhaseChange;
             _game.OnCardMove += OnCardMove;
             _game.OnPlayerStatsChange += OnPlayerStatsChange;
+            GuiMediator.OnButtonClick += OnButtonClick;
+        }
+
+        private void OnButtonClick(object sender, ButtonClickEventArgs args)
+        {
+            var type = args.Type;
+            if (type != ButtonType.NextPhaseButton) return;
+            NextPhase();
+        }
+
+        private void Start()
+        {
+            if (StartGame)
+                _game.Start();
         }
 
         private void OnPlayerStatsChange(object sender, PlayerChangeEventArg args)
@@ -40,9 +57,42 @@ namespace Assets.Scripts.Core
             return GuiMediator.CreateCard(cardName, id, owner, destination);
         }
 
-        public void EnableResourcePanel(bool metalEnable = true, bool crystalEnable = true, bool deuteriumEnable = true)
+        public void EnableResourcePanel(Action<ResourceType> onClose, bool metalEnable, bool crystalEnable,
+            bool deuteriumEnable)
         {
-            
+            GuiMediator.EnableResourcePanel(onClose, metalEnable, crystalEnable, deuteriumEnable);
         }
+
+        #region Photon
+
+        public void NextPhase()
+        {
+            GetComponent<PhotonView>().RPC("RpcNextPhase", PhotonTargets.AllViaServer);
+        }
+
+        [PunRPC]
+        private void RpcNextPhase()
+        {
+            _game.NextPhase();
+        }
+
+        public void AddResource(PlayerType pType, ResourceType rType, int value)
+        {
+            var bytePlayerType = (byte) pType;
+            var byteResourceType = (byte) rType;
+            GetComponent<PhotonView>()
+                .RPC("RpcAddResource", PhotonTargets.Others, bytePlayerType, byteResourceType, value);
+            RpcAddResource(bytePlayerType, byteResourceType, value);
+        }
+
+        [PunRPC]
+        public void RpcAddResource(byte bytePlayerType, byte byteResourceType, int value)
+        {
+            var pType = (PlayerType) bytePlayerType;
+            var rType = (ResourceType) byteResourceType;
+            _game.AddResource(pType, rType, value);
+        }
+
+        #endregion
     }
 }
