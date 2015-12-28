@@ -18,6 +18,8 @@ namespace Assets.Scripts.Gui
         private Dictionary<string, GameObject> _idDictionary;
         public Sprite CardBack;
         public Image CardView;
+        public Button NextButton;
+        public Text PhaseText;
         public ResourcePanelController ResourcePanelController;
         public PlayerController Player;
         public PlayerController Opponent;
@@ -56,6 +58,20 @@ namespace Assets.Scripts.Gui
         public void UpdatePlayerStats(PlayerType type, PlayerStats stats)
         {
             // TODO: Update player statistics
+            if (type == PlayerType.Player)
+            {
+                Player.Stats.SetText(PlayerStatsType.Hp, "HP: " + stats.Get(PlayerStatsType.Hp) + " / " + stats.Get(PlayerStatsType.MaxHp));
+                Player.Stats.SetText(PlayerStatsType.Metal, "Metal: " + stats.Get(PlayerStatsType.Metal) + " / " + stats.Get(PlayerStatsType.MaxMetal));
+                Player.Stats.SetText(PlayerStatsType.Deuterium, "Deuterium: " + stats.Get(PlayerStatsType.Deuterium) + " / " + stats.Get(PlayerStatsType.MaxDeuterium));
+                Player.Stats.SetText(PlayerStatsType.Crystal, "Crystal: " + stats.Get(PlayerStatsType.Crystal) + " / " + stats.Get(PlayerStatsType.MaxCrystal));
+            }
+            else if (type == PlayerType.Opponent)
+            {
+                Opponent.Stats.SetText(PlayerStatsType.Hp, "HP: " + stats.Get(PlayerStatsType.Hp) + " / " + stats.Get(PlayerStatsType.MaxHp));
+                Opponent.Stats.SetText(PlayerStatsType.Metal, "Metal: " + stats.Get(PlayerStatsType.Metal) + " / " + stats.Get(PlayerStatsType.MaxMetal));
+                Opponent.Stats.SetText(PlayerStatsType.Deuterium, "Deuterium: " + stats.Get(PlayerStatsType.Deuterium) + " / " + stats.Get(PlayerStatsType.MaxDeuterium));
+                Opponent.Stats.SetText(PlayerStatsType.Crystal, "Crystal: " + stats.Get(PlayerStatsType.Crystal) + " / " + stats.Get(PlayerStatsType.MaxCrystal));
+            }
         }
 
         /// <summary>
@@ -66,6 +82,14 @@ namespace Assets.Scripts.Gui
         public void SetButtonClickable(ButtonType type, bool clickable)
         {
             // TODO: Set button clickable
+            if (type == ButtonType.NextPhaseButton)
+            {
+                NextButton.interactable = clickable;
+            }
+            else if (type == ButtonType.Undefined)
+            {
+                //Nothing do here
+            }
         }
 
         /// <summary>
@@ -81,6 +105,16 @@ namespace Assets.Scripts.Gui
         public Card CreateCard(string cardName, string id, PlayerType owner, ZoneType destination)
         {
             // TODO: Create card
+            var ownerController = owner == PlayerType.Player ? Player : Opponent;
+            var card = Instantiate(Resources.Load(cardName)) as GameObject;
+            _idDictionary.Add(id, card);
+            if (card == null)
+                return null;
+            if (destination == ZoneType.Hand)
+                ownerController.MoveToHand(card);
+            else
+                ownerController.MoveToBattlefield(card);
+            return card.GetComponent<Card>();
             throw new NotImplementedException();
         }
 
@@ -93,6 +127,12 @@ namespace Assets.Scripts.Gui
         public void MoveCard(string id, PlayerType owner, ZoneType destination)
         {
             // TODO: Move card
+            var card = _idDictionary[id];
+            var ownerController = owner == PlayerType.Player ? Player : Opponent;
+            if (destination == ZoneType.Hand)
+                ownerController.MoveToHand(card);
+            else
+                ownerController.MoveToBattlefield(card);
         }
 
         /// <summary>
@@ -102,6 +142,7 @@ namespace Assets.Scripts.Gui
         public void SetPhaseText(string text)
         {
             // TODO: Set phase text
+            PhaseText.text = text;
         }
 
         /// <summary>
@@ -112,6 +153,8 @@ namespace Assets.Scripts.Gui
         public void SetCardIsFront(string id, bool isFront)
         {
             // TODO: Set card IsFront
+            var card = _idDictionary[id];
+            card.GetComponent<Card>().IsFront = isFront;
         }
 
         /// <summary>
@@ -127,7 +170,27 @@ namespace Assets.Scripts.Gui
         {
             // TODO: Enable ResourcePanel
             // call onClose(ResourceType t) after a button is clicked where t is the button clicked.
+            ResourcePanelController.gameObject.SetActive(true);
+            ResourcePanelController.MetalButton.interactable = metalEnable;
+            ResourcePanelController.CrystalButton.interactable = crystalEnable;
+            ResourcePanelController.DeuteriumButton.interactable = deuteriumEnable;
+            ResourcePanelController.MetalButton.onClick.AddListener(delegate
+            {
+                onClose(ResourceType.Metal);
+                OnButtonClick(this, new ButtonClickEventArgs(ButtonType.Undefined));
+            });
+            ResourcePanelController.CrystalButton.onClick.AddListener(delegate
+            {
+                onClose(ResourceType.Crystal);
+                OnButtonClick(this, new ButtonClickEventArgs(ButtonType.Undefined));
+            });
+            ResourcePanelController.DeuteriumButton.onClick.AddListener(delegate
+            {
+                onClose(ResourceType.Deuterium);
+                OnButtonClick(this, new ButtonClickEventArgs(ButtonType.Undefined));
+            });
         }
+
 
         /// <summary>
         ///     Enable a selection of card and call onClose after selection.
@@ -154,6 +217,9 @@ namespace Assets.Scripts.Gui
         public void SetDraggable(string id, bool draggable)
         {
             // TODO: Set Draggable
+            var card = _idDictionary[id];
+            if (draggable)
+                card.AddComponent<Draggable>();
         }
     }
 }
