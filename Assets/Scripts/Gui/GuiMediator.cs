@@ -83,13 +83,7 @@ namespace Assets.Scripts.Gui
         {
             // TODO: Set button clickable
             if (type == ButtonType.NextPhaseButton)
-            {
                 NextButton.interactable = clickable;
-            }
-            else if (type == ButtonType.Undefined)
-            {
-                //Nothing do here
-            }
         }
 
         /// <summary>
@@ -174,17 +168,17 @@ namespace Assets.Scripts.Gui
             ResourcePanelController.CrystalButton.interactable = crystalEnable;
             ResourcePanelController.DeuteriumButton.interactable = deuteriumEnable;
             ClearListener();
-            ResourcePanelController.MetalButton.onClick.AddListener(delegate
+            ResourcePanelController.MetalButton.onClick.AddListener(()=>
             {
                 onClose(ResourceType.Metal);
                 OnButtonClick(this, new ButtonClickEventArgs(ButtonType.Undefined));
             });
-            ResourcePanelController.CrystalButton.onClick.AddListener(delegate
+            ResourcePanelController.CrystalButton.onClick.AddListener(() =>
             {
                 onClose(ResourceType.Crystal);
                 OnButtonClick(this, new ButtonClickEventArgs(ButtonType.Undefined));
             });
-            ResourcePanelController.DeuteriumButton.onClick.AddListener(delegate
+            ResourcePanelController.DeuteriumButton.onClick.AddListener(()=>
             {
                 onClose(ResourceType.Deuterium);
                 OnButtonClick(this, new ButtonClickEventArgs(ButtonType.Undefined));
@@ -192,7 +186,7 @@ namespace Assets.Scripts.Gui
         }
 
 
-        public void ClearListener()
+        private void ClearListener()
         {
             ResourcePanelController.MetalButton.onClick.RemoveAllListeners();
             ResourcePanelController.CrystalButton.onClick.RemoveAllListeners();
@@ -225,8 +219,11 @@ namespace Assets.Scripts.Gui
         {
             // TODO: Set Draggable
             var card = _idDictionary[id];
-            if (draggable && card.GetComponent<Draggable>() == null)
+            var drag = card.GetComponent<Draggable>();
+            if (draggable && drag == null)
                 card.AddComponent<Draggable>();
+            if(!draggable && drag != null)
+                Destroy(drag);
         }
     }
 }

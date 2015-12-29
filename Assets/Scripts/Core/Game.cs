@@ -4,6 +4,7 @@ using Assets.Scripts.Core.Event;
 using Assets.Scripts.Core.Message;
 using Assets.Scripts.Core.Phase;
 using Assets.Scripts.Core.Statistics;
+using Assets.Scripts.Infrastructure;
 using Assets.Scripts.Infrastructure.EventAggregator;
 using Assets.Scripts.Infrastructure.IdFactory;
 using Assets.Scripts.Utility;
@@ -67,6 +68,7 @@ namespace Assets.Scripts.Core
         /// <param name="phase"></param>
         public void SetPhase(BasePhase phase)
         {
+            Log.Verbose("Set Phase: "+ phase.GetName());
             _phase = phase;
             OnPhaseChange(this, new PhaseChangeEventArg(_phase));
             _phase.Start();
@@ -147,6 +149,7 @@ namespace Assets.Scripts.Core
         /// </summary>
         public void Start()
         {
+            Log.Verbose("Start Game");
             SetPhase(new MainPhase(this, _first));
         }
 

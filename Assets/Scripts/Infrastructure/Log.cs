@@ -2,7 +2,7 @@ using System.Diagnostics;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
-namespace Assets.Scripts.Outdate.Infrastructure
+namespace Assets.Scripts.Infrastructure
 {
     public static class Log
     {

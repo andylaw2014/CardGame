@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Assets.Scripts.Infrastructure;
 using Assets.Scripts.Outdate.Core.Message;
 using Assets.Scripts.Outdate.Core.Resource;
 using Assets.Scripts.Outdate.Infrastructure;

@@ -2,6 +2,7 @@ using System;
 using Assets.Scripts.Core.Event;
 using Assets.Scripts.Gui;
 using Assets.Scripts.Gui.Event;
+using Assets.Scripts.Infrastructure;
 using UnityEngine;
 
 namespace Assets.Scripts.Core
@@ -24,6 +25,7 @@ namespace Assets.Scripts.Core
 
         private void OnButtonClick(object sender, ButtonClickEventArgs args)
         {
+            Log.Verbose("OnButtonClick");
             var type = args.Type;
             if (type != ButtonType.NextPhaseButton) return;
             NextPhase();
@@ -67,6 +69,7 @@ namespace Assets.Scripts.Core
 
         public void NextPhase()
         {
+            Log.Verbose("NextPhase (RPC)");
             GetComponent<PhotonView>().RPC("RpcNextPhase", PhotonTargets.AllViaServer);
         }
 
@@ -78,6 +81,7 @@ namespace Assets.Scripts.Core
 
         public void AddResource(PlayerType pType, ResourceType rType, int value)
         {
+            Log.Verbose("AddResource (RPC)");
             var bytePlayerType = (byte) pType;
             var byteResourceType = (byte) rType;
             GetComponent<PhotonView>()

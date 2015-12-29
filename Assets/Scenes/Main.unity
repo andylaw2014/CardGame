@@ -1632,6 +1632,12 @@ RectTransform:
   m_PrefabParentObject: {fileID: 22400004, guid: 05a81c3d5091440058129444d28322f3,
     type: 2}
   m_PrefabInternal: {fileID: 732740760}
+--- !u!114 &732740762 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11400004, guid: 05a81c3d5091440058129444d28322f3,
+    type: 2}
+  m_PrefabInternal: {fileID: 732740760}
+  m_Script: {fileID: 1392445389, guid: f5f67c52d1564df4a8936ccd202a3bd8, type: 3}
 --- !u!1 &749082233
 GameObject:
   m_ObjectHideFlags: 0
@@ -2490,6 +2496,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CardBack: {fileID: 21300000, guid: 41fb64318f9d75443a90d1b2e780972f, type: 3}
   CardView: {fileID: 265886034}
+  NextButton: {fileID: 732740762}
+  PhaseText: {fileID: 203737316}
   ResourcePanelController: {fileID: 723917537}
   Player: {fileID: 1715432380}
   Opponent: {fileID: 730225730}
