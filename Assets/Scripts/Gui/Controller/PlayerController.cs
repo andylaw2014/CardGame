@@ -16,7 +16,7 @@ namespace Assets.Scripts.Gui.Controller
         public void MoveToHand(GameObject card)
         {
             // TODO: Move card to hand
-            Extension.MoveToParent(card,Hand);
+            card.MoveToParent(Hand);
             // Use MoveToParent
         }
 
@@ -27,7 +27,7 @@ namespace Assets.Scripts.Gui.Controller
         public void MoveToBattlefield(GameObject card)
         {
             // TODO: Move card to Battlefield
-            Extension.MoveToParent(card, Battlefield);
+            card.MoveToParent(Battlefield);
             // Use MoveToParent
         }
     }

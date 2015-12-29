@@ -115,7 +115,6 @@ namespace Assets.Scripts.Gui
             else
                 ownerController.MoveToBattlefield(card);
             return card.GetComponent<Card>();
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -174,6 +173,7 @@ namespace Assets.Scripts.Gui
             ResourcePanelController.MetalButton.interactable = metalEnable;
             ResourcePanelController.CrystalButton.interactable = crystalEnable;
             ResourcePanelController.DeuteriumButton.interactable = deuteriumEnable;
+            ClearListener();
             ResourcePanelController.MetalButton.onClick.AddListener(delegate
             {
                 onClose(ResourceType.Metal);
@@ -191,6 +191,13 @@ namespace Assets.Scripts.Gui
             });
         }
 
+
+        public void ClearListener()
+        {
+            ResourcePanelController.MetalButton.onClick.RemoveAllListeners();
+            ResourcePanelController.CrystalButton.onClick.RemoveAllListeners();
+            ResourcePanelController.DeuteriumButton.onClick.RemoveAllListeners();
+        }
 
         /// <summary>
         ///     Enable a selection of card and call onClose after selection.
@@ -218,7 +225,7 @@ namespace Assets.Scripts.Gui
         {
             // TODO: Set Draggable
             var card = _idDictionary[id];
-            if (draggable)
+            if (draggable && card.GetComponent<Draggable>() == null)
                 card.AddComponent<Draggable>();
         }
     }
