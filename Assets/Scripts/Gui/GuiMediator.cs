@@ -48,6 +48,10 @@ namespace Assets.Scripts.Gui
         private void Awake()
         {
             _idDictionary = new Dictionary<string, GameObject>();
+            NextButton.onClick.AddListener(() =>
+            {
+                OnButtonClick(this, new ButtonClickEventArgs(ButtonType.NextPhaseButton));
+            });
         }
 
         /// <summary>
@@ -82,8 +86,8 @@ namespace Assets.Scripts.Gui
         public void SetButtonClickable(ButtonType type, bool clickable)
         {
             // TODO: Set button clickable
-            if (type == ButtonType.NextPhaseButton)
-                NextButton.interactable = clickable;
+            if (type != ButtonType.NextPhaseButton) return;
+            NextButton.interactable = clickable;
         }
 
         /// <summary>
@@ -168,7 +172,7 @@ namespace Assets.Scripts.Gui
             ResourcePanelController.CrystalButton.interactable = crystalEnable;
             ResourcePanelController.DeuteriumButton.interactable = deuteriumEnable;
             ClearListener();
-            ResourcePanelController.MetalButton.onClick.AddListener(()=>
+            ResourcePanelController.MetalButton.onClick.AddListener(() =>
             {
                 onClose(ResourceType.Metal);
                 OnButtonClick(this, new ButtonClickEventArgs(ButtonType.Undefined));
@@ -178,7 +182,7 @@ namespace Assets.Scripts.Gui
                 onClose(ResourceType.Crystal);
                 OnButtonClick(this, new ButtonClickEventArgs(ButtonType.Undefined));
             });
-            ResourcePanelController.DeuteriumButton.onClick.AddListener(()=>
+            ResourcePanelController.DeuteriumButton.onClick.AddListener(() =>
             {
                 onClose(ResourceType.Deuterium);
                 OnButtonClick(this, new ButtonClickEventArgs(ButtonType.Undefined));
@@ -208,8 +212,39 @@ namespace Assets.Scripts.Gui
             // You need a new UI element that allow the selection of cards with given ID.
             // At the end of selection (or cancel if allowed), call onClose (string[] selected)
             // selected is the arrays of selected card id(s). It should be null if it is canceled.
+            var selected = new List<string>();
+            foreach (var t in idList)
+            {
+                AddButton(t, selected, allowCancel);
+            }
+            NextButton.onClick.AddListener(() =>
+            {
+                onClose(selected.ToArray());
+                OnButtonClick(this, new ButtonClickEventArgs(ButtonType.NextPhaseButton));
+            });
         }
 
+
+        private void AddButton(string t, ICollection<string> selected, bool allowCancel)
+        {
+            var isClicked = false;
+            var card = _idDictionary[t];
+            var button = card.AddComponent<Button>();
+            button.interactable = true;
+            button.onClick.AddListener(() =>
+            {
+                if (!isClicked || !allowCancel)
+                {
+                    isClicked = true;
+                    selected.Add(t);
+                }
+                else
+                {
+                    isClicked = false;
+                    selected.Remove(t);
+                }
+            });
+        }
         /// <summary>
         ///     Set a card to be draggable or not.
         /// </summary>
@@ -222,7 +257,7 @@ namespace Assets.Scripts.Gui
             var drag = card.GetComponent<Draggable>();
             if (draggable && drag == null)
                 card.AddComponent<Draggable>();
-            if(!draggable && drag != null)
+            if (!draggable && drag != null)
                 Destroy(drag);
         }
     }

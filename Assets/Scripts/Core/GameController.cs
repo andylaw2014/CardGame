@@ -21,6 +21,7 @@ namespace Assets.Scripts.Core
             _game.OnCardMove += OnCardMove;
             _game.OnPlayerStatsChange += OnPlayerStatsChange;
             GuiMediator.OnButtonClick += OnButtonClick;
+            GuiMediator.SetButtonClickable(ButtonType.NextPhaseButton, PhotonNetwork.isMasterClient);
         }
 
         private void OnButtonClick(object sender, ButtonClickEventArgs args)
