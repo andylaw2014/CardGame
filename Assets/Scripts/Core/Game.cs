@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Assets.Scripts.Core.Event;
 using Assets.Scripts.Core.Message;
 using Assets.Scripts.Core.Phase;
 using Assets.Scripts.Core.Statistics;
@@ -11,8 +10,7 @@ using Assets.Scripts.Utility;
 
 namespace Assets.Scripts.Core
 {
-    public class Game : IHandle<CardParentChangeMessage>, IHandle<CardZoneChangeMessage>,
-        IHandle<PlayerStatsChangeMessage>
+    public class Game
     {
         private const int MaximumResource = 10;
         private readonly EventAggregator _eventAggregator;
@@ -30,7 +28,6 @@ namespace Assets.Scripts.Core
         public Game(GameController gameController, PlayerType first)
         {
             _eventAggregator = new EventAggregator();
-            _eventAggregator.Subscribe(this);
             _first = first;
             _gameController = gameController;
             _idFactory = new CardIdFactory();
@@ -39,15 +36,11 @@ namespace Assets.Scripts.Core
                 _players.Add(type, new Player(this, type));
         }
 
-        public event EventHandler<PhaseChangeEventArg> OnPhaseChange = (sender, arg) => { };
-        public event EventHandler<CardChangeEventArg> OnCardMove = (sender, arg) => { };
-        public event EventHandler<PlayerChangeEventArg> OnPlayerStatsChange = (sender, arg) => { };
-
         /// <summary>
         ///     Publish an in-game message.
         /// </summary>
         /// <param name="message">Message to publish.</param>
-        public void Publish(GameMessage message)
+        private void Publish(GameMessage message)
         {
             _eventAggregator.Publish(message);
         }
@@ -66,11 +59,13 @@ namespace Assets.Scripts.Core
         ///     Set the game phase.
         /// </summary>
         /// <param name="phase"></param>
-        public void SetPhase(BasePhase phase)
+        /// <param name="notify"></param>
+        public void SetPhase(BasePhase phase, bool notify = true)
         {
-            Log.Verbose("Set Phase: "+ phase.GetName());
+            Log.Verbose("Set Phase: " + phase.GetName() + "(" + phase.Parent + ")");
             _phase = phase;
-            OnPhaseChange(this, new PhaseChangeEventArg(_phase));
+            if (notify)
+                Publish(new PhaseStartMessage(_phase));
             _phase.Start();
         }
 
@@ -79,24 +74,9 @@ namespace Assets.Scripts.Core
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public string GetCardId(PlayerType type)
+        private string GetCardId(PlayerType type)
         {
             return _idFactory.GetId(_first == type ? CardIdFactory.FirstPlayer : CardIdFactory.SecondPlayer);
-        }
-
-        /// <summary>
-        ///     Create a Card and Gui Card.
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="cardName"></param>
-        /// <param name="zone"></param>
-        /// <returns></returns>
-        public Card CreateCard(PlayerType type, string cardName, ZoneType zone)
-        {
-            var id = GetCardId(type);
-            var cardComponent = _gameController.CreateCard(cardName, id, type, zone);
-            var cardStats = new CardStats(cardComponent.Stats);
-            return new Card(this, id, cardStats);
         }
 
         /// <summary>
@@ -104,7 +84,7 @@ namespace Assets.Scripts.Core
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public Player GetPlayer(PlayerType type)
+        private Player GetPlayer(PlayerType type)
         {
             return _players[type];
         }
@@ -115,8 +95,7 @@ namespace Assets.Scripts.Core
             var enableMetal = player[PlayerStatsType.MaxMetal] < MaximumResource;
             var enableCrystal = player[PlayerStatsType.MaxCrystal] < MaximumResource;
             var enableDeuterium = player[PlayerStatsType.MaxDeuterium] < MaximumResource;
-            _gameController.EnableResourcePanel(rtype => { _gameController.AddResource(type, rtype, 1); }
-                , enableMetal, enableCrystal, enableDeuterium);
+            Publish(new EnableResourcePanelMessage(type, enableMetal, enableCrystal, enableDeuterium));
         }
 
         /// <summary>
@@ -125,7 +104,9 @@ namespace Assets.Scripts.Core
         /// <param name="pType"></param>
         /// <param name="rType"></param>
         /// <param name="value"></param>
-        public void AddResource(PlayerType pType, ResourceType rType, int value)
+        /// <param name="restore"></param>
+        /// <param name="notify"></param>
+        public void AddResource(PlayerType pType, ResourceType rType, int value, bool restore = true, bool notify = true)
         {
             var player = GetPlayer(pType);
             switch (rType)
@@ -142,6 +123,10 @@ namespace Assets.Scripts.Core
                 default:
                     throw new ArgumentOutOfRangeException(rType.ToString(), rType, null);
             }
+            if (restore)
+                GetPlayer(pType).RestoreResource();
+            if (notify)
+                Publish(new PlayerStatsChangeMessage(GetPlayer(pType)));
         }
 
         /// <summary>
@@ -150,34 +135,31 @@ namespace Assets.Scripts.Core
         public void Start()
         {
             Log.Verbose("Start Game");
+            Publish(new PlayerStatsChangeMessage(GetPlayer(_first)));
+            Publish(new PlayerStatsChangeMessage(GetPlayer(_first.Opposite())));
             SetPhase(new MainPhase(this, _first));
         }
 
         /// <summary>
         ///     Move to next phase.
         /// </summary>
-        public void NextPhase()
+        public void NextPhase(bool notify = true)
         {
+            if (notify)
+                Publish(new PhaseEndMessage(_phase));
             _phase.Next();
         }
 
-        #region Handle
-
-        public void Handle(CardParentChangeMessage message)
+        public void DrawCard(PlayerType type)
         {
-            OnCardMove(this, new CardChangeEventArg(message.Card));
+            var id = GetCardId(type);
+            _gameController.CreateCard("TestCard", id, type, ZoneType.Hand);
         }
 
-        public void Handle(CardZoneChangeMessage message)
+        public void CreateCard(PlayerType type, ZoneType zone, string id, Gui.Card cardComponent)
         {
-            OnCardMove(this, new CardChangeEventArg(message.Card));
+            var cardStats = new CardStats(cardComponent.Stats);
+            GetPlayer(type).Add(zone,new Card(id, cardStats));
         }
-
-        public void Handle(PlayerStatsChangeMessage message)
-        {
-            OnPlayerStatsChange(this, new PlayerChangeEventArg(message.Player));
-        }
-
-        #endregion
     }
 }

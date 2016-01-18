@@ -24,7 +24,6 @@ namespace Assets.Scripts.Core.Phase
         /// </summary>
         public void Start()
         {
-            Game.Publish(new PhaseStartMessage(this));
             Execute();
         }
 
@@ -41,7 +40,6 @@ namespace Assets.Scripts.Core.Phase
         /// </summary>
         public void Next()
         {
-            Game.Publish(new PhaseEndMessage(this));
             Game.SetPhase(NextPhase());
         }
 

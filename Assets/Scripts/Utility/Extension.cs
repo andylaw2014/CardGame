@@ -71,9 +71,9 @@ namespace Assets.Scripts.Utility
         /// </summary>
         /// <param name="player"></param>
         /// <returns></returns>
-        public static PlayerType Oopponent(this PlayerType player)
+        public static PlayerType Opposite(this PlayerType player)
         {
-            return player == PlayerType.Player ? PlayerType.Player : PlayerType.Opponent;
+            return player == PlayerType.Player ? PlayerType.Opponent : PlayerType.Player;
         }
 
         /// <summary>

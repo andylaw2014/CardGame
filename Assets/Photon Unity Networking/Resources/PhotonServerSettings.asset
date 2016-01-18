@@ -36,4 +36,5 @@ MonoBehaviour:
   - RequestForPickupTimes
   - RpcAddResource
   - RpcNextPhase
+  - RpcCreateCard
   DisableAutoOpenWizard: 1

@@ -10,7 +10,7 @@ namespace Assets.Scripts.Core.Phase
 
         protected override BasePhase NextPhase()
         {
-            return new DefencePhase(Game, Parent.Oopponent());
+            return new DefencePhase(Game, Parent.Opposite());
         }
 
         public override string GetName()

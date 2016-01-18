@@ -8,8 +8,9 @@ namespace Assets.Scripts.Core.Phase
 
         protected override void Execute()
         {
-            if(Parent==PlayerType.Player)
-                Game.AddResourceByPanel(Parent);
+            if (Parent != PlayerType.Player) return;
+            Game.AddResourceByPanel(Parent);
+            Game.DrawCard(Parent);
         }
 
         protected override BasePhase NextPhase()

@@ -61,7 +61,6 @@ namespace Assets.Scripts.Gui
         /// <param name="stats"></param>
         public void UpdatePlayerStats(PlayerType type, PlayerStats stats)
         {
-            // TODO: Update player statistics
             if (type == PlayerType.Player)
             {
                 Player.Stats.SetText(PlayerStatsType.Hp, "HP: " + stats.Get(PlayerStatsType.Hp) + " / " + stats.Get(PlayerStatsType.MaxHp));
@@ -69,7 +68,7 @@ namespace Assets.Scripts.Gui
                 Player.Stats.SetText(PlayerStatsType.Deuterium, "Deuterium: " + stats.Get(PlayerStatsType.Deuterium) + " / " + stats.Get(PlayerStatsType.MaxDeuterium));
                 Player.Stats.SetText(PlayerStatsType.Crystal, "Crystal: " + stats.Get(PlayerStatsType.Crystal) + " / " + stats.Get(PlayerStatsType.MaxCrystal));
             }
-            else if (type == PlayerType.Opponent)
+            else
             {
                 Opponent.Stats.SetText(PlayerStatsType.Hp, "HP: " + stats.Get(PlayerStatsType.Hp) + " / " + stats.Get(PlayerStatsType.MaxHp));
                 Opponent.Stats.SetText(PlayerStatsType.Metal, "Metal: " + stats.Get(PlayerStatsType.Metal) + " / " + stats.Get(PlayerStatsType.MaxMetal));
@@ -85,7 +84,6 @@ namespace Assets.Scripts.Gui
         /// <param name="clickable"></param>
         public void SetButtonClickable(ButtonType type, bool clickable)
         {
-            // TODO: Set button clickable
             if (type != ButtonType.NextPhaseButton) return;
             NextButton.interactable = clickable;
         }
@@ -102,7 +100,6 @@ namespace Assets.Scripts.Gui
         /// <returns>Card component</returns>
         public Card CreateCard(string cardName, string id, PlayerType owner, ZoneType destination)
         {
-            // TODO: Create card
             var ownerController = owner == PlayerType.Player ? Player : Opponent;
             var card = Instantiate(Resources.Load(cardName)) as GameObject;
             _idDictionary.Add(id, card);
@@ -176,16 +173,19 @@ namespace Assets.Scripts.Gui
             {
                 onClose(ResourceType.Metal);
                 OnButtonClick(this, new ButtonClickEventArgs(ButtonType.Undefined));
+                ResourcePanelController.gameObject.SetActive(false);
             });
             ResourcePanelController.CrystalButton.onClick.AddListener(() =>
             {
                 onClose(ResourceType.Crystal);
                 OnButtonClick(this, new ButtonClickEventArgs(ButtonType.Undefined));
+                ResourcePanelController.gameObject.SetActive(false);
             });
             ResourcePanelController.DeuteriumButton.onClick.AddListener(() =>
             {
                 onClose(ResourceType.Deuterium);
                 OnButtonClick(this, new ButtonClickEventArgs(ButtonType.Undefined));
+                ResourcePanelController.gameObject.SetActive(false);
             });
         }
 

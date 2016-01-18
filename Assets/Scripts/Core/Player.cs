@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using Assets.Scripts.Core.Message;
 using Assets.Scripts.Core.Statistics;
 
 namespace Assets.Scripts.Core
@@ -21,15 +21,6 @@ namespace Assets.Scripts.Core
             _hand = new List<Card>();
         }
 
-        /// <summary>
-        /// It return a deep copy of PlayerStats.
-        /// </summary>
-        /// <returns></returns>
-        public PlayerStats GePlayerStats()
-        {
-            return new PlayerStats(_stats);
-        }
-
         public int this[PlayerStatsType statsType]
         {
             get { return _stats.Get(statsType); }
@@ -37,8 +28,38 @@ namespace Assets.Scripts.Core
             {
                 if (this[statsType] == value) return;
                 _stats.Set(statsType, value);
-                _game.Publish(new PlayerStatsChangeMessage(this));
             }
+        }
+
+        public void Add(ZoneType zone, Card card)
+        {
+            switch (zone)
+            {
+                case ZoneType.Hand:
+                    _hand.Add(card);
+                    break;
+                case ZoneType.BattleField:
+                    _battlefield.Add(card);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(zone.ToString(), zone, null);
+            }
+        }
+
+        /// <summary>
+        ///     It return a deep copy of PlayerStats.
+        /// </summary>
+        /// <returns></returns>
+        public PlayerStats GePlayerStats()
+        {
+            return new PlayerStats(_stats);
+        }
+
+        public void RestoreResource()
+        {
+            _stats[PlayerStatsType.Metal] = _stats[PlayerStatsType.MaxMetal];
+            _stats[PlayerStatsType.Crystal] = _stats[PlayerStatsType.MaxCrystal];
+            _stats[PlayerStatsType.Deuterium] = _stats[PlayerStatsType.Deuterium];
         }
     }
 }
