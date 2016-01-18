@@ -121,6 +121,8 @@ namespace Assets.Scripts.Core
 
             var front = !(owner == PlayerType.Opponent && destination == ZoneType.Hand);
             GuiMediator.SetCardIsFront(id, front);
+            var drag = (owner == PlayerType.Player && destination == ZoneType.Hand);
+            GuiMediator.SetDraggable(id, drag);
         }
 
         #endregion

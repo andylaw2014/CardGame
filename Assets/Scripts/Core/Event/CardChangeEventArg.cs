@@ -2,7 +2,7 @@ using System;
 
 namespace Assets.Scripts.Core.Event
 {
-    public class CardChangeEventArg :EventArgs
+    public class CardChangeEventArg : EventArgs
     {
         public readonly Card Card;
 

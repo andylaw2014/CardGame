@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Assets.Scripts.Gui
 {
-    public class Card : MonoBehaviour
+    public class Card : MonoBehaviour, IPointerEnterHandler
     {
         private Image _cardImage;
         private GuiMediator _guiMediator;
@@ -46,22 +46,22 @@ namespace Assets.Scripts.Gui
         }
 
         /// <summary>
+        ///     Change the card view image when mouse enter a card.
+        /// </summary>
+        /// <param name="eventData"></param>
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            if (_isFront)
+                _guiMediator.CardView.sprite = Image;
+        }
+
+        /// <summary>
         ///     Use this for initialization
         /// </summary>
         private void Awake()
         {
             _guiMediator = GameObject.FindGameObjectWithTag(Tag.GuiMediator).GetComponent<GuiMediator>();
             _cardImage = GetComponent<Image>();
-        }
-
-        /// <summary>
-        ///     Change the card view image when mouse enter a card.
-        /// </summary>
-        /// <param name="eventData"></param>
-        private void OnPointerEnter(PointerEventData eventData)
-        {
-            if (_isFront)
-                _guiMediator.CardView.sprite = Image;
         }
 
         public void SetStats(CardStatsType type, int value)

@@ -159,7 +159,7 @@ namespace Assets.Scripts.Core
         public void CreateCard(PlayerType type, ZoneType zone, string id, Gui.Card cardComponent)
         {
             var cardStats = new CardStats(cardComponent.Stats);
-            GetPlayer(type).Add(zone,new Card(id, cardStats));
+            GetPlayer(type).Add(zone, new Card(id, cardStats));
         }
     }
 }

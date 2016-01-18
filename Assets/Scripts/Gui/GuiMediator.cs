@@ -19,10 +19,10 @@ namespace Assets.Scripts.Gui
         public Sprite CardBack;
         public Image CardView;
         public Button NextButton;
-        public Text PhaseText;
-        public ResourcePanelController ResourcePanelController;
-        public PlayerController Player;
         public PlayerController Opponent;
+        public Text PhaseText;
+        public PlayerController Player;
+        public ResourcePanelController ResourcePanelController;
 
         /// <summary>
         ///     This is call when a button is clicked.
@@ -48,10 +48,8 @@ namespace Assets.Scripts.Gui
         private void Awake()
         {
             _idDictionary = new Dictionary<string, GameObject>();
-            NextButton.onClick.AddListener(() =>
-            {
-                OnButtonClick(this, new ButtonClickEventArgs(ButtonType.NextPhaseButton));
-            });
+            NextButton.onClick.AddListener(
+                () => { OnButtonClick(this, new ButtonClickEventArgs(ButtonType.NextPhaseButton)); });
         }
 
         /// <summary>
@@ -63,17 +61,27 @@ namespace Assets.Scripts.Gui
         {
             if (type == PlayerType.Player)
             {
-                Player.Stats.SetText(PlayerStatsType.Hp, "HP: " + stats.Get(PlayerStatsType.Hp) + " / " + stats.Get(PlayerStatsType.MaxHp));
-                Player.Stats.SetText(PlayerStatsType.Metal, "Metal: " + stats.Get(PlayerStatsType.Metal) + " / " + stats.Get(PlayerStatsType.MaxMetal));
-                Player.Stats.SetText(PlayerStatsType.Deuterium, "Deuterium: " + stats.Get(PlayerStatsType.Deuterium) + " / " + stats.Get(PlayerStatsType.MaxDeuterium));
-                Player.Stats.SetText(PlayerStatsType.Crystal, "Crystal: " + stats.Get(PlayerStatsType.Crystal) + " / " + stats.Get(PlayerStatsType.MaxCrystal));
+                Player.Stats.SetText(PlayerStatsType.Hp,
+                    "HP: " + stats.Get(PlayerStatsType.Hp) + " / " + stats.Get(PlayerStatsType.MaxHp));
+                Player.Stats.SetText(PlayerStatsType.Metal,
+                    "Metal: " + stats.Get(PlayerStatsType.Metal) + " / " + stats.Get(PlayerStatsType.MaxMetal));
+                Player.Stats.SetText(PlayerStatsType.Deuterium,
+                    "Deuterium: " + stats.Get(PlayerStatsType.Deuterium) + " / " +
+                    stats.Get(PlayerStatsType.MaxDeuterium));
+                Player.Stats.SetText(PlayerStatsType.Crystal,
+                    "Crystal: " + stats.Get(PlayerStatsType.Crystal) + " / " + stats.Get(PlayerStatsType.MaxCrystal));
             }
             else
             {
-                Opponent.Stats.SetText(PlayerStatsType.Hp, "HP: " + stats.Get(PlayerStatsType.Hp) + " / " + stats.Get(PlayerStatsType.MaxHp));
-                Opponent.Stats.SetText(PlayerStatsType.Metal, "Metal: " + stats.Get(PlayerStatsType.Metal) + " / " + stats.Get(PlayerStatsType.MaxMetal));
-                Opponent.Stats.SetText(PlayerStatsType.Deuterium, "Deuterium: " + stats.Get(PlayerStatsType.Deuterium) + " / " + stats.Get(PlayerStatsType.MaxDeuterium));
-                Opponent.Stats.SetText(PlayerStatsType.Crystal, "Crystal: " + stats.Get(PlayerStatsType.Crystal) + " / " + stats.Get(PlayerStatsType.MaxCrystal));
+                Opponent.Stats.SetText(PlayerStatsType.Hp,
+                    "HP: " + stats.Get(PlayerStatsType.Hp) + " / " + stats.Get(PlayerStatsType.MaxHp));
+                Opponent.Stats.SetText(PlayerStatsType.Metal,
+                    "Metal: " + stats.Get(PlayerStatsType.Metal) + " / " + stats.Get(PlayerStatsType.MaxMetal));
+                Opponent.Stats.SetText(PlayerStatsType.Deuterium,
+                    "Deuterium: " + stats.Get(PlayerStatsType.Deuterium) + " / " +
+                    stats.Get(PlayerStatsType.MaxDeuterium));
+                Opponent.Stats.SetText(PlayerStatsType.Crystal,
+                    "Crystal: " + stats.Get(PlayerStatsType.Crystal) + " / " + stats.Get(PlayerStatsType.MaxCrystal));
             }
         }
 
@@ -135,7 +143,6 @@ namespace Assets.Scripts.Gui
         /// <param name="text"></param>
         public void SetPhaseText(string text)
         {
-            // TODO: Set phase text
             PhaseText.text = text;
         }
 
@@ -146,7 +153,6 @@ namespace Assets.Scripts.Gui
         /// <param name="isFront"></param>
         public void SetCardIsFront(string id, bool isFront)
         {
-            // TODO: Set card IsFront
             var card = _idDictionary[id];
             card.GetComponent<Card>().IsFront = isFront;
         }
@@ -162,7 +168,6 @@ namespace Assets.Scripts.Gui
         public void EnableResourcePanel(Action<ResourceType> onClose, bool metalEnable,
             bool crystalEnable, bool deuteriumEnable)
         {
-            // TODO: Enable ResourcePanel
             // call onClose(ResourceType t) after a button is clicked where t is the button clicked.
             ResourcePanelController.gameObject.SetActive(true);
             ResourcePanelController.MetalButton.interactable = metalEnable;
@@ -245,6 +250,7 @@ namespace Assets.Scripts.Gui
                 }
             });
         }
+
         /// <summary>
         ///     Set a card to be draggable or not.
         /// </summary>

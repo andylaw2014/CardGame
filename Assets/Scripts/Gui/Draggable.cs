@@ -1,4 +1,3 @@
-
 using Assets.Scripts.Outdate.Infrastructure;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -44,9 +43,9 @@ namespace Assets.Scripts.Gui
         public void OnEndDrag(PointerEventData eventData)
         {
             GetComponent<CanvasGroup>().blocksRaycasts = true;
-                transform.SetParent(_parent);
-                transform.SetSiblingIndex(_placeHolder.transform.GetSiblingIndex());
-                transform.rotation = Quaternion.identity;
+            transform.SetParent(_parent);
+            transform.SetSiblingIndex(_placeHolder.transform.GetSiblingIndex());
+            transform.rotation = Quaternion.identity;
             Destroy(_placeHolder);
         }
     }

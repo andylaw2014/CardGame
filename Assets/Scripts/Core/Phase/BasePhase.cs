@@ -1,5 +1,3 @@
-using Assets.Scripts.Core.Message;
-
 namespace Assets.Scripts.Core.Phase
 {
     public abstract class BasePhase

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Assets.Scripts.Outdate.Infrastructure;
 
 namespace Assets.Scripts.Infrastructure.EventAggregator
 {

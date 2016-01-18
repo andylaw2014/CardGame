@@ -1,5 +1,4 @@
 using Assets.Scripts.Infrastructure;
-using Assets.Scripts.Outdate.Infrastructure;
 using Assets.Scripts.Outdate.UI;
 using UnityEngine;
 

@@ -2495,7 +2495,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CardBack: {fileID: 21300000, guid: 41fb64318f9d75443a90d1b2e780972f, type: 3}
-  CardView: {fileID: 265886034}
+  CardView: {fileID: 31010469}
   NextButton: {fileID: 732740762}
   PhaseText: {fileID: 203737316}
   ResourcePanelController: {fileID: 723917537}
