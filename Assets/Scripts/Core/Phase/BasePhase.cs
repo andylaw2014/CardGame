@@ -46,5 +46,10 @@ namespace Assets.Scripts.Core.Phase
         /// </summary>
         /// <returns></returns>
         public abstract string GetName();
+
+        public virtual bool AllowPlayCard()
+        {
+            return false;
+        }
     }
 }

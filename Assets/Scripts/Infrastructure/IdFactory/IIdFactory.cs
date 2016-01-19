@@ -8,5 +8,7 @@ namespace Assets.Scripts.Infrastructure.IdFactory
         /// <param name="type">Type of the unique id.</param>
         /// <returns>Unique Id.</returns>
         string GetId(int type);
+
+        int GetType(string id);
     }
 }

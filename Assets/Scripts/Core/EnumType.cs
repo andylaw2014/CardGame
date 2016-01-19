@@ -24,4 +24,9 @@ namespace Assets.Scripts.Core
         Crystal,
         Deuterium
     }
+
+    public enum CardType
+{
+    Unit, Event
+}
 }

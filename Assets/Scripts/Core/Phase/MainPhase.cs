@@ -20,7 +20,12 @@ namespace Assets.Scripts.Core.Phase
 
         public override string GetName()
         {
-            return "Draw Phase";
+            return "Main Phase";
+        }
+
+        public override bool AllowPlayCard()
+        {
+            return Parent == PlayerType.Player;
         }
     }
 }

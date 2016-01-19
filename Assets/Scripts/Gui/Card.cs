@@ -18,6 +18,7 @@ namespace Assets.Scripts.Gui
 
         public Sprite Image;
         public Statistics Stats; // For grouping in inspector
+        public CardType Type;
 
         public bool IsFront
         {

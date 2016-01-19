@@ -16,5 +16,17 @@ namespace Assets.Scripts.Infrastructure.IdFactory
             var prefix = type == FirstPlayer ? "F" : "S";
             return prefix + (_count[type]++);
         }
+
+        public int GetType(string id)
+        {
+            switch (id[0])
+            {
+                case 'F':
+                    return FirstPlayer;
+                case 'S':
+                    return SecondPlayer;
+            }
+            return -1;
+        }
     }
 }

@@ -10,7 +10,7 @@ using UnityEngine;
 namespace Assets.Scripts.Core
 {
     public class GameController : MonoBehaviour, IHandle<PhaseStartMessage>, IHandle<EnableResourcePanelMessage>,
-        IHandle<PlayerStatsChangeMessage>
+        IHandle<PlayerStatsChangeMessage>, IHandle<CardZoneChangeMessage>
     {
         private Game _game;
         public GuiMediator GuiMediator;
@@ -23,6 +23,7 @@ namespace Assets.Scripts.Core
             _game.Subscribe(this);
             GuiMediator.OnButtonClick += OnButtonClick;
             GuiMediator.SetButtonClickable(ButtonType.NextPhaseButton, PhotonNetwork.isMasterClient);
+            GuiMediator.OnCardDragToZone += OnCardDragToZone;
         }
 
         private void OnButtonClick(object sender, ButtonClickEventArgs args)
@@ -39,10 +40,12 @@ namespace Assets.Scripts.Core
                 _game.Start();
         }
 
-        private void OnCardMove(object sender, CardChangeEventArg args)
+        private void OnCardDragToZone(object sender, CardDragToZoneEventArgs args)
         {
-            var card = args.Card;
-            GuiMediator.MoveCard(card.Id, card.Parent, card.Zone);
+            Log.Verbose("OnCardDragToZone");
+            if (args.Destination != ZoneType.BattleField) return;
+            _game.TryPlay(args.Target);
+            Log.Verbose(args.Target+":BattleField");
         }
 
         #region Handle
@@ -66,6 +69,21 @@ namespace Assets.Scripts.Core
             GuiMediator.UpdatePlayerStats(player.Type, player.GePlayerStats());
         }
 
+        public void Handle(CardZoneChangeMessage message)
+        {
+            var card = message.Card;
+            Log.Verbose(string.Format("Handle CardZoneChangeMessage:{0},{1},{2}" ,card.Id,card.Parent, card.Zone));
+            GuiMediator.MoveCard(card.Id, card.Parent, card.Zone);
+            SetFrontAndDrag(card.Id, card.Parent, card.Zone);
+        }
+
+        private void SetFrontAndDrag(string id, PlayerType owner, ZoneType destination)
+        {
+            var front = !(owner == PlayerType.Opponent && destination == ZoneType.Hand);
+            GuiMediator.SetCardIsFront(id, front);
+            var drag = (owner == PlayerType.Player && destination == ZoneType.Hand);
+            GuiMediator.SetDraggable(id, drag);
+        }
         #endregion
 
         #region Photon
@@ -117,12 +135,20 @@ namespace Assets.Scripts.Core
         {
             var owner = (PlayerType) byteOwner;
             var destination = (ZoneType) byteDestination;
+            Log.Verbose(string.Format("CreateCard (RPC):{0},{1}", id, owner));
             _game.CreateCard(owner, destination, id, GuiMediator.CreateCard(cardName, id, owner, destination));
+            SetFrontAndDrag(id, owner, destination);
+        }
 
-            var front = !(owner == PlayerType.Opponent && destination == ZoneType.Hand);
-            GuiMediator.SetCardIsFront(id, front);
-            var drag = (owner == PlayerType.Player && destination == ZoneType.Hand);
-            GuiMediator.SetDraggable(id, drag);
+        public void PlayCard(string id)
+        {
+            GetComponent<PhotonView>().RPC("RpcPlayCard", PhotonTargets.Others, id);
+        }
+
+        [PunRPC]
+        private void RpcPlayCard(string id)
+        {
+             _game.PlayCard(id);
         }
 
         #endregion

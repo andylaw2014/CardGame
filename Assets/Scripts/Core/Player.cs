@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Core.Statistics;
 
 namespace Assets.Scripts.Core
@@ -60,6 +61,39 @@ namespace Assets.Scripts.Core
             _stats[PlayerStatsType.Metal] = _stats[PlayerStatsType.MaxMetal];
             _stats[PlayerStatsType.Crystal] = _stats[PlayerStatsType.MaxCrystal];
             _stats[PlayerStatsType.Deuterium] = _stats[PlayerStatsType.Deuterium];
+        }
+
+        public Card GetCardById(string id)
+        {
+            foreach (var card in _battlefield.Where(card => card.Id==id))
+                return card;
+            return _hand.FirstOrDefault(card => card.Id == id);
+        }
+
+        private bool EnoughCost(Card card)
+        {
+            return this[PlayerStatsType.Metal] >= card[CardStatsType.Metal] &&
+                   this[PlayerStatsType.Crystal] >= card[CardStatsType.Crystal] &&
+                   this[PlayerStatsType.Deuterium] >= card[CardStatsType.Deuterium];
+        }
+
+        public bool Play(Card card)
+        {
+            if (!EnoughCost(card)) return false;
+            this[PlayerStatsType.Metal] -= card[CardStatsType.Metal];
+            this[PlayerStatsType.Crystal] -= card[CardStatsType.Crystal];
+            this[PlayerStatsType.Deuterium] -= card[CardStatsType.Deuterium];
+            _hand.Remove(card);
+            if (card.Type == CardType.Unit)
+            {
+                _battlefield.Add(card);
+                card.Zone = ZoneType.BattleField;
+                return true;
+            }
+            else
+            //TODO: EVENT
+            return false;
+
         }
     }
 }

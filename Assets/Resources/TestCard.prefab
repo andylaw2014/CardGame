@@ -33,11 +33,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Image: {fileID: 21300000, guid: bf3c22ca7e43a7f49a436cc5c1a5eb94, type: 3}
   Stats:
-    Hp: 0
-    Atk: 0
-    Metal: 0
+    Hp: 1
+    Atk: 1
+    Metal: 1
     Crystal: 0
     Deuterium: 0
+  Type: 0
 --- !u!114 &11453442
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -229,6 +230,18 @@ Prefab:
       value: 
       objectReference: {fileID: 21300000, guid: bf3c22ca7e43a7f49a436cc5c1a5eb94,
         type: 3}
+    - target: {fileID: 0}
+      propertyPath: Stats.Hp
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: Stats.Atk
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: Stats.Metal
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 119130}

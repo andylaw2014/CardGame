@@ -89,6 +89,16 @@ namespace Assets.Scripts.Core
             return _players[type];
         }
 
+        private Player GetPlayerByCardId(string id)
+        {
+            return GetPlayer(_idFactory.GetType(id) == CardIdFactory.FirstPlayer ? _first : _first.Opposite());
+        }
+
+        public Card GetCardById(string id)
+        {
+            return GetPlayerByCardId(id).GetCardById(id);
+        }
+
         public void AddResourceByPanel(PlayerType type)
         {
             var player = GetPlayer(type);
@@ -158,8 +168,31 @@ namespace Assets.Scripts.Core
 
         public void CreateCard(PlayerType type, ZoneType zone, string id, Gui.Card cardComponent)
         {
-            var cardStats = new CardStats(cardComponent.Stats);
-            GetPlayer(type).Add(zone, new Card(id, cardStats));
+            Log.Verbose(string.Format("CreateCard:{0},{1},{2}", type, zone, id));
+            var card = new Card(id, cardComponent) {Parent = type};
+            GetPlayer(type).Add(zone, card);
+        }
+
+        public void TryPlay(string id)
+        {
+            Log.Verbose("TryPlay:" + id);
+            var player = GetPlayerByCardId(id);
+            var card = player.GetCardById(id);
+            Log.Verbose(string.Format("{3} TryPlay:{0},{1},{2}", card.Id, card.Parent, card.Zone, player.Type));
+            if (!_phase.AllowPlayCard() || !player.Play(card)) return;
+            Publish(new PlayerStatsChangeMessage(player));
+            Publish(new CardZoneChangeMessage(card));
+            _gameController.PlayCard(id);
+        }
+
+        public void PlayCard(string id)
+        {
+            var player = GetPlayerByCardId(id);
+            var card = player.GetCardById(id);
+            Log.Verbose(string.Format("{3} PlayCard:{0},{1},{2}", card.Id, card.Parent, card.Zone, player.Type));
+            player.Play(card);
+            Publish(new PlayerStatsChangeMessage(player));
+            Publish(new CardZoneChangeMessage(card));
         }
     }
 }

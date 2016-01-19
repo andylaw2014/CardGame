@@ -37,4 +37,5 @@ MonoBehaviour:
   - RpcAddResource
   - RpcNextPhase
   - RpcCreateCard
+  - RpcPlayCard
   DisableAutoOpenWizard: 1
