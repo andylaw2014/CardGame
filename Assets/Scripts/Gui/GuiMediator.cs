@@ -5,6 +5,7 @@ using Assets.Scripts.Core.Statistics;
 using Assets.Scripts.Gui.Controller;
 using Assets.Scripts.Gui.Event;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.Gui
@@ -23,6 +24,7 @@ namespace Assets.Scripts.Gui
         public Text PhaseText;
         public PlayerController Player;
         public ResourcePanelController ResourcePanelController;
+        private bool _oneSelected;
 
         /// <summary>
         ///     This is call when a button is clicked.
@@ -50,8 +52,9 @@ namespace Assets.Scripts.Gui
             _idDictionary = new Dictionary<string, GameObject>();
             NextButton.onClick.AddListener(
                 () => { OnButtonClick(this, new ButtonClickEventArgs(ButtonType.NextPhaseButton)); });
+            _oneSelected = false;
         }
-
+       
         /// <summary>
         ///     Update player's statistics.
         /// </summary>
@@ -110,9 +113,10 @@ namespace Assets.Scripts.Gui
         {
             var ownerController = owner == PlayerType.Player ? Player : Opponent;
             var card = Instantiate(Resources.Load(cardName)) as GameObject;
-            _idDictionary.Add(id, card);
             if (card == null)
                 return null;
+            card.GetComponent<Card>().Id = id;
+            _idDictionary.Add(id, card);
             if (destination == ZoneType.Hand)
                 ownerController.MoveToHand(card);
             else
@@ -217,20 +221,32 @@ namespace Assets.Scripts.Gui
             // You need a new UI element that allow the selection of cards with given ID.
             // At the end of selection (or cancel if allowed), call onClose (string[] selected)
             // selected is the arrays of selected card id(s). It should be null if it is canceled.
-            var selected = new List<string>();
+            var selected = new HashSet<string>();
             foreach (var t in idList)
             {
-                AddButton(t, selected, allowCancel);
+                AddButton(t, selected, allowMultiple, allowCancel);
             }
+            //NextButton.onClick.RemoveAllListeners();
             NextButton.onClick.AddListener(() =>
             {
-                onClose(selected.ToArray());
-                OnButtonClick(this, new ButtonClickEventArgs(ButtonType.NextPhaseButton));
+                var stringArray = new string[selected.Count];
+                selected.CopyTo(stringArray);
+                onClose(stringArray.Length == 0 ? null : stringArray);
+                foreach (var t in idList)
+                {
+                    var butt = _idDictionary[t].GetComponent<Button>();
+                    if (butt != null)
+                        Destroy(butt);
+                }
+                NextButton.onClick.RemoveAllListeners();
+                NextButton.onClick.AddListener(() =>
+                {
+                    OnButtonClick(this, new ButtonClickEventArgs(ButtonType.NextPhaseButton));
+                });
             });
         }
 
-
-        private void AddButton(string t, ICollection<string> selected, bool allowCancel)
+        private void AddButton(string t, HashSet<string> selected, bool allowMultiple, bool allowCancel)
         {
             var isClicked = false;
             var card = _idDictionary[t];
@@ -238,18 +254,24 @@ namespace Assets.Scripts.Gui
             button.interactable = true;
             button.onClick.AddListener(() =>
             {
+                if (!allowMultiple) { if (!isClicked && _oneSelected) return; }
                 if (!isClicked || !allowCancel)
                 {
                     isClicked = true;
+                    _oneSelected = true;
+                    button.image.color = new Color(0F, 0.8F, 0F, 0.5F);
                     selected.Add(t);
                 }
                 else
                 {
                     isClicked = false;
+                    _oneSelected = false;
+                    button.image.color = Color.white;
                     selected.Remove(t);
                 }
             });
         }
+
 
         /// <summary>
         ///     Set a card to be draggable or not.
@@ -261,10 +283,57 @@ namespace Assets.Scripts.Gui
             // TODO: Set Draggable
             var card = _idDictionary[id];
             var drag = card.GetComponent<Draggable>();
+            var dragDest = card.GetComponent<DragDestination>();
             if (draggable && drag == null)
+            {
                 card.AddComponent<Draggable>();
-            if (!draggable && drag != null)
-                Destroy(drag);
+                var dest = card.AddComponent<DragDestination>();
+                dest.SetEvent(OnCardDragToCard, OnCardDragToZone, id);
+            }
+            if (draggable || drag == null || dragDest == null) return;
+            Destroy(dragDest);
+            Destroy(drag);
         }
+
+        public class DragDestination : MonoBehaviour,IEndDragHandler
+        {
+            private string _destination;
+            private string _name;
+            private string _id;
+            public event EventHandler<CardDragToCardEventArgs> OnCardDragToCard;
+            public event EventHandler<CardDragToZoneEventArgs> OnCardDragToZone;
+
+            public void SetEvent(EventHandler<CardDragToCardEventArgs> e1, EventHandler<CardDragToZoneEventArgs> e2, string id)
+            {
+                OnCardDragToCard = e1;
+                OnCardDragToZone = e2;
+                _id = id;
+            }
+
+            public void OnEndDrag(PointerEventData eventData)
+            {
+                _destination = eventData.pointerEnter.name;
+                _name = eventData.pointerEnter.transform.parent.name;
+                if (_name == "Opponent" || _name == "Player")
+                {
+                    var zoneType = _destination == "Hand" ? ZoneType.Hand : ZoneType.BattleField;
+                    var ownerType = eventData.pointerEnter.transform.parent.name == "Player"
+                        ? PlayerType.Player
+                        : PlayerType.Opponent;
+                    if (OnCardDragToZone == null) return;
+                    OnCardDragToZone(this, new CardDragToZoneEventArgs(_id, zoneType, ownerType));
+                    //Debug.Log("_destination:  " + zoneType);
+                    //Debug.Log("_onwer:  " + ownerType);
+                }
+                else
+                {
+                    if (OnCardDragToCard == null) return;
+                    OnCardDragToCard(this, new CardDragToCardEventArgs(_id, eventData.pointerEnter.GetComponent<Card>().Id));
+                    //Debug.Log("_Target :  " + _id);
+                    //Debug.Log("_Another Card:  " + eventData.pointerEnter.GetComponent<Card>().Id);
+                }
+            }
+        }
+
     }
 }
