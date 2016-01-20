@@ -5,7 +5,6 @@ using Assets.Scripts.Core.Statistics;
 using Assets.Scripts.Gui.Controller;
 using Assets.Scripts.Gui.Event;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.Gui
@@ -17,6 +16,7 @@ namespace Assets.Scripts.Gui
     {
         // You should store the card id and the referenced gameobject
         private Dictionary<string, GameObject> _idDictionary;
+        private bool _oneSelected;
         public Sprite CardBack;
         public Image CardView;
         public Button NextButton;
@@ -24,7 +24,6 @@ namespace Assets.Scripts.Gui
         public Text PhaseText;
         public PlayerController Player;
         public ResourcePanelController ResourcePanelController;
-        private bool _oneSelected;
 
         /// <summary>
         ///     This is call when a button is clicked.
@@ -54,7 +53,7 @@ namespace Assets.Scripts.Gui
                 () => { OnButtonClick(this, new ButtonClickEventArgs(ButtonType.NextPhaseButton)); });
             _oneSelected = false;
         }
-       
+
         /// <summary>
         ///     Update player's statistics.
         /// </summary>
@@ -216,7 +215,6 @@ namespace Assets.Scripts.Gui
         public void EnableSelection(Action<string[]> onClose, string[] idList, bool allowMultiple,
             bool allowCancel)
         {
-            // TODO:Enable Selection
             // You need a new UI element that allow the selection of cards with given ID.
             // At the end of selection (or cancel if allowed), call onClose (string[] selected)
             // selected is the arrays of selected card id(s). It should be null if it is canceled.
@@ -238,10 +236,8 @@ namespace Assets.Scripts.Gui
                         Destroy(butt);
                 }
                 NextButton.onClick.RemoveAllListeners();
-                NextButton.onClick.AddListener(() =>
-                {
-                    OnButtonClick(this, new ButtonClickEventArgs(ButtonType.NextPhaseButton));
-                });
+                NextButton.onClick.AddListener(
+                    () => { OnButtonClick(this, new ButtonClickEventArgs(ButtonType.NextPhaseButton)); });
             });
         }
 
@@ -253,7 +249,10 @@ namespace Assets.Scripts.Gui
             button.interactable = true;
             button.onClick.AddListener(() =>
             {
-                if (!allowMultiple) { if (!isClicked && _oneSelected) return; }
+                if (!allowMultiple)
+                {
+                    if (!isClicked && _oneSelected) return;
+                }
                 if (!isClicked || !allowCancel)
                 {
                     isClicked = true;
@@ -292,8 +291,9 @@ namespace Assets.Scripts.Gui
             Destroy(dragDest);
             Destroy(drag);
         }
+
         /// <summary>
-        /// Remove the card.
+        ///     Remove the card.
         /// </summary>
         /// <param name="id"></param>
         public void DestoryCard(string id)
@@ -301,5 +301,14 @@ namespace Assets.Scripts.Gui
             //TODO: DestoryCard
         }
 
+        /// <summary>
+        ///     Set the color of the color
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="colorType"></param>
+        public void SelectColor(string id, ColorType colorType)
+        {
+            //TODO: SelectColor
+        }
     }
 }

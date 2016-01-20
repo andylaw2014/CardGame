@@ -9,17 +9,8 @@ namespace Assets.Scripts.Gui
     public class DragDestination : MonoBehaviour, IEndDragHandler
     {
         private string _destination;
-        private string _name;
         private string _id;
-        public event EventHandler<CardDragToCardEventArgs> OnCardDragToCard;
-        public event EventHandler<CardDragToZoneEventArgs> OnCardDragToZone;
-
-        public void SetEvent(EventHandler<CardDragToCardEventArgs> e1, EventHandler<CardDragToZoneEventArgs> e2, string id)
-        {
-            OnCardDragToCard = e1;
-            OnCardDragToZone = e2;
-            _id = id;
-        }
+        private string _name;
 
         public void OnEndDrag(PointerEventData eventData)
         {
@@ -43,6 +34,17 @@ namespace Assets.Scripts.Gui
                 //Debug.Log("_Target :  " + _id);
                 //Debug.Log("_Another Card:  " + eventData.pointerEnter.GetComponent<Card>().Id);
             }
+        }
+
+        public event EventHandler<CardDragToCardEventArgs> OnCardDragToCard;
+        public event EventHandler<CardDragToZoneEventArgs> OnCardDragToZone;
+
+        public void SetEvent(EventHandler<CardDragToCardEventArgs> e1, EventHandler<CardDragToZoneEventArgs> e2,
+            string id)
+        {
+            OnCardDragToCard = e1;
+            OnCardDragToZone = e2;
+            _id = id;
         }
     }
 }

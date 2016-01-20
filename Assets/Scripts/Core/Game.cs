@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Core.Message;
 using Assets.Scripts.Core.Phase;
 using Assets.Scripts.Core.Statistics;
@@ -18,6 +19,7 @@ namespace Assets.Scripts.Core
         private readonly GameController _gameController;
         private readonly IIdFactory _idFactory;
         private readonly Dictionary<PlayerType, Player> _players;
+        private Battle _battle;
         private BasePhase _phase;
 
         /// <summary>
@@ -34,6 +36,7 @@ namespace Assets.Scripts.Core
             _players = new Dictionary<PlayerType, Player>();
             foreach (var type in Extension.GetValues<PlayerType>())
                 _players.Add(type, new Player(this, type));
+            _battle = null;
         }
 
         /// <summary>
@@ -193,6 +196,30 @@ namespace Assets.Scripts.Core
             player.Play(card);
             Publish(new PlayerStatsChangeMessage(player));
             Publish(new CardZoneChangeMessage(card));
+        }
+
+        public void CreateBattle(PlayerType player, string[] attacker)
+        {
+            Log.Verbose("CreateBattle:" + attacker.Length);
+            _battle = new Battle(player, attacker);
+        }
+
+        public void SelectAttacker()
+        {
+            var player = GetPlayer(PlayerType.Player);
+            _gameController.SelectAttacker(PlayerType.Player, player.GetAttackUnit().ToArray());
+        }
+
+        private class Battle
+        {
+            public readonly PlayerType Player;
+            private string[] _attacker;
+
+            internal Battle(PlayerType player, string[] attacker)
+            {
+                _attacker = attacker;
+                Player = player;
+            }
         }
     }
 }

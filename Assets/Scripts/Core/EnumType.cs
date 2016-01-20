@@ -26,7 +26,15 @@ namespace Assets.Scripts.Core
     }
 
     public enum CardType
-{
-    Unit, Event
-}
+    {
+        Unit,
+        Event
+    }
+
+    public enum ColorType
+    {
+        Normal,
+        Selected,
+        Targetable
+    }
 }

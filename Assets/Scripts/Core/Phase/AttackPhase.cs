@@ -17,5 +17,10 @@ namespace Assets.Scripts.Core.Phase
         {
             return "Attack Phase";
         }
+
+        protected override void Execute()
+        {
+            Game.SelectAttacker();
+        }
     }
 }

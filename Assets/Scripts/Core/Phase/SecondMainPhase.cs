@@ -17,5 +17,10 @@ namespace Assets.Scripts.Core.Phase
         {
             return "Second Main Phase";
         }
+
+        public override bool AllowPlayCard()
+        {
+            return Parent == PlayerType.Player;
+        }
     }
 }

@@ -3,7 +3,7 @@ using Assets.Scripts.Core.Statistics;
 
 namespace Assets.Scripts.Core
 {
-    public class Card: IEquatable<Card>
+    public class Card : IEquatable<Card>
     {
         private readonly CardStats _stats;
         public readonly string Id;
@@ -29,6 +29,11 @@ namespace Assets.Scripts.Core
         public bool Equals(Card other)
         {
             return Id == other.Id;
+        }
+
+        public bool CanAttack()
+        {
+            return true;
         }
     }
 }

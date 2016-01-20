@@ -1,4 +1,3 @@
-using Assets.Scripts.Core.Event;
 using Assets.Scripts.Core.Message;
 using Assets.Scripts.Gui;
 using Assets.Scripts.Gui.Event;
@@ -45,7 +44,7 @@ namespace Assets.Scripts.Core
             Log.Verbose("OnCardDragToZone");
             if (args.Destination != ZoneType.BattleField) return;
             _game.TryPlay(args.Target);
-            Log.Verbose(args.Target+":BattleField");
+            Log.Verbose(args.Target + ":BattleField");
         }
 
         #region Handle
@@ -72,7 +71,7 @@ namespace Assets.Scripts.Core
         public void Handle(CardZoneChangeMessage message)
         {
             var card = message.Card;
-            Log.Verbose(string.Format("Handle CardZoneChangeMessage:{0},{1},{2}" ,card.Id,card.Parent, card.Zone));
+            Log.Verbose(string.Format("Handle CardZoneChangeMessage:{0},{1},{2}", card.Id, card.Parent, card.Zone));
             GuiMediator.MoveCard(card.Id, card.Parent, card.Zone);
             SetFrontAndDrag(card.Id, card.Parent, card.Zone);
         }
@@ -84,6 +83,14 @@ namespace Assets.Scripts.Core
             var drag = (owner == PlayerType.Player && destination == ZoneType.Hand);
             GuiMediator.SetDraggable(id, drag);
         }
+
+        public void SelectAttacker(PlayerType player, string[] selectable)
+        {
+            Log.Verbose("SelectAttacker");
+            GuiMediator.EnableSelection(attacker => { CreateBattle(player, attacker); }
+                , selectable, true, false);
+        }
+
         #endregion
 
         #region Photon
@@ -148,7 +155,22 @@ namespace Assets.Scripts.Core
         [PunRPC]
         private void RpcPlayCard(string id)
         {
-             _game.PlayCard(id);
+            _game.PlayCard(id);
+        }
+
+        public void CreateBattle(PlayerType player, string[] attacker)
+        {
+            var bytePlayerType = (byte) player;
+            var byteOpponentType = (byte) player.Opposite();
+            RpcCreateBattle(bytePlayerType, attacker);
+            GetComponent<PhotonView>().RPC("RpcCreateBattle", PhotonTargets.Others, byteOpponentType, attacker);
+        }
+
+        [PunRPC]
+        private void RpcCreateBattle(byte bytePlayerType, string[] attacker)
+        {
+            var player = (PlayerType) bytePlayerType;
+            _game.CreateBattle(player, attacker);
         }
 
         #endregion

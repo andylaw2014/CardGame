@@ -65,7 +65,7 @@ namespace Assets.Scripts.Core
 
         public Card GetCardById(string id)
         {
-            foreach (var card in _battlefield.Where(card => card.Id==id))
+            foreach (var card in _battlefield.Where(card => card.Id == id))
                 return card;
             return _hand.FirstOrDefault(card => card.Id == id);
         }
@@ -90,10 +90,12 @@ namespace Assets.Scripts.Core
                 card.Zone = ZoneType.BattleField;
                 return true;
             }
-            else
-            //TODO: EVENT
             return false;
+        }
 
+        public IEnumerable<string> GetAttackUnit()
+        {
+            return from unit in _battlefield where unit.CanAttack() select unit.Id;
         }
     }
 }
