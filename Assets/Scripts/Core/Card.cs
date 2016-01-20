@@ -35,6 +35,7 @@ namespace Assets.Scripts.Core
         {
             return true;
         }
+
         public bool CanDefence()
         {
             return true;
@@ -49,7 +50,6 @@ namespace Assets.Scripts.Core
 
         public void Defence()
         {
-
         }
 
         public Gui.Card.Statistics GetStatistics()

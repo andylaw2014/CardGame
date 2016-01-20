@@ -51,12 +51,10 @@ namespace Assets.Scripts.Core.Phase
 
         public virtual void Handle(CardDragToZoneEventArgs args)
         {
-
         }
 
         public virtual void Handle(CardDragToCardEventArgs args)
         {
-
         }
     }
 }

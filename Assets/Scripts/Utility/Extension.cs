@@ -64,7 +64,7 @@ namespace Assets.Scripts.Utility
                 list.Swap(index, count);
             }
         }
-       
+
 
         /// <summary>
         ///     Get the Opposite of PlayerType.

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Assets.Scripts.Core.Message;
 using Assets.Scripts.Gui;
 using Assets.Scripts.Gui.Event;
@@ -10,7 +9,8 @@ using UnityEngine;
 namespace Assets.Scripts.Core
 {
     public class GameController : MonoBehaviour, IHandle<PhaseStartMessage>, IHandle<EnableResourcePanelMessage>,
-        IHandle<PlayerStatsChangeMessage>, IHandle<CardZoneChangeMessage>, IHandle<CardDeadMessage>, IHandle<CardStatsChangeMessage>
+        IHandle<PlayerStatsChangeMessage>, IHandle<CardZoneChangeMessage>, IHandle<CardDeadMessage>,
+        IHandle<CardStatsChangeMessage>
     {
         private Game _game;
         public GuiMediator GuiMediator;
@@ -70,6 +70,7 @@ namespace Assets.Scripts.Core
 
         public void SetColor(string id, ColorType colorType)
         {
+            Log.Verbose("SetColor"+id+":"+ colorType);
             GuiMediator.SelectColor(id, colorType);
         }
 
@@ -115,7 +116,7 @@ namespace Assets.Scripts.Core
         public void Handle(CardStatsChangeMessage message)
         {
             var card = message.Card;
-            GuiMediator.UpdateCardStats(card.Id,card.GetStatistics());
+            GuiMediator.UpdateCardStats(card.Id, card.GetStatistics());
         }
 
         #endregion
@@ -197,8 +198,8 @@ namespace Assets.Scripts.Core
         private void RpcCreateBattle(byte bytePlayerType, string[] attacker)
         {
             var player = (PlayerType) bytePlayerType;
-            if(attacker!=null)
-            _game.CreateBattle(player, attacker);
+            if (attacker != null)
+                _game.CreateBattle(player, attacker);
         }
 
         public void AddBattle(string defender, string attacker)
@@ -213,7 +214,5 @@ namespace Assets.Scripts.Core
         }
 
         #endregion
-
-
     }
 }

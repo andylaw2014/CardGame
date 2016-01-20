@@ -108,5 +108,10 @@ namespace Assets.Scripts.Core
             _battlefield.Remove(GetCardById(id));
             _hand.Remove(GetCardById(id));
         }
+
+        public IEnumerable<string> GetCardOnBattleField()
+        {
+            return _battlefield.Select(card => card.Id);
+        }
     }
 }

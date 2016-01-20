@@ -212,7 +212,8 @@ namespace Assets.Scripts.Core
         public void CreateBattle(PlayerType player, string[] attacker)
         {
             Log.Verbose("CreateBattle:" + attacker.Length);
-            _battle = new Battle(this,_gameController,player, attacker);
+            _battle = new Battle(this, _gameController, player, attacker);
+            ShowAttacker();
         }
 
         public void SelectAttacker()
@@ -224,20 +225,24 @@ namespace Assets.Scripts.Core
         public void SelectDefender()
         {
             var player = GetPlayer(PlayerType.Player);
-            foreach(var id in player.GetDefenceUnit())
-                _gameController.SetDraggable(id,true);
+            foreach (var id in player.GetDefenceUnit())
+                _gameController.SetDraggable(id, true);
         }
 
         public void ShowAttacker()
         {
+            Log.Verbose("ShowAttacker:");
             if (_battle == null) return;
-            foreach(var attacker in _battle.GetAttacker())
-                _gameController.SetColor(attacker,ColorType.Selected);
+            foreach (var attacker in _battle.GetAttacker())
+            {
+                Log.Verbose("attacker");
+                _gameController.SetColor(attacker, ColorType.Selected);
+            }
         }
 
         public void AddBattle(string defender, string attacker)
         {
-           _gameController.AddBattle(defender,attacker);
+            _gameController.AddBattle(defender, attacker);
         }
 
         public void AddFight(string defender, string attacker)
@@ -251,11 +256,20 @@ namespace Assets.Scripts.Core
             if (_battle == null) return;
             _battle.Resolve();
             _battle = null;
+            ResetColor();
+        }
+
+        private void ResetColor()
+        {
+            foreach (var id in GetPlayer(PlayerType.Player).GetCardOnBattleField())
+                _gameController.SetColor(id,ColorType.Normal);
+            foreach (var id in GetPlayer(PlayerType.Opponent).GetCardOnBattleField())
+                _gameController.SetColor(id, ColorType.Normal);
         }
 
         public void DamagePlayer(PlayerType playerType, int damage)
         {
-            Log.Verbose("DamagePlayer"+ playerType+":"+damage);
+            Log.Verbose("DamagePlayer" + playerType + ":" + damage);
             var player = GetPlayer(playerType);
             player[PlayerStatsType.Hp] -= damage;
             Publish(new PlayerStatsChangeMessage(player));
@@ -263,7 +277,7 @@ namespace Assets.Scripts.Core
 
         public void Fight(string defender, string attacker)
         {
-            Log.Verbose("Fight:"+ attacker+":"+ defender);
+            Log.Verbose("Fight:" + attacker + ":" + defender);
             var atk = GetCardById(attacker);
             var def = GetCardById(defender);
             atk.Attack(def);
@@ -286,11 +300,11 @@ namespace Assets.Scripts.Core
 
         private class Battle
         {
-            public readonly PlayerType Player;
             private readonly string[] _attacker;
             private readonly Dictionary<string, string> _battle;
-            private readonly GameController _gameController;
             private readonly Game _game;
+            private readonly GameController _gameController;
+            public readonly PlayerType Player;
 
             internal Battle(Game game, GameController gameController, PlayerType player, string[] attacker)
             {
@@ -298,7 +312,7 @@ namespace Assets.Scripts.Core
                 _gameController = gameController;
                 _game = game;
                 Player = player;
-                _battle= new Dictionary<string, string>();
+                _battle = new Dictionary<string, string>();
             }
 
             public void AddBattle(string defender, string attacker)
@@ -307,9 +321,9 @@ namespace Assets.Scripts.Core
                 if (!_battle.ContainsKey(defender) && !_battle.ContainsValue(attacker))
                 {
                     _battle.Add(defender, attacker);
-                    _gameController.SetDraggable(defender,false);
-                    _gameController.SetColor(attacker,ColorType.Normal);
-                    _game.Fight(defender,attacker);
+                    _gameController.SetDraggable(defender, false);
+                    _gameController.SetColor(attacker, ColorType.Normal);
+                    _game.Fight(defender, attacker);
                 }
             }
 
@@ -324,7 +338,7 @@ namespace Assets.Scripts.Core
                 var notDef = _attacker.Where(attacker => !_battle.ContainsValue(attacker)).ToList();
                 foreach (var card in notDef.Select(attacker => _game.GetCardById(attacker)))
                 {
-                    _game.DamagePlayer(Player.Opposite(),card[CardStatsType.Atk]);
+                    _game.DamagePlayer(Player.Opposite(), card[CardStatsType.Atk]);
                 }
             }
         }

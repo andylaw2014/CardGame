@@ -11,7 +11,6 @@ namespace Assets.Scripts.Core.Phase
 
         protected override void Execute()
         {
-            Game.ShowAttacker();
             if (Parent != PlayerType.Player) return;
             Game.SelectDefender();
         }

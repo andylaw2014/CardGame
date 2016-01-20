@@ -23,7 +23,7 @@ namespace Assets.Scripts.Core.Statistics
 
         public Gui.Card.Statistics ToStatistics()
         {
-            return new Gui.Card.Statistics()
+            return new Gui.Card.Statistics
             {
                 Hp = this[CardStatsType.Hp],
                 Atk = this[CardStatsType.Atk],
