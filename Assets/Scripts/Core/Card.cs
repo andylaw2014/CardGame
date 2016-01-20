@@ -49,7 +49,12 @@ namespace Assets.Scripts.Core
 
         public void Defence()
         {
-            
+
+        }
+
+        public Gui.Card.Statistics GetStatistics()
+        {
+            return _stats.ToStatistics();
         }
     }
 }

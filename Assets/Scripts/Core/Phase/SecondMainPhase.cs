@@ -10,6 +10,7 @@ namespace Assets.Scripts.Core.Phase
 
         protected override void Execute()
         {
+            Game.ResolveBattle();
         }
 
         protected override BasePhase NextPhase()

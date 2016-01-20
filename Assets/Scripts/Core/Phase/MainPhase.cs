@@ -10,7 +10,6 @@ namespace Assets.Scripts.Core.Phase
 
         protected override void Execute()
         {
-            Game.ResetBattle();
             if (Parent != PlayerType.Player) return;
             Game.AddResourceByPanel(Parent);
             Game.DrawCard(Parent);

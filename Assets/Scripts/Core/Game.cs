@@ -235,25 +235,35 @@ namespace Assets.Scripts.Core
                 _gameController.SetColor(attacker,ColorType.Selected);
         }
 
-        public void ResetBattle()
+        public void AddBattle(string defender, string attacker)
         {
-            _battle = null;
+           _gameController.AddBattle(defender,attacker);
         }
 
-        public void AddDefender(string defender, string attacker)
+        public void AddFight(string defender, string attacker)
         {
-            if (_battle != null)
-                _battle.AddBattle(defender, attacker);
+            if (_battle == null) return;
+            _battle.AddBattle(defender, attacker);
         }
 
         public void ResolveBattle()
         {
-            if (_battle != null)
-                _battle.Resolve();
+            if (_battle == null) return;
+            _battle.Resolve();
+            _battle = null;
+        }
+
+        public void DamagePlayer(PlayerType playerType, int damage)
+        {
+            Log.Verbose("DamagePlayer"+ playerType+":"+damage);
+            var player = GetPlayer(playerType);
+            player[PlayerStatsType.Hp] -= damage;
+            Publish(new PlayerStatsChangeMessage(player));
         }
 
         public void Fight(string defender, string attacker)
         {
+            Log.Verbose("Fight:"+ attacker+":"+ defender);
             var atk = GetCardById(attacker);
             var def = GetCardById(defender);
             atk.Attack(def);
@@ -310,7 +320,12 @@ namespace Assets.Scripts.Core
 
             public void Resolve()
             {
-                
+                Log.Verbose("Resolve");
+                var notDef = _attacker.Where(attacker => !_battle.ContainsValue(attacker)).ToList();
+                foreach (var card in notDef.Select(attacker => _game.GetCardById(attacker)))
+                {
+                    _game.DamagePlayer(Player.Opposite(),card[CardStatsType.Atk]);
+                }
             }
         }
     }

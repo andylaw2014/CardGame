@@ -114,7 +114,8 @@ namespace Assets.Scripts.Core
 
         public void Handle(CardStatsChangeMessage message)
         {
-            throw new System.NotImplementedException();
+            var card = message.Card;
+            GuiMediator.UpdateCardStats(card.Id,card.GetStatistics());
         }
 
         #endregion
@@ -198,6 +199,17 @@ namespace Assets.Scripts.Core
             var player = (PlayerType) bytePlayerType;
             if(attacker!=null)
             _game.CreateBattle(player, attacker);
+        }
+
+        public void AddBattle(string defender, string attacker)
+        {
+            GetComponent<PhotonView>().RPC("RpcAddBattle", PhotonTargets.All, defender, attacker);
+        }
+
+        [PunRPC]
+        private void RpcAddBattle(string defender, string attacker)
+        {
+            _game.AddFight(defender, attacker);
         }
 
         #endregion

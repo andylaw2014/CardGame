@@ -39,4 +39,5 @@ MonoBehaviour:
   - RpcCreateCard
   - RpcPlayCard
   - RpcCreateBattle
+  - RpcAddBattle
   DisableAutoOpenWizard: 1

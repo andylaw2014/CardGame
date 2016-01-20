@@ -20,6 +20,18 @@ namespace Assets.Scripts.Core.Statistics
             Set(CardStatsType.Crystal, stats.Crystal);
             Set(CardStatsType.Deuterium, stats.Deuterium);
         }
+
+        public Gui.Card.Statistics ToStatistics()
+        {
+            return new Gui.Card.Statistics()
+            {
+                Hp = this[CardStatsType.Hp],
+                Atk = this[CardStatsType.Atk],
+                Metal = this[CardStatsType.Metal],
+                Crystal = this[CardStatsType.Crystal],
+                Deuterium = this[CardStatsType.Deuterium]
+            };
+        }
     }
 
     public enum CardStatsType

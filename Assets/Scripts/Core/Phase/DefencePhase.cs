@@ -1,5 +1,4 @@
 using Assets.Scripts.Gui.Event;
-using Assets.Scripts.Infrastructure;
 using Assets.Scripts.Utility;
 
 namespace Assets.Scripts.Core.Phase
@@ -31,7 +30,7 @@ namespace Assets.Scripts.Core.Phase
         {
             if (Game.GetCardById(args.Target).Zone != ZoneType.BattleField) return;
             if (Game.GetCardById(args.Destination).Zone != ZoneType.BattleField) return;
-            Game.AddDefender(args.Target, args.Destination);
+            Game.AddBattle(args.Target, args.Destination);
         }
     }
 }

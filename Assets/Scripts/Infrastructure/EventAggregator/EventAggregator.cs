@@ -40,7 +40,6 @@ namespace Assets.Scripts.Infrastructure.EventAggregator
 
         public void Publish(object message)
         {
-            Log.Verbose(message);
             Publish(message, action => action());
         }
 

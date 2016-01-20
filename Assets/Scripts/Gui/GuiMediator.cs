@@ -310,5 +310,15 @@ namespace Assets.Scripts.Gui
         {
             //TODO: SelectColor
         }
+
+        /// <summary>
+        /// Update Card Statistics.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="stats"></param>
+        public void UpdateCardStats(string id, Card.Statistics stats)
+        {
+            //TODO: Update Card Statistics
+        }
     }
 }
