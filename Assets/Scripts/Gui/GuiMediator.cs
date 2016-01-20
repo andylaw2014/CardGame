@@ -249,6 +249,7 @@ namespace Assets.Scripts.Gui
             var butt = card.GetComponent<Button>();
             if (butt != null)
                 Destroy(butt);
+            //Debug.Log(t+" add Button.");
             var button = card.AddComponent<Button>();
             button.interactable = true;
             button.onClick.AddListener(() =>
@@ -317,20 +318,21 @@ namespace Assets.Scripts.Gui
         {
             //TODO: SelectColor
             var card = _idDictionary[id];
+            /*
             var butt = card.GetComponent<Button>();
             if (butt != null) { }
             else
-                butt = card.AddComponent<Button>();
+                butt = card.AddComponent<Button>();*/
             switch (colorType)
             {
                 case ColorType.Normal:
-                    butt.image.color = Color.white;
+                    card.GetComponent<Image>().color = Color.white;
                     break;
                 case ColorType.Selected:
-                    butt.image.color = new Color(0F, 0.8F, 0F, 0.5F);
+                    card.GetComponent<Image>().color = new Color(0F, 0.8F, 0F, 0.5F);
                     break;
                 case ColorType.Targetable:
-                    butt.image.color = Color.yellow;
+                    card.GetComponent<Image>().color = Color.yellow;
                     break;
             }
         }
