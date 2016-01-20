@@ -28,7 +28,7 @@ namespace Assets.Scripts.Core.Phase
 
         public override void Handle(CardDragToCardEventArgs args)
         {
-            Log.Verbose("Handle:"+ args.Target+":"+ args.Destination);
+            Log.Verbose("Handle:" + args.Target + ":" + args.Destination);
             if (Game.GetCardById(args.Target).Zone != ZoneType.BattleField) return;
             if (Game.GetCardById(args.Destination).Zone != ZoneType.BattleField) return;
             Game.AddBattle(args.Target, args.Destination);
