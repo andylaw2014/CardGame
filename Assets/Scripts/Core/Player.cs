@@ -105,8 +105,15 @@ namespace Assets.Scripts.Core
 
         public void Remove(string id)
         {
-            _battlefield.Remove(GetCardById(id));
-            _hand.Remove(GetCardById(id));
+            Remove(GetCardById(id));
+        }
+
+        public void Remove(Card card)
+        {
+            if (card.Zone == ZoneType.BattleField)
+                _battlefield.Remove(card);
+            else
+                _hand.Remove(card);
         }
 
         public IEnumerable<string> GetCardOnBattleField()

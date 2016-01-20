@@ -152,6 +152,19 @@ namespace Assets.Scripts.Core
             Publish(new PlayerStatsChangeMessage(GetPlayer(_first)));
             Publish(new PlayerStatsChangeMessage(GetPlayer(_first.Opposite())));
             SetPhase(new MainPhase(this, _first));
+            if (_first == PlayerType.Player)
+            {
+                DrawCard(PlayerType.Player);
+                DrawCard(PlayerType.Player);
+                DrawCard(PlayerType.Player);
+            }
+            else
+            {
+                DrawCard(PlayerType.Player);
+                DrawCard(PlayerType.Player);
+                DrawCard(PlayerType.Player);
+                DrawCard(PlayerType.Player);
+            }
         }
 
         /// <summary>
@@ -262,7 +275,7 @@ namespace Assets.Scripts.Core
         private void ResetColor()
         {
             foreach (var id in GetPlayer(PlayerType.Player).GetCardOnBattleField())
-                _gameController.SetColor(id,ColorType.Normal);
+                _gameController.SetColor(id, ColorType.Normal);
             foreach (var id in GetPlayer(PlayerType.Opponent).GetCardOnBattleField())
                 _gameController.SetColor(id, ColorType.Normal);
         }
@@ -284,7 +297,7 @@ namespace Assets.Scripts.Core
             if (atk[CardStatsType.Hp] <= 0)
             {
                 Publish(new CardDeadMessage(atk));
-                _gameController.GuiMediator.DestoryCard(atk.Id);
+                GetPlayer(atk.Parent).Remove(atk);
             }
             else
                 Publish(new CardStatsChangeMessage(atk));
@@ -292,7 +305,7 @@ namespace Assets.Scripts.Core
             if (def[CardStatsType.Hp] <= 0)
             {
                 Publish(new CardDeadMessage(def));
-                _gameController.GuiMediator.DestoryCard(def.Id);
+                GetPlayer(def.Parent).Remove(def);
             }
             else
                 Publish(new CardStatsChangeMessage(def));

@@ -4,6 +4,7 @@ using Assets.Scripts.Core;
 using Assets.Scripts.Core.Statistics;
 using Assets.Scripts.Gui.Controller;
 using Assets.Scripts.Gui.Event;
+using Assets.Scripts.Infrastructure;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -304,6 +305,10 @@ namespace Assets.Scripts.Gui
         public void DestoryCard(string id)
         {
             //TODO: DestoryCard
+            foreach (var temp in _idDictionary)
+            {
+                Log.Verbose(temp.Key + ":" + temp.Value);
+            }
             var target = _idDictionary[id];
             Destroy(target);
             _idDictionary.Remove(id);
@@ -338,7 +343,7 @@ namespace Assets.Scripts.Gui
         }
 
         /// <summary>
-        /// Update Card Statistics.
+        ///     Update Card Statistics.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="stats"></param>

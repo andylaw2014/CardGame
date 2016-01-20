@@ -70,7 +70,7 @@ namespace Assets.Scripts.Core
 
         public void SetColor(string id, ColorType colorType)
         {
-            Log.Verbose("SetColor"+id+":"+ colorType);
+            Log.Verbose("SetColor" + id + ":" + colorType);
             GuiMediator.SelectColor(id, colorType);
         }
 
