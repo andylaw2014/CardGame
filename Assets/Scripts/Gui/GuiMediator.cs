@@ -232,6 +232,7 @@ namespace Assets.Scripts.Gui
                 foreach (var t in idList)
                 {
                     var butt = _idDictionary[t].GetComponent<Button>();
+                    SelectColor(t, ColorType.Normal);
                     if (butt != null)
                         Destroy(butt);
                 }
@@ -245,6 +246,9 @@ namespace Assets.Scripts.Gui
         {
             var isClicked = false;
             var card = _idDictionary[t];
+            var butt = card.GetComponent<Button>();
+            if (butt != null)
+                Destroy(butt);
             var button = card.AddComponent<Button>();
             button.interactable = true;
             button.onClick.AddListener(() =>
@@ -257,14 +261,14 @@ namespace Assets.Scripts.Gui
                 {
                     isClicked = true;
                     _oneSelected = true;
-                    button.image.color = new Color(0F, 0.8F, 0F, 0.5F);
+                    SelectColor(t, ColorType.Selected);
                     selected.Add(t);
                 }
                 else
                 {
                     isClicked = false;
                     _oneSelected = false;
-                    button.image.color = Color.white;
+                    SelectColor(t, ColorType.Normal);
                     selected.Remove(t);
                 }
             });
@@ -299,6 +303,9 @@ namespace Assets.Scripts.Gui
         public void DestoryCard(string id)
         {
             //TODO: DestoryCard
+            var target = _idDictionary[id];
+            Destroy(target);
+            _idDictionary.Remove(id);
         }
 
         /// <summary>
@@ -309,6 +316,23 @@ namespace Assets.Scripts.Gui
         public void SelectColor(string id, ColorType colorType)
         {
             //TODO: SelectColor
+            var card = _idDictionary[id];
+            var butt = card.GetComponent<Button>();
+            if (butt != null) { }
+            else
+                butt = card.AddComponent<Button>();
+            switch (colorType)
+            {
+                case ColorType.Normal:
+                    butt.image.color = Color.white;
+                    break;
+                case ColorType.Selected:
+                    butt.image.color = new Color(0F, 0.8F, 0F, 0.5F);
+                    break;
+                case ColorType.Targetable:
+                    butt.image.color = Color.yellow;
+                    break;
+            }
         }
 
         /// <summary>
