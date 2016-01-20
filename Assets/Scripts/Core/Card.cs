@@ -35,5 +35,21 @@ namespace Assets.Scripts.Core
         {
             return true;
         }
+        public bool CanDefence()
+        {
+            return true;
+        }
+
+        public void Attack(Card card)
+        {
+            card.Defence();
+            card[CardStatsType.Hp] -= this[CardStatsType.Atk];
+            this[CardStatsType.Hp] -= card[CardStatsType.Atk];
+        }
+
+        public void Defence()
+        {
+            
+        }
     }
 }

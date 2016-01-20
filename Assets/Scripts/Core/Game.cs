@@ -4,6 +4,7 @@ using System.Linq;
 using Assets.Scripts.Core.Message;
 using Assets.Scripts.Core.Phase;
 using Assets.Scripts.Core.Statistics;
+using Assets.Scripts.Gui.Event;
 using Assets.Scripts.Infrastructure;
 using Assets.Scripts.Infrastructure.EventAggregator;
 using Assets.Scripts.Infrastructure.IdFactory;
@@ -182,7 +183,7 @@ namespace Assets.Scripts.Core
             var player = GetPlayerByCardId(id);
             var card = player.GetCardById(id);
             Log.Verbose(string.Format("{3} TryPlay:{0},{1},{2}", card.Id, card.Parent, card.Zone, player.Type));
-            if (!_phase.AllowPlayCard() || !player.Play(card)) return;
+            if (!player.Play(card)) return;
             Publish(new PlayerStatsChangeMessage(player));
             Publish(new CardZoneChangeMessage(card));
             _gameController.PlayCard(id);
@@ -198,10 +199,20 @@ namespace Assets.Scripts.Core
             Publish(new CardZoneChangeMessage(card));
         }
 
+        public void Handle(CardDragToZoneEventArgs args)
+        {
+            _phase.Handle(args);
+        }
+
+        public void Handle(CardDragToCardEventArgs args)
+        {
+            _phase.Handle(args);
+        }
+
         public void CreateBattle(PlayerType player, string[] attacker)
         {
             Log.Verbose("CreateBattle:" + attacker.Length);
-            _battle = new Battle(player, attacker);
+            _battle = new Battle(this,_gameController,player, attacker);
         }
 
         public void SelectAttacker()
@@ -210,15 +221,96 @@ namespace Assets.Scripts.Core
             _gameController.SelectAttacker(PlayerType.Player, player.GetAttackUnit().ToArray());
         }
 
+        public void SelectDefender()
+        {
+            var player = GetPlayer(PlayerType.Player);
+            foreach(var id in player.GetDefenceUnit())
+                _gameController.SetDraggable(id,true);
+        }
+
+        public void ShowAttacker()
+        {
+            if (_battle == null) return;
+            foreach(var attacker in _battle.GetAttacker())
+                _gameController.SetColor(attacker,ColorType.Selected);
+        }
+
+        public void ResetBattle()
+        {
+            _battle = null;
+        }
+
+        public void AddDefender(string defender, string attacker)
+        {
+            if (_battle != null)
+                _battle.AddBattle(defender, attacker);
+        }
+
+        public void ResolveBattle()
+        {
+            if (_battle != null)
+                _battle.Resolve();
+        }
+
+        public void Fight(string defender, string attacker)
+        {
+            var atk = GetCardById(attacker);
+            var def = GetCardById(defender);
+            atk.Attack(def);
+            if (atk[CardStatsType.Hp] <= 0)
+            {
+                Publish(new CardDeadMessage(atk));
+                _gameController.GuiMediator.DestoryCard(atk.Id);
+            }
+            else
+                Publish(new CardStatsChangeMessage(atk));
+
+            if (def[CardStatsType.Hp] <= 0)
+            {
+                Publish(new CardDeadMessage(def));
+                _gameController.GuiMediator.DestoryCard(def.Id);
+            }
+            else
+                Publish(new CardStatsChangeMessage(def));
+        }
+
         private class Battle
         {
             public readonly PlayerType Player;
-            private string[] _attacker;
+            private readonly string[] _attacker;
+            private readonly Dictionary<string, string> _battle;
+            private readonly GameController _gameController;
+            private readonly Game _game;
 
-            internal Battle(PlayerType player, string[] attacker)
+            internal Battle(Game game, GameController gameController, PlayerType player, string[] attacker)
             {
                 _attacker = attacker;
+                _gameController = gameController;
+                _game = game;
                 Player = player;
+                _battle= new Dictionary<string, string>();
+            }
+
+            public void AddBattle(string defender, string attacker)
+            {
+                if (!_attacker.Contains(attacker)) return;
+                if (!_battle.ContainsKey(defender) && !_battle.ContainsValue(attacker))
+                {
+                    _battle.Add(defender, attacker);
+                    _gameController.SetDraggable(defender,false);
+                    _gameController.SetColor(attacker,ColorType.Normal);
+                    _game.Fight(defender,attacker);
+                }
+            }
+
+            public IEnumerable<string> GetAttacker()
+            {
+                return _attacker;
+            }
+
+            public void Resolve()
+            {
+                
             }
         }
     }

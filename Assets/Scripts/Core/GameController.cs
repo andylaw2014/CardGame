@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Assets.Scripts.Core.Message;
 using Assets.Scripts.Gui;
 using Assets.Scripts.Gui.Event;
@@ -9,7 +10,7 @@ using UnityEngine;
 namespace Assets.Scripts.Core
 {
     public class GameController : MonoBehaviour, IHandle<PhaseStartMessage>, IHandle<EnableResourcePanelMessage>,
-        IHandle<PlayerStatsChangeMessage>, IHandle<CardZoneChangeMessage>
+        IHandle<PlayerStatsChangeMessage>, IHandle<CardZoneChangeMessage>, IHandle<CardDeadMessage>, IHandle<CardStatsChangeMessage>
     {
         private Game _game;
         public GuiMediator GuiMediator;
@@ -23,6 +24,7 @@ namespace Assets.Scripts.Core
             GuiMediator.OnButtonClick += OnButtonClick;
             GuiMediator.SetButtonClickable(ButtonType.NextPhaseButton, PhotonNetwork.isMasterClient);
             GuiMediator.OnCardDragToZone += OnCardDragToZone;
+            GuiMediator.OnCardDragToCard += OnCardDragToCard;
         }
 
         private void OnButtonClick(object sender, ButtonClickEventArgs args)
@@ -42,9 +44,38 @@ namespace Assets.Scripts.Core
         private void OnCardDragToZone(object sender, CardDragToZoneEventArgs args)
         {
             Log.Verbose("OnCardDragToZone");
-            if (args.Destination != ZoneType.BattleField) return;
-            _game.TryPlay(args.Target);
-            Log.Verbose(args.Target + ":BattleField");
+            _game.Handle(args);
+        }
+
+        private void OnCardDragToCard(object sender, CardDragToCardEventArgs args)
+        {
+            Log.Verbose("OnCardDragToCard");
+            _game.Handle(args);
+        }
+
+        private void SetFrontAndDrag(string id, PlayerType owner, ZoneType destination)
+        {
+            var front = !(owner == PlayerType.Opponent && destination == ZoneType.Hand);
+            GuiMediator.SetCardIsFront(id, front);
+            var drag = (owner == PlayerType.Player && destination == ZoneType.Hand);
+            SetDraggable(id, drag);
+        }
+
+        public void SelectAttacker(PlayerType player, string[] selectable)
+        {
+            Log.Verbose("SelectAttacker");
+            GuiMediator.EnableSelection(attacker => { CreateBattle(player, attacker); }
+                , selectable, true, false);
+        }
+
+        public void SetColor(string id, ColorType colorType)
+        {
+            GuiMediator.SelectColor(id, colorType);
+        }
+
+        public void SetDraggable(string id, bool drag)
+        {
+            GuiMediator.SetDraggable(id, drag);
         }
 
         #region Handle
@@ -76,19 +107,14 @@ namespace Assets.Scripts.Core
             SetFrontAndDrag(card.Id, card.Parent, card.Zone);
         }
 
-        private void SetFrontAndDrag(string id, PlayerType owner, ZoneType destination)
+        public void Handle(CardDeadMessage message)
         {
-            var front = !(owner == PlayerType.Opponent && destination == ZoneType.Hand);
-            GuiMediator.SetCardIsFront(id, front);
-            var drag = (owner == PlayerType.Player && destination == ZoneType.Hand);
-            GuiMediator.SetDraggable(id, drag);
+            GuiMediator.DestoryCard(message.Card.Id);
         }
 
-        public void SelectAttacker(PlayerType player, string[] selectable)
+        public void Handle(CardStatsChangeMessage message)
         {
-            Log.Verbose("SelectAttacker");
-            GuiMediator.EnableSelection(attacker => { CreateBattle(player, attacker); }
-                , selectable, true, false);
+            throw new System.NotImplementedException();
         }
 
         #endregion
@@ -170,9 +196,12 @@ namespace Assets.Scripts.Core
         private void RpcCreateBattle(byte bytePlayerType, string[] attacker)
         {
             var player = (PlayerType) bytePlayerType;
+            if(attacker!=null)
             _game.CreateBattle(player, attacker);
         }
 
         #endregion
+
+
     }
 }

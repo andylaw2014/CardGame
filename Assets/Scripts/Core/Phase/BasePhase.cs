@@ -1,3 +1,5 @@
+using Assets.Scripts.Gui.Event;
+
 namespace Assets.Scripts.Core.Phase
 {
     public abstract class BasePhase
@@ -47,9 +49,14 @@ namespace Assets.Scripts.Core.Phase
         /// <returns></returns>
         public abstract string GetName();
 
-        public virtual bool AllowPlayCard()
+        public virtual void Handle(CardDragToZoneEventArgs args)
         {
-            return false;
+
+        }
+
+        public virtual void Handle(CardDragToCardEventArgs args)
+        {
+
         }
     }
 }

@@ -2,9 +2,13 @@ using Assets.Scripts.Utility;
 
 namespace Assets.Scripts.Core.Phase
 {
-    public class SecondMainPhase : BasePhase
+    public class SecondMainPhase : MainPhase
     {
         public SecondMainPhase(Game game, PlayerType parent) : base(game, parent)
+        {
+        }
+
+        protected override void Execute()
         {
         }
 
@@ -16,11 +20,6 @@ namespace Assets.Scripts.Core.Phase
         public override string GetName()
         {
             return "Second Main Phase";
-        }
-
-        public override bool AllowPlayCard()
-        {
-            return Parent == PlayerType.Player;
         }
     }
 }

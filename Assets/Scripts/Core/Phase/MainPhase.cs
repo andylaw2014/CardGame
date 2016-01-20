@@ -1,3 +1,5 @@
+using Assets.Scripts.Gui.Event;
+
 namespace Assets.Scripts.Core.Phase
 {
     public class MainPhase : BasePhase
@@ -8,6 +10,7 @@ namespace Assets.Scripts.Core.Phase
 
         protected override void Execute()
         {
+            Game.ResetBattle();
             if (Parent != PlayerType.Player) return;
             Game.AddResourceByPanel(Parent);
             Game.DrawCard(Parent);
@@ -23,9 +26,10 @@ namespace Assets.Scripts.Core.Phase
             return "Main Phase";
         }
 
-        public override bool AllowPlayCard()
+        public override void Handle(CardDragToZoneEventArgs args)
         {
-            return Parent == PlayerType.Player;
+            if (Parent != PlayerType.Player || args.Destination != ZoneType.BattleField) return;
+            Game.TryPlay(args.Target);
         }
     }
 }

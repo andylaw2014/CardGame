@@ -97,5 +97,16 @@ namespace Assets.Scripts.Core
         {
             return from unit in _battlefield where unit.CanAttack() select unit.Id;
         }
+
+        public IEnumerable<string> GetDefenceUnit()
+        {
+            return from unit in _battlefield where unit.CanDefence() select unit.Id;
+        }
+
+        public void Remove(string id)
+        {
+            _battlefield.Remove(GetCardById(id));
+            _hand.Remove(GetCardById(id));
+        }
     }
 }
