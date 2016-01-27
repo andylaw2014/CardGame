@@ -20,7 +20,8 @@ namespace Assets.Scripts.Core.Phase
 
         protected override void Execute()
         {
-            Game.SelectAttacker();
+            if(Parent==PlayerType.Player)
+                Game.SelectAttacker();
         }
     }
 }
